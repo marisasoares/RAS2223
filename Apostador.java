@@ -1,6 +1,7 @@
+import java.util.HashMap;
+import java.util.Map;
 
-
-public class Apostador : Utilizador{
+public class Apostador extends Utilizador{
 
     private Map<String,Aposta> apostas;
     private int carteira;

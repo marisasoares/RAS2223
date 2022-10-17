@@ -1,4 +1,4 @@
-public class Administrador : Utilizador{
+public class Administrador extends Utilizador{
 
 
 }
