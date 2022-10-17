@@ -2,15 +2,15 @@ import java.time.LocalDateTime;
 
 public class Jogo {
 
-    private string id;
+    private String id;
     private LocalDateTime date;
-    private string desporto;
-    private string equipaDaCasa;
-    private string equipaOponente;
+    private String desporto;
+    private String equipaDaCasa;
+    private String equipaOponente;
     private float pontuacaoEquipaCasa;
     private float pontuacaoEquipaOponente;
 
-    public Jogo(string id, LocalDateTime date, string desporto, string equipaDaCasa, string equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
+    public Jogo(String id, LocalDateTime date, String desporto, String equipaDaCasa, String equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
         this.id = id;
         this.date = date;
         this.desporto = desporto;
@@ -20,7 +20,7 @@ public class Jogo {
         this.pontuacaoEquipaOponente = pontuacaoEquipaOponente;
     }
 
-    public Jogo(string id, string desporto, string equipaDaCasa, string equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
+    public Jogo(String id, String desporto, String equipaDaCasa, String equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
         this.id = id;
         this.desporto = desporto;
         this.equipaDaCasa = equipaDaCasa;
@@ -30,7 +30,7 @@ public class Jogo {
         this.date = LocalDateTime.now();
     }
 
-    public Jogo(string id, string desporto, string equipaDaCasa, string equipaOponente) {
+    public Jogo(String id, String desporto, String equipaDaCasa, String equipaOponente) {
         this.id = id;
         this.desporto = desporto;
         this.equipaDaCasa = equipaDaCasa;
@@ -40,11 +40,11 @@ public class Jogo {
         this.date = LocalDateTime.now();
     }
 
-    public string getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(string id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,27 +56,27 @@ public class Jogo {
         this.date = date;
     }
 
-    public string getDesporto() {
+    public String getDesporto() {
         return desporto;
     }
 
-    public void setDesporto(string desporto) {
+    public void setDesporto(String desporto) {
         this.desporto = desporto;
     }
 
-    public string getEquipaDaCasa() {
+    public String getEquipaDaCasa() {
         return equipaDaCasa;
     }
 
-    public void setEquipaDaCasa(string equipaDaCasa) {
+    public void setEquipaDaCasa(String equipaDaCasa) {
         this.equipaDaCasa = equipaDaCasa;
     }
 
-    public string getEquipaOponente() {
+    public String getEquipaOponente() {
         return equipaOponente;
     }
 
-    public void setEquipaOponente(string equipaOponente) {
+    public void setEquipaOponente(String equipaOponente) {
         this.equipaOponente = equipaOponente;
     }
 
