@@ -1,2 +1,2 @@
-public class Especialista extends Utilizador{
+public class Especialista : Utilizador{
 }

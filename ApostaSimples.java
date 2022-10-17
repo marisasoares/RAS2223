@@ -1,2 +1,2 @@
-public class ApostaSimples extends Aposta{
+public class ApostaSimples : Aposta{
 }
