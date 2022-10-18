@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class Aposta {
+public class Aposta{
 
     private LocalDateTime data;
     private String id;

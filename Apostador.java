@@ -4,19 +4,19 @@ import java.util.Map;
 public class Apostador extends Utilizador{
 
     private Map<String,Aposta> apostas;
-    private int carteira;
+    private Carteira carteira;
 
-    public Apostador(Map<String, Aposta> apostas, int carteira) {
+    public Apostador(Map<String, Aposta> apostas, Carteira carteira) {
         this.apostas = apostas;
         this.carteira = carteira;
     }
 
     public Apostador(){
         this.apostas = new HashMap<>();
-        this.carteira = 0;
+        this.carteira = new Carteira(0,0);
     }
 
-    public Apostador(String username, String password, String email, Map<String, Aposta> apostas, int carteira) {
+    public Apostador(String username, String password, String email, Map<String, Aposta> apostas, Carteira carteira) {
         super(username, password, email);
         this.apostas = apostas;
         this.carteira = carteira;
@@ -30,7 +30,7 @@ public class Apostador extends Utilizador{
         this.apostas = apostas;
     }
 
-    public void setCarteira(int carteira) {
+    public void setCarteira(Carteira carteira) {
         this.carteira = carteira;
     }
 
