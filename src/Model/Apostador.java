@@ -1,3 +1,5 @@
+package src.Model;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +24,12 @@ public class Apostador extends Utilizador{
         this.carteira = carteira;
     }
 
+    public Apostador(String username, String password, String email) {
+        super(username, password, email);
+        this.apostas = new HashMap<>();
+        this.carteira = new Carteira(0,0);
+    }
+
     public Map<String, Aposta> getApostas() {
         return apostas;
     }
@@ -34,7 +42,7 @@ public class Apostador extends Utilizador{
         this.carteira = carteira;
     }
 
-    public int getCarteira() {
+    public Carteira getCarteira() {
         return carteira;
     }
 }

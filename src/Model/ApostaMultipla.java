@@ -1,3 +1,5 @@
+package src.Model;
+
 import java.time.LocalDateTime;
 
 public class ApostaMultipla extends Aposta{

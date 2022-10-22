@@ -1,3 +1,5 @@
+package src.Model;
+
 import java.time.LocalDateTime;
 
 public class ApostaSimples extends Aposta{

@@ -1,18 +1,20 @@
+package src.Model;
+
 public class Utilizador {
 
     private String username;
-    private String password;
+    private int password_Hash;
     private String email;
 
     public Utilizador(){
         this.username = "NaN";
-        this.password = "NaN";
+        this.password_Hash = "NaN".hashCode();
         this.email = "NaN";
     }
 
     public Utilizador(String username, String password, String email) {
         this.username = username;
-        this.password = password;
+        this.password_Hash = password.hashCode();
         this.email = email;
     }
 
@@ -24,12 +26,12 @@ public class Utilizador {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public int getPasswordHash() {
+        return password_Hash;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password_Hash = password.hashCode();
     }
 
     public String getEmail() {
@@ -44,7 +46,7 @@ public class Utilizador {
     public String toString() {
         return "Utilizador{" +
                 "username=" + username +
-                ", password=" + password +
+                ", password hash=" + password_Hash +
                 ", email=" + email +
                 '}';
     }

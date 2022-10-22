@@ -1,3 +1,5 @@
+package src.Model;
+
 public class Carteira {
     double euros;
     double dollars;
