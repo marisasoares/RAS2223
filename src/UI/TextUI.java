@@ -6,12 +6,13 @@ import src.DataLayer.Database;
 import src.Model.Administrador;
 import src.Model.Apostador;
 import src.Model.Especialista;
-import src.Model.Utilizador;
+
+import src.UI.Menu;
 
 public class TextUI {
 
     //Scanner para leitura
-    private transient Scanner scin;
+    private transient Scanner scanner;
     public Database database = new Database();
 
     /**
@@ -22,14 +23,19 @@ public class TextUI {
     public TextUI() {
     }
 
+    public void pressEnterToContinue(){
+        System.out.println(" - press enter to continue -");
+        this.scanner.nextLine();
+    }
+
     /**
      * Executa o menu principal e invoca o método correspondente à opção seleccionada.
     */
     public void run() {
-        scin = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         database.loadUsersFromDB();
         this.menuPrincipal();
-        System.out.println("Até breve...");
+        clearScreen();
     }
 
     public static void clearScreen(){
@@ -39,9 +45,10 @@ public class TextUI {
     //Métodos auxiliares 
 
     private void menuPrincipal() {
+        clearScreen();
         Menu menu = new Menu(new String[]{
                 "Login",
-                "Register",
+                "Registar",
                 "Apostar"
         });
 
@@ -55,44 +62,79 @@ public class TextUI {
         menu.run();
     }
 
+    private void errorMessage(String s){
+        System.out.println("\033[0;31m[Erro] " + s + "\033[0m");
+    }
+
     private void register(){
-        System.out.println("---- Rasbet ----");
-        System.out.println(" ");
-        System.out.println("     Registo      ");
+        clearScreen();
+        System.out.print("\033[0;36m");
+        System.out.println("╔══════════╗");
+        System.out.println("║  Rasbet  ╠════════════════════════");
+        System.out.println("╚══════════╝ ");
+        System.out.println("\n    REGISTO      \033[0m\n\n");
         String username = "",email = "", password = "";
         int tentativa = 0;
         do {
-            if(tentativa != 0) System.out.println("Username já utilizado ou inválido");
+            
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K"); 
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K");
+                errorMessage("Username já utilizado ou inválido");
+            }
             System.out.print("Insira username: ");
-            username = this.scin.nextLine();
+            username = this.scanner.nextLine();
             tentativa++;
         } while (this.database.usernameExists(username) || username.trim().length() == 0);
         tentativa = 0;
+        System.out.println();
         do {
-            if(tentativa != 0) System.out.println("Email inválido");
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K"); 
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K");
+                errorMessage("Email inválido");
+            }
             System.out.print("Insira email: ");
-            email = this.scin.nextLine();
+            email = this.scanner.nextLine();
             tentativa++;
         } while (email.trim().length() == 0 || !email.matches("\\w+@\\w+\\.\\w+"));
         tentativa = 0;
+        System.out.println();
         do {
-            if(tentativa != 0) System.out.println("A password deve conter pelo menos 8 caractéres");
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K"); 
+                System.out.print(String.format("\033[%dA",1)); 
+                System.out.print("\033[2K");
+                errorMessage("A password deve conter pelo menos 8 caractéres");
+                }    
             System.out.print("Insira password: ");
-            password = this.scin.nextLine();
+            password = this.scanner.nextLine();
             tentativa++;
         } while (password.length() < 8);
         Apostador user = new Apostador(username, password, email);
         this.database.addUtilizador(user);
+        pressEnterToContinue();
     }
 
     private void login(){
-        System.out.println("---- Rasbet ----");
-        System.out.println(" ");
-        System.out.println("     Login      ");
-        System.out.print("Username: ");
-        String username = this.scin.nextLine();
-        System.out.print("Password: ");
-        String password = this.scin.nextLine();
+        clearScreen();
+        System.out.print("\033[0;36m");
+        System.out.println("╔══════════╗");
+        System.out.println("║  Rasbet  ╠════════════════════════");
+        System.out.println("╚══════════╝ ");
+        System.out.println("\n    LOGIN      \033[0m\n");
+        System.out.print(" Username: ");
+        String username = this.scanner.nextLine();
+        System.out.print(" Password: ");
+        String password = this.scanner.nextLine();
         boolean login_Successful = database.login(username, password);
         if(login_Successful){
             Object user = database.getUtilizador(username, password);
@@ -100,43 +142,39 @@ public class TextUI {
             else if(user instanceof Administrador) menuAdministrador(((Administrador) user));
             else menuApostador((Apostador)user);
             
-        } else System.out.println("Login Inválido");
-        scin.nextLine();
-        
+        } else {
+            errorMessage("Login Inválido");
+            pressEnterToContinue();
+        }
+        return;
     }
 
     private void menuApostador(Apostador apostador){
         clearScreen();
-        System.out.println("Bem vindo " + apostador.getUsername());
-        System.out.println(apostador.getEmail());
         Menu menu = new Menu(new String[]{
                 "Apostar"
-        });
+        },"Bem vindo " + apostador.getUsername() + "\n" + apostador.getEmail()+"\n");
         menu.setTitulo("Menu Apostador");
         menu.run();
     }
 
     private void menuEspecialista(Especialista esp){
         clearScreen();
-        System.out.println("Bem vindo " + esp.getUsername());
-        System.out.println(esp.getEmail());
         Menu menu = new Menu(new String[]{
                 "Apostar",
                 "Definir odds"
-        });
+        },"Bem vindo " + esp.getUsername() + "\n" + esp.getEmail()+"\n");
         menu.setTitulo("Menu Especialista");
         menu.run();
     }
 
     private void menuAdministrador(Administrador admin){
         clearScreen();
-        System.out.println("Bem vindo " + admin.getUsername());
-        System.out.println(admin.getEmail());
         Menu menu = new Menu(new String[]{
                 "Alterar estado aposta",
                 "Lista apostas ativas",
                 "Alterar odds"
-        });
+        },"Bem vindo " + admin.getUsername() + "\n" + admin.getEmail()+"\n");
         menu.setTitulo("Menu Administrador");
         menu.run();
     }
