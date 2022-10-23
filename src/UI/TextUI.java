@@ -170,7 +170,8 @@ public class TextUI {
     private void menuApostador(Apostador apostador){
         clearScreen();
         Menu menu = new Menu(new String[]{
-                "Apostar"
+                "Apostar",
+                "Alterar password"
         },"Bem vindo " + apostador.getUsername() 
         + "\n" + apostador.getEmail() + "\nSaldo: \n"
         + apostador.getCarteira().getEuros() + " €\n" +

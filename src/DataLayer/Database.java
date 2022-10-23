@@ -2,6 +2,7 @@ package src.DataLayer;
 
 import src.Model.*;
 import java.util.Map;
+import java.util.Random;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,15 +37,15 @@ public class Database implements IDatabase{
             String username = "user" + i;
             String email = username + "@gmail.com";
             Apostador u = new Apostador(username,"12345",email);
-            if(addUtilizador(u)) System.out.println("Utilizador " + i + " carregado");
+            u.getCarteira().setEuros(new Random().nextInt(200));
+            u.getCarteira().setDollars(new Random().nextInt(200));
+            addUtilizador(u);
         }
 
         Administrador admin = new Administrador("admin","12345","admin@gmail.com");
-        if(addUtilizador(admin)) System.out.println("Admin carregado");
         Especialista esp = new Especialista("esp","12345","esp@gmail.com");
-        if(addUtilizador(esp)) System.out.println("Especialista carregado");
-        
-        
+        addUtilizador(admin);
+        addUtilizador(esp);
     }
 
     public void loadJogosAndSportsFromDB() {
@@ -54,8 +55,8 @@ public class Database implements IDatabase{
          
 
         // Implementação Simulada
-        Desporto futebol = new Desporto("Futebol");
-        Desporto basquetebol = new Desporto("Basquetebol");
+        Desporto futebol = new Desporto("⚽ Futebol");
+        Desporto basquetebol = new Desporto("🏀 Basquetebol ");
         addDesporto(futebol);
         addDesporto(basquetebol);
         Jogo jogoFutebol = new Jogo(futebol);
@@ -70,12 +71,12 @@ public class Database implements IDatabase{
          */
 
         // Implementação Simulada
-        Desporto rugby = new Desporto("Rugby");
-        System.out.println("Added rugby with id: " + addDesporto(rugby));
+        Desporto rugby = new Desporto("🏉 Rugby");
+        addDesporto(rugby);
         Jogo jogorugby = new Jogo(rugby);
-        System.out.println("Added jogo with id: " + addJogo(jogorugby));
+        addJogo(jogorugby);
         Aposta aposta = new ApostaSimples(LocalDateTime.now(),jogorugby);
-        System.out.println("Added aposta with id: " + addAposta(aposta));
+        addAposta(aposta);
         
     }
 
