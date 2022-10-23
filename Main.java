@@ -1,4 +1,3 @@
-package src;
 import src.UI.TextUI;
 
 public class Main {
