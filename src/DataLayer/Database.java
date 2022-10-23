@@ -3,6 +3,7 @@ package src.DataLayer;
 import src.Model.*;
 import java.util.Map;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -185,4 +186,52 @@ public class Database implements IDatabase{
     public boolean existemApostas(){
         return !IDatabase.isEmpty(this.apostas);
     } 
+
+    public ArrayList<String> listarJogos(){
+        ArrayList<String> jogos = new ArrayList<>();
+        for (Map.Entry<String,Jogo> entry : this.jogos.entrySet()) {
+            jogos.add(entry.getValue().toString());
+        }
+        return jogos;
+    }
+
+    public ArrayList<String> listarDesportos(){
+        ArrayList<String> desportos = new ArrayList<>();
+        for (Map.Entry<String,Desporto> entry : this.desportos.entrySet()) {
+            desportos.add(entry.getValue().toString());
+        }
+        return desportos;
+    }
+
+    public ArrayList<String> listarApostas(){
+        ArrayList<String> apostas = new ArrayList<>();
+        for (Map.Entry<String,Aposta> entry : this.apostas.entrySet()) {
+            apostas.add(entry.getValue().toString());
+        }
+        return apostas;
+    }
+
+    public ArrayList<String> listarApostadores(){
+        ArrayList<String> apostadores = new ArrayList<>();
+        for (Map.Entry<String,Apostador> entry : this.apostadores.entrySet()) {
+            apostadores.add(entry.getValue().toString());
+        }
+        return apostadores;
+    }
+
+    public ArrayList<String> listarAdministradores(){
+        ArrayList<String> administradores = new ArrayList<>();
+        for (Map.Entry<String,Administrador> entry : this.administradores.entrySet()) {
+            administradores.add(entry.getValue().toString());
+        }
+        return administradores;
+    }
+
+    public ArrayList<String> listarEspecialistas(){
+        ArrayList<String> especialistas = new ArrayList<>();
+        for (Map.Entry<String,Especialista> entry : this.especialistas.entrySet()) {
+            especialistas.add(entry.getValue().toString());
+        }
+        return especialistas;
+    }
 }

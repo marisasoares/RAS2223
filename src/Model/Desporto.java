@@ -60,10 +60,9 @@ public class Desporto {
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", nome='" + getNome() + "'" +
-            "}";
+        return "ID do desporto: " + getId() +
+               "\nNome: " + getNome() +
+               "\n";
     }
 
 

@@ -45,4 +45,11 @@ public class Apostador extends Utilizador{
     public Carteira getCarteira() {
         return carteira;
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "Tipo: Apostador\n" + this.carteira.toString();
+    }
+
 }

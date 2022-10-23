@@ -24,4 +24,13 @@ public class Carteira {
     public void setDollars(double dollars) {
         this.dollars = dollars;
     }
+
+
+    @Override
+    public String toString() {
+        return  "Euros: " + getEuros() + " €" +
+                "\nDollars: " + getDollars() + " $" +
+                "\n";
+    }
+
 }

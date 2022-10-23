@@ -1,5 +1,6 @@
 package src.DataLayer;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -127,8 +128,17 @@ public interface IDatabase {
         return m.isEmpty();
     } 
 
+    public ArrayList<String> listarJogos();
 
+    public ArrayList<String> listarDesportos();
 
+    public ArrayList<String> listarApostas();
+
+    public ArrayList<String> listarApostadores();
+
+    public ArrayList<String> listarAdministradores();
+
+    public ArrayList<String> listarEspecialistas();
 
     /**
 	 * Gera um identificador de 8 caracteres único

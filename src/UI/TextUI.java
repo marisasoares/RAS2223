@@ -43,6 +43,14 @@ public class TextUI {
         System.out.println("\033[H\033[2J");
     }
 
+    public static void header(String string){
+        System.out.print("\033[0;36m");
+        System.out.println("╔══════════╗");
+        System.out.println("║  Rasbet  ╠════════════════════════");
+        System.out.println("╚══════════╝ ");
+        System.out.println("\n    " + string + "      \033[0m\n\n");
+    }
+
     //Métodos auxiliares 
 
     private void menuPrincipal() {
@@ -58,7 +66,7 @@ public class TextUI {
 
         //Registar os handlers das transições
         menu.setHandler(1,() -> login());
-        menu.setHandler(2,() -> register());
+        menu.setHandler(2,() -> register(0));
         //Executar o menu
         menu.run();
     }
@@ -67,13 +75,13 @@ public class TextUI {
         System.out.println("\033[0;31m[Erro] " + s + "\033[0m");
     }
 
-    private void register(){
+    /*
+     * UI para registo de um utilizador
+     * @param tipo_de_utilizador 0 - apostador, 1 - especialista, 2 - administrador
+     */
+    private void register(int tipo_de_utilizador){
         clearScreen();
-        System.out.print("\033[0;36m");
-        System.out.println("╔══════════╗");
-        System.out.println("║  Rasbet  ╠════════════════════════");
-        System.out.println("╚══════════╝ ");
-        System.out.println("\n    REGISTO      \033[0m\n\n");
+        header("REGISTO");
         String username = "",email = "", password = "";
         int tentativa = 0;
         do {
@@ -120,18 +128,27 @@ public class TextUI {
             password = this.scanner.nextLine();
             tentativa++;
         } while (password.length() < 8);
-        Apostador user = new Apostador(username, password, email);
-        this.database.addUtilizador(user);
+        switch (tipo_de_utilizador) {
+            case 1:
+                Especialista esp = new Especialista(username, password, email);
+                this.database.addUtilizador(esp);
+                break;
+            case 2:
+                Administrador admin = new Administrador(username, password, email);
+                this.database.addUtilizador(admin);
+                break;
+            default:
+                Apostador user = new Apostador(username, password, email);
+                this.database.addUtilizador(user);
+                break;
+        }
+        
         pressEnterToContinue();
     }
 
     private void login(){
         clearScreen();
-        System.out.print("\033[0;36m");
-        System.out.println("╔══════════╗");
-        System.out.println("║  Rasbet  ╠════════════════════════");
-        System.out.println("╚══════════╝ ");
-        System.out.println("\n    LOGIN      \033[0m\n");
+        header("LOGIN");
         System.out.print(" Username: ");
         String username = this.scanner.nextLine();
         System.out.print(" Password: ");
@@ -175,11 +192,92 @@ public class TextUI {
     private void menuAdministrador(Administrador admin){
         clearScreen();
         Menu menu = new Menu(new String[]{
+                "Adicionar Administrador",
+                "Adicionar Especialista",
                 "Alterar estado aposta",
-                "Lista apostas ativas",
-                "Alterar odds"
+                "Alterar odds",
+                "Listar Apostas",
+                "Listar Jogos",
+                "Listar Desportos",
+                "Listar Apostadores",
+                "Listar Especialista",
+                "Listar Administradores"
         },"Bem vindo " + admin.getUsername() + "\n" + admin.getEmail()+"\n");
         menu.setTitulo("Menu Administrador");
+        menu.setPreCondition(5, ()->database.existemApostas());
+        menu.setPreCondition(6, ()->database.existemJogos());
+        menu.setPreCondition(7, ()->database.existemDesportos());
+        menu.setPreCondition(8, ()->database.existemApostadores());
+        menu.setPreCondition(9, ()->database.existemEspecialistas());
+        menu.setPreCondition(10, ()->database.existemAdministradores());
+        menu.setHandler(1, ()->register(2));
+        menu.setHandler(2, ()->register(1));
+        menu.setHandler(5, ()->listarApostas());
+        menu.setHandler(6, ()->listarJogos());
+        menu.setHandler(7, ()->listarDesportos());
+        menu.setHandler(8, ()->listarApostadores());
+        menu.setHandler(9, ()->listarEspecialistas());
+        menu.setHandler(10, ()->listarAdministradores());
         menu.run();
+    }
+
+    private void listarJogos(){
+        clearScreen();
+        header("LISTA DE JOGOS");
+        for (String s : this.database.listarJogos()) {
+            System.out.println("Jogo ─────────────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
+    }
+
+    private void listarDesportos(){
+        clearScreen();
+        header("LISTA DE DESPORTOS");
+        for (String s : this.database.listarDesportos()) {
+            System.out.println("Desporto ─────────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
+    }
+
+    private void listarApostas(){
+        clearScreen();
+        header("LISTA DE APOSTAS");
+        for (String s : this.database.listarApostas()) {
+            System.out.println("Aposta ───────────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
+    }
+
+    private void listarEspecialistas(){
+        clearScreen();
+        header("LISTA DE ESPECIALISTAS");
+        for (String s : this.database.listarEspecialistas()) {
+            System.out.println("Especialista ───────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
+    }
+
+    private void listarAdministradores(){
+        clearScreen();
+        header("LISTA DE ADMINISTRADORES");
+        for (String s : this.database.listarAdministradores()) {
+            System.out.println("Administrador ───────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
+    }
+
+    private void listarApostadores(){
+        clearScreen();
+        header("LISTA DE APOSTADORES");
+        for (String s : this.database.listarApostadores()) {
+            System.out.println("Apostador ───────────────────────────");
+            System.out.print(s);
+        }
+        pressEnterToContinue();
     }
 }

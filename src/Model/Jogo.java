@@ -54,10 +54,9 @@ public class Jogo {
 
     @Override
     public String toString() {
-        return "Jogo{" +
-                "id=" + id +
-                ", date=" + date +
-                ", desporto=" + desporto +
-                '}';
+        return "ID do jogo: " + id +
+               "\nDate: " + date +
+               "\nDesporto: \n" + desporto +
+               '\n';
     }
 }

@@ -47,7 +47,7 @@ public class DesportoIndividual extends Desporto{
 
     @Override
     public String toString() {
-        return "{" +
+        return super.toString() + "{" +
             " jogadores='" + getJogadores() + "'" +
             "}";
     }

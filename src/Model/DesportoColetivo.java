@@ -48,7 +48,7 @@ public class DesportoColetivo extends Desporto{
 
     @Override
     public String toString() {
-        return "{" +
+        return super.toString() + "{" +
             " listaEquipas='" + getListaEquipas() + "'" +
             "}";
     }

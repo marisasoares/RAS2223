@@ -44,11 +44,9 @@ public class Utilizador {
 
     @Override
     public String toString() {
-        return "Utilizador{" +
-                "username=" + username +
-                ", password hash=" + password_Hash +
-                ", email=" + email +
-                '}';
+        return "Username: " + username +
+               "\nemail: " + email +
+               '\n';
     }
 
 }

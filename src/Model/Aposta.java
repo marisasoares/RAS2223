@@ -43,4 +43,13 @@ public class Aposta{
     public void setJogo(Jogo jogo) {
         this.jogo = jogo;
     }
+
+    @Override
+    public String toString() {
+        return "Data: " + getData() +
+               "\nID da aposta: " + getId() +
+               "\nJogo: \n" + getJogo() +
+               "\n";
+    }
+
 }
