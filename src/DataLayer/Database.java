@@ -36,14 +36,14 @@ public class Database implements IDatabase{
         for (int i = 1; i <= 20; i++) {
             String username = "user" + i;
             String email = username + "@gmail.com";
-            Apostador u = new Apostador(username,"12345",email);
+            Apostador u = new Apostador(username,"12345678",email);
             u.getCarteira().setEuros(new Random().nextInt(200));
             u.getCarteira().setDollars(new Random().nextInt(200));
             addUtilizador(u);
         }
 
-        Administrador admin = new Administrador("admin","12345","admin@gmail.com");
-        Especialista esp = new Especialista("esp","12345","esp@gmail.com");
+        Administrador admin = new Administrador("admin","12345678","admin@gmail.com");
+        Especialista esp = new Especialista("esp","12345678","esp@gmail.com");
         addUtilizador(admin);
         addUtilizador(esp);
     }
