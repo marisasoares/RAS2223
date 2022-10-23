@@ -7,11 +7,13 @@ public class DesportoColetivo extends Desporto{
     private Map<String,Equipa> listaEquipas;
     
 
-    public DesportoColetivo() {
-    }
-
     public DesportoColetivo(String id, String nome, Map<String,Equipa> listaEquipas) {
         super(id, nome);
+        this.listaEquipas = listaEquipas;
+    }
+
+    public DesportoColetivo(String nome, Map<String,Equipa> listaEquipas) {
+        super(nome);
         this.listaEquipas = listaEquipas;
     }
 

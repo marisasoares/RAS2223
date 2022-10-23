@@ -11,16 +11,16 @@ public class JogoEquipa extends Jogo{
 
 
 
-    public JogoEquipa(String id, LocalDateTime date, Desporto desporto, Equipa equipaDaCasa, Equipa equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
-        super(id, date, desporto);
+    public JogoEquipa(LocalDateTime date, Desporto desporto, Equipa equipaDaCasa, Equipa equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
+        super(date, desporto);
         this.equipaDaCasa = equipaDaCasa;
         this.equipaOponente = equipaOponente;
         this.pontuacaoEquipaCasa = pontuacaoEquipaCasa;
         this.pontuacaoEquipaOponente = pontuacaoEquipaOponente;
     }
 
-    public JogoEquipa(String id, LocalDateTime date, Desporto desporto, Equipa equipaDaCasa, Equipa equipaOponente){
-        super(id, date, desporto);
+    public JogoEquipa(LocalDateTime date, Desporto desporto, Equipa equipaDaCasa, Equipa equipaOponente){
+        super(date, desporto);
         this.equipaDaCasa = equipaDaCasa;
         this.equipaOponente = equipaOponente;
         this.pontuacaoEquipaCasa = 0;

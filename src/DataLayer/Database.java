@@ -2,21 +2,26 @@ package src.DataLayer;
 
 import src.Model.*;
 import java.util.Map;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 
-public class Database {
+public class Database implements IDatabase{
 
     private Map<String, Apostador> apostadores;
     private Map<String, Especialista> especialistas;
     private Map<String, Administrador> administradores;
-    private Map<String, Jogo> calendario;
+    private Map<String, Jogo> jogos;
+    private Map<String, Desporto> desportos;
+    private Map<String, Aposta> apostas;
 
     public Database(){
         this.apostadores = new HashMap<>();
         this.especialistas = new HashMap<>();
         this.administradores = new HashMap<>();
-        this.calendario = new HashMap<>();
+        this.jogos = new HashMap<>();
+        this.desportos = new HashMap<>();
+        this.apostas = new HashMap<>();
     }
 
     public void loadUsersFromDB(){
@@ -36,7 +41,77 @@ public class Database {
         Administrador admin = new Administrador("admin","12345","admin@gmail.com");
         if(addUtilizador(admin)) System.out.println("Admin carregado");
         Especialista esp = new Especialista("esp","12345","esp@gmail.com");
-        if(addUtilizador(esp)) System.out.println("Especialista carregado");        
+        if(addUtilizador(esp)) System.out.println("Especialista carregado");
+        
+        
+    }
+
+    public void loadJogosAndSportsFromDB() {
+        /**
+            ------------------------ PARA IMPLEMENTAR DEPOIS --------------------
+         */
+         
+
+        // Implementação Simulada
+        Desporto futebol = new Desporto("Futebol");
+        Desporto basquetebol = new Desporto("Basquetebol");
+        addDesporto(futebol);
+        addDesporto(basquetebol);
+        Jogo jogoFutebol = new Jogo(futebol);
+        Jogo jogobasquetebol = new Jogo(basquetebol);
+        addJogo(jogoFutebol); 
+        addJogo(jogobasquetebol); 
+    }
+
+    public void loadApostasFromDB() {
+        /**
+            ------------------------ PARA IMPLEMENTAR DEPOIS --------------------
+         */
+
+        // Implementação Simulada
+        Desporto rugby = new Desporto("Rugby");
+        System.out.println("Added rugby with id: " + addDesporto(rugby));
+        Jogo jogorugby = new Jogo(rugby);
+        System.out.println("Added jogo with id: " + addJogo(jogorugby));
+        Aposta aposta = new ApostaSimples(LocalDateTime.now(),jogorugby);
+        System.out.println("Added aposta with id: " + addAposta(aposta));
+        
+    }
+
+    public String addJogo(Jogo jogo){
+        return IDatabase.addToDatabase(jogo, this.jogos);
+    }
+
+    public boolean addJogo(Jogo jogo,String id){
+        return IDatabase.addToDatabaseWithId(jogo,id, this.jogos);
+    }
+
+    public boolean removeJogo(String id){
+        return IDatabase.removeFromDatase(id,this.jogos);
+    }
+
+    public String addDesporto(Desporto desporto){
+        return IDatabase.addToDatabase(desporto, this.desportos);
+    }
+
+    public boolean addDesporto(Desporto desporto,String id){
+        return IDatabase.addToDatabaseWithId(desporto, id,this.desportos);
+    }
+
+    public boolean removeDesporto(String id){
+        return IDatabase.removeFromDatase(id,this.desportos);
+    }
+
+    public String addAposta(Aposta aposta){
+        return IDatabase.addToDatabase(aposta, this.apostas);
+    }
+
+    public boolean addAposta(Aposta aposta,String id){
+        return IDatabase.addToDatabaseWithId(aposta, id,this.apostas);
+    }
+
+    public boolean removeAposta(String id){
+        return IDatabase.removeFromDatase(id,this.apostas);
     }
 
     public boolean addUtilizador(Utilizador user){
@@ -80,12 +155,34 @@ public class Database {
         if(this.administradores.containsKey(username)) usernameExists = true;
         if(this.especialistas.containsKey(username)) usernameExists = true;
         if(this.apostadores.containsKey(username)) usernameExists = true;
-        
         return usernameExists;
     }
 
-    public boolean existemApostadoresRegistados(){
-        return !this.apostadores.isEmpty();
+    public boolean existemUtilizadores(){
+        return existemAdministradores() && existemApostadores() && existemEspecialistas();
     }
-    
+
+    public boolean existemApostadores(){
+        return !IDatabase.isEmpty(this.apostadores);
+    }
+
+    public boolean existemEspecialistas(){
+        return !IDatabase.isEmpty(this.especialistas);
+    }
+
+    public boolean existemAdministradores(){
+        return !IDatabase.isEmpty(this.administradores);
+    }
+
+    public boolean existemJogos(){
+        return !IDatabase.isEmpty(this.jogos);
+    }
+
+    public boolean existemDesportos(){
+        return !IDatabase.isEmpty(this.desportos);
+    }
+
+    public boolean existemApostas(){
+        return !IDatabase.isEmpty(this.apostas);
+    } 
 }

@@ -14,14 +14,14 @@ public class Jogo {
     }
     
 
-    public Jogo(String id, LocalDateTime date, Desporto desporto) {
-        this.id = id;
+    public Jogo(LocalDateTime date, Desporto desporto) {
+        this.id = "NaN";
         this.date = date;
         this.desporto = desporto;
     }
 
-    public Jogo(String id, Desporto desporto) {
-        this.id = id;
+    public Jogo(Desporto desporto) {
+        this.id = "NaN";
         this.desporto = desporto;
         this.date = LocalDateTime.now();
     }

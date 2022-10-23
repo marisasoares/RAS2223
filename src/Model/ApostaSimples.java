@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 
 public class ApostaSimples extends Aposta{
 
-    public ApostaSimples(LocalDateTime data, String id, Jogo jogo) {
-        super(data, id, jogo);
+    public ApostaSimples( String id,LocalDateTime data, Jogo jogo) {
+        super(id,data, jogo);
+    }
+
+    public ApostaSimples(LocalDateTime data, Jogo jogo) {
+        super(data, jogo);
     }
 }

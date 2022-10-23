@@ -6,12 +6,13 @@ public class Desporto {
     String id;
     String nome;
 
-
-    public Desporto() {
-    }
-
     public Desporto(String id, String nome) {
         this.id = id;
+        this.nome = nome;
+    }
+
+    public Desporto(String nome) {
+        this.id = "NaN";
         this.nome = nome;
     }
 

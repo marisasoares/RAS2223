@@ -8,9 +8,15 @@ public class Aposta{
     private String id;
     private Jogo jogo;
 
-    public Aposta(LocalDateTime data, String id, Jogo jogo) {
+    public Aposta(String id, LocalDateTime data, Jogo jogo) {
         this.data = data;
         this.id = id;
+        this.jogo = jogo;
+    }
+
+    public Aposta(LocalDateTime data, Jogo jogo) {
+        this.data = data;
+        this.id = "NaN";
         this.jogo = jogo;
     }
 

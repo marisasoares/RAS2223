@@ -12,7 +12,7 @@ public class JogoIndividual extends Jogo{
     }
 
     public JogoIndividual(String id, LocalDateTime date, Desporto desporto, float pontuacao) {
-        super(id, date, desporto);
+        super(date, desporto);
         this.pontuacao = pontuacao;
     }
 

@@ -6,12 +6,13 @@ import java.util.Objects;
 public class DesportoIndividual extends Desporto{
     private ArrayList<String> jogadores;
     
-
-    public DesportoIndividual() {
-    }
-
     public DesportoIndividual(String id, String nome, ArrayList<String> jogadores) {
         super(id, nome);
+        this.jogadores = jogadores;
+    }
+
+    public DesportoIndividual(String nome, ArrayList<String> jogadores) {
+        super(nome);
         this.jogadores = jogadores;
     }
 

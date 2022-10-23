@@ -3,17 +3,16 @@ package src.UI;
 import java.util.Scanner;
 
 import src.DataLayer.Database;
+import src.DataLayer.IDatabase;
 import src.Model.Administrador;
 import src.Model.Apostador;
 import src.Model.Especialista;
-
-import src.UI.Menu;
 
 public class TextUI {
 
     //Scanner para leitura
     private transient Scanner scanner;
-    public Database database = new Database();
+    public IDatabase database = new Database();
 
     /**
     * Construtor.
@@ -34,6 +33,8 @@ public class TextUI {
     public void run() {
         scanner = new Scanner(System.in);
         database.loadUsersFromDB();
+        database.loadJogosAndSportsFromDB();
+        database.loadApostasFromDB();
         this.menuPrincipal();
         clearScreen();
     }
@@ -53,7 +54,7 @@ public class TextUI {
         });
 
         //Registar pré-condições das transições
-        menu.setPreCondition(1, ()->this.database.existemApostadoresRegistados());
+        menu.setPreCondition(1, ()->this.database.existemUtilizadores());
 
         //Registar os handlers das transições
         menu.setHandler(1,() -> login());
@@ -153,7 +154,10 @@ public class TextUI {
         clearScreen();
         Menu menu = new Menu(new String[]{
                 "Apostar"
-        },"Bem vindo " + apostador.getUsername() + "\n" + apostador.getEmail()+"\n");
+        },"Bem vindo " + apostador.getUsername() 
+        + "\n" + apostador.getEmail() + "\nSaldo: \n"
+        + apostador.getCarteira().getEuros() + " €\n" +
+        + apostador.getCarteira().getDollars() + " $\n");
         menu.setTitulo("Menu Apostador");
         menu.run();
     }
