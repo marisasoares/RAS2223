@@ -1,19 +1,18 @@
 package src.Model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class JogoIndividual extends Jogo{
 
     private float pontuacao;
+    private ArrayList<Jogador> jogadores;
 
-
-    public JogoIndividual() {
-    }
-
-    public JogoIndividual(String id, LocalDateTime date, Desporto desporto, float pontuacao) {
+    public JogoIndividual(String id, LocalDateTime date, Desporto desporto, float pontuacao,ArrayList<Jogador> jogadores) {
         super(date, desporto);
         this.pontuacao = pontuacao;
+        this.jogadores = jogadores;
     }
 
     public float getPontuacao() {
@@ -24,10 +23,23 @@ public class JogoIndividual extends Jogo{
         this.pontuacao = pontuacao;
     }
 
-    public JogoIndividual pontuacao(float pontuacao) {
-        setPontuacao(pontuacao);
-        return this;
+
+    public ArrayList<String> getJogadores() {
+        ArrayList<String> jogadoresString = new ArrayList<>();
+        for (Jogador j : this.jogadores) {
+            jogadoresString.add(j.toString());
+        }
+        return jogadoresString;
     }
+
+    public void setJogadores(ArrayList<Jogador> jogadores) {
+        ArrayList<Jogador> newJogadores = new ArrayList<>();
+        for (Jogador j : jogadores) {
+            newJogadores.add(j);
+        }
+        this.jogadores = newJogadores;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -75,7 +75,7 @@ public class Database implements IDatabase{
         addDesporto(rugby);
         Jogo jogorugby = new Jogo(rugby);
         addJogo(jogorugby);
-        Aposta aposta = new ApostaSimples(LocalDateTime.now(),jogorugby);
+        Aposta aposta = new ApostaSimples(LocalDateTime.now(),jogorugby,30,1,1,1,34);
         addAposta(aposta);
         
     }

@@ -207,17 +207,13 @@ public class Menu implements Serializable{
         System.out.print("\033[0;36m");
         StringBuilder sb = new StringBuilder();
         sb.append("╔══");
-        for (char c : this.titulo.toCharArray()) {
-            sb.append("═");
-        }
+        for (int i = 0; i < this.titulo.length(); i++) sb.append("═");
         sb.append("══╗");
         System.out.println(sb.toString());
         System.out.println("║  " + this.titulo + "  ╠════════════════════════════════════════════════");
         sb = new StringBuilder();
         sb.append("╚══");
-        for (char c : this.titulo.toCharArray()) {
-            sb.append("═");
-        }
+        for (int i = 0; i < this.titulo.length(); i++) sb.append("═");
         sb.append("══╝");
         System.out.println(sb.toString());
         System.out.print("\033[0m");

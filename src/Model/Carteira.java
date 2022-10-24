@@ -28,9 +28,11 @@ public class Carteira {
 
     @Override
     public String toString() {
-        return  "Euros: " + getEuros() + " €" +
-                "\nDollars: " + getDollars() + " $" +
-                "\n";
+        return "{" +
+            " euros='" + getEuros() + "'" +
+            ", dollars='" + getDollars() + "'" +
+            "}";
     }
+
 
 }

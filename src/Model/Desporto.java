@@ -58,12 +58,13 @@ public class Desporto {
         return Objects.hash(id, nome);
     }
 
+
     @Override
     public String toString() {
-        return "ID do desporto: " + getId() +
-               "\nNome: " + getNome() +
-               "\n";
+        return "{" +
+            " id='" + getId() + "'" +
+            ", nome='" + getNome() + "'" +
+            "}";
     }
-
 
 }

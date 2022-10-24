@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 
 public class ApostaMultipla extends Aposta{
 
-    public ApostaMultipla(String id,LocalDateTime data,  Jogo jogo) {
-        super( id, data, jogo);
+    public ApostaMultipla(String id,LocalDateTime data,  Jogo jogo,float valor , float oddCasa, float oddEmpate, float oddFora, float ganho) {
+        super( id, data, jogo, valor, oddCasa, oddEmpate, oddFora,ganho);
     }
 
-    public ApostaMultipla(LocalDateTime data, Jogo jogo) {
-        super(data, jogo);
+    public ApostaMultipla(LocalDateTime data, Jogo jogo, float valor ,float oddCasa, float oddEmpate, float oddFora,float ganho) {
+        super(data, jogo, valor, oddCasa, oddEmpate, oddFora,ganho);
     }
 }

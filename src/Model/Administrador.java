@@ -13,7 +13,11 @@ public class Administrador extends Utilizador{
 
     @Override
     public String toString() {
-        return super.toString() + "Tipo: Administrador\n";
+        return "{" +
+        " username='" + getUsername() + "'" +
+        ", email='" + getEmail() + "'" +
+        ", tipo='administrador'" +
+        "}";
     }
 
     

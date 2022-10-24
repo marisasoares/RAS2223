@@ -46,13 +46,12 @@ public class DesportoColetivo extends Desporto{
         return Objects.hashCode(listaEquipas);
     }
 
+
     @Override
     public String toString() {
-        return super.toString() + "{" +
+        return "{" +
             " listaEquipas='" + getListaEquipas() + "'" +
             "}";
     }
-
-
 
 }

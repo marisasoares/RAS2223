@@ -49,7 +49,13 @@ public class Apostador extends Utilizador{
 
     @Override
     public String toString() {
-        return super.toString() + "Tipo: Apostador\n" + this.carteira.toString();
+        return "{" +
+            " username='" + getUsername() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", apostas='" + getApostas() + "'" +
+            ", carteira='" + getCarteira() + "'" +
+            ", tipo='apostador'" +
+            "}";
     }
 
 }

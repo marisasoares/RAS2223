@@ -13,7 +13,11 @@ public class Especialista extends Utilizador{
 
     @Override
     public String toString() {
-        return super.toString() + "Tipo: Especialista\n";
+        return "{" +
+                " username='" + getUsername() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", tipo= 'Especialista'" +
+                "}";
     }
 
 }

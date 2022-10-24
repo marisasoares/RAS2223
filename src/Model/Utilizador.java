@@ -42,11 +42,14 @@ public class Utilizador {
         this.email = email;
     }
 
+
     @Override
     public String toString() {
-        return "Username: " + username +
-               "\nemail: " + email +
-               '\n';
+        return "{" +
+            " username='" + getUsername() + "'" +
+            ", email='" + getEmail() + "'" +
+            "}";
     }
+    
 
 }

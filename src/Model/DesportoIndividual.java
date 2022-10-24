@@ -45,12 +45,14 @@ public class DesportoIndividual extends Desporto{
         return Objects.hashCode(jogadores);
     }
 
+
     @Override
     public String toString() {
-        return super.toString() + "{" +
+        return "{" +
             " jogadores='" + getJogadores() + "'" +
             "}";
     }
+    
 
 
     

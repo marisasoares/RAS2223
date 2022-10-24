@@ -1,15 +1,12 @@
 package src.Model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class JogoEquipa extends Jogo{
     private Equipa equipaDaCasa;
     private Equipa equipaOponente;
     private float pontuacaoEquipaCasa;
     private float pontuacaoEquipaOponente;
-
-
 
     public JogoEquipa(LocalDateTime date, Desporto desporto, Equipa equipaDaCasa, Equipa equipaOponente, float pontuacaoEquipaCasa, float pontuacaoEquipaOponente) {
         super(date, desporto);
@@ -60,22 +57,14 @@ public class JogoEquipa extends Jogo{
         this.pontuacaoEquipaOponente = pontuacaoEquipaOponente;
     }
 
-
-
     @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof JogoEquipa)) {
-            return false;
-        }
-        JogoEquipa jogoEquipa = (JogoEquipa) o;
-        return Objects.equals(equipaDaCasa, jogoEquipa.equipaDaCasa) && Objects.equals(equipaOponente, jogoEquipa.equipaOponente) && pontuacaoEquipaCasa == jogoEquipa.pontuacaoEquipaCasa && pontuacaoEquipaOponente == jogoEquipa.pontuacaoEquipaOponente;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(equipaDaCasa, equipaOponente, pontuacaoEquipaCasa, pontuacaoEquipaOponente);
+    public String toString() {
+        return "{" +
+            " equipaDaCasa='" + getEquipaDaCasa() + "'" +
+            ", equipaOponente='" + getEquipaOponente() + "'" +
+            ", pontuacaoEquipaCasa='" + getPontuacaoEquipaCasa() + "'" +
+            ", pontuacaoEquipaOponente='" + getPontuacaoEquipaOponente() + "'" +
+            "}";
     }
 
 }

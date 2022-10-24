@@ -227,8 +227,9 @@ public class TextUI {
         header("LISTA DE JOGOS");
         for (String s : this.database.listarJogos()) {
             System.out.println("Jogo ─────────────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 
@@ -237,8 +238,9 @@ public class TextUI {
         header("LISTA DE DESPORTOS");
         for (String s : this.database.listarDesportos()) {
             System.out.println("Desporto ─────────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 
@@ -247,8 +249,9 @@ public class TextUI {
         header("LISTA DE APOSTAS");
         for (String s : this.database.listarApostas()) {
             System.out.println("Aposta ───────────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 
@@ -257,8 +260,9 @@ public class TextUI {
         header("LISTA DE ESPECIALISTAS");
         for (String s : this.database.listarEspecialistas()) {
             System.out.println("Especialista ───────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 
@@ -267,8 +271,9 @@ public class TextUI {
         header("LISTA DE ADMINISTRADORES");
         for (String s : this.database.listarAdministradores()) {
             System.out.println("Administrador ───────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 
@@ -277,8 +282,9 @@ public class TextUI {
         header("LISTA DE APOSTADORES");
         for (String s : this.database.listarApostadores()) {
             System.out.println("Apostador ───────────────────────────");
-            System.out.print(s);
+            System.out.println(s);
         }
+        System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
 }

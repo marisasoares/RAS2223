@@ -1,25 +1,21 @@
 package src.Model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Jogo {
 
     private String id;
     private LocalDateTime date;
     private Desporto desporto;
-    private Equipa equipaCasa;
-    private Equipa equipaFora;
-    private List<Jogador> jogadores;
-
-
-    public Jogo(){
-        
-    }
-    
 
     public Jogo(LocalDateTime date, Desporto desporto) {
         this.id = "NaN";
+        this.date = date;
+        this.desporto = desporto;
+    }
+
+    public Jogo(String id, LocalDateTime date, Desporto desporto) {
+        this.id = id;
         this.date = date;
         this.desporto = desporto;
     }
@@ -54,13 +50,14 @@ public class Jogo {
         this.desporto = desporto;
     }
 
-    
 
     @Override
     public String toString() {
-        return "ID do jogo: " + id +
-               "\nDate: " + date +
-               "\nDesporto: \n" + desporto +
-               '\n';
+        return "{" +
+            " id='" + getId() + "'" +
+            ", date='" + getDate() + "'" +
+            ", desporto='" + getDesporto() + "'" +
+            "}";
     }
+    
 }
