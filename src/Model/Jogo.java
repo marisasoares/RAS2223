@@ -1,12 +1,16 @@
 package src.Model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Jogo {
 
     private String id;
     private LocalDateTime date;
     private Desporto desporto;
+    private Equipa equipaCasa;
+    private Equipa equipaFora;
+    private List<Jogador> jogadores;
 
 
     public Jogo(){
