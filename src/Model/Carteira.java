@@ -1,38 +1,51 @@
 package Model;
 
 public class Carteira {
-    double euros;
-    double dollars;
+    /**
+     * Quantia em euros guardada nesta carteira
+     * */
+    private float euros;
+    /**
+     * Quantia em dolars guardada nesta carteira*/
+    private float dollars;
 
-    public Carteira(double euros, double dollars) {
+    public Carteira() {
+        this.euros = 0;
+        this.dollars = 0;
+    }
+
+    public Carteira(float euros, float dollars) {
         this.euros = euros;
         this.dollars = dollars;
     }
 
-    public double getEuros() {
-        return euros;
+    public float getEuros() {
+        return this.euros;
     }
 
-    public void setEuros(double euros) {
+    public void setEuros(float euros) {
         this.euros = euros;
     }
 
-    public double getDollars() {
-        return dollars;
+    public float getDollars() {
+        return this.dollars;
     }
 
-    public void setDollars(double dollars) {
+    public void setDollars(float dollars) {
         this.dollars = dollars;
     }
 
-
-    @Override
-    public String toString() {
-        return "{" +
-            " euros='" + getEuros() + "'" +
-            ", dollars='" + getDollars() + "'" +
-            "}";
+    /**
+     * Adicionar um valor em euros à carteira
+     * */
+    public void addEuros(float amount){
+        this.setEuros(this.getEuros()+amount);
     }
 
-
+    /**
+     * Adicionar um valor em dollars à carteira
+     * */
+    public void addDollars(float amount){
+        this.setDollars(this.getDollars()+amount);
+    }
 }

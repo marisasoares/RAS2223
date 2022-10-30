@@ -3,7 +3,7 @@ package DataLayer;
 public class DAOconfig {
     public static final String USERNAME = "root";
     public static final String PASSWORD = "root";
-    //Caso pc miguel
+    //Caso PC miguel
     //public static final String PASSWORD = "Database#33";
     private static final String DATABASE = "rasbet";
     private static final String DRIVER = "jdbc:mysql";

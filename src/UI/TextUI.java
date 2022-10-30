@@ -2,83 +2,30 @@ package UI;
 
 import java.util.Scanner;
 
-import DataLayer.Database;
-import DataLayer.IDatabase;
+
 import Model.Administrador;
 import Model.Apostador;
 import Model.Especialista;
 
 public class TextUI {
 
-    //Scanner para leitura
-    private transient Scanner scanner;
-    public IDatabase database = new Database();
 
-    /**
-    * Construtor.
-    *
-    * Cria os menus e a camada de negócio.
-    */
-    public TextUI() {
-    }
 
-    public void pressEnterToContinue(){
-        System.out.println(" - press enter to continue -");
-        this.scanner.nextLine();
-    }
 
-    /**
-     * Executa o menu principal e invoca o método correspondente à opção seleccionada.
-    */
-    public void run() {
-        scanner = new Scanner(System.in);
-        database.loadUsersFromDB();
-        database.loadJogosAndSportsFromDB();
-        database.loadApostasFromDB();
-        this.menuPrincipal();
-        clearScreen();
-    }
 
-    public static void clearScreen(){
-        System.out.println("\033[H\033[2J");
-    }
 
-    public static void header(String string){
-        System.out.print("\033[0;36m");
-        System.out.println("╔══════════╗");
-        System.out.println("║  Rasbet  ╠════════════════════════");
-        System.out.println("╚══════════╝ ");
-        System.out.println("\n    " + string + "      \033[0m\n\n");
-    }
+
 
     //Métodos auxiliares 
 
-    private void menuPrincipal() {
-        clearScreen();
-        Menu menu = new Menu(new String[]{
-                "Login",
-                "Registar",
-                "Apostar"
-        });
 
-        //Registar pré-condições das transições
-        menu.setPreCondition(1, ()->this.database.existemUtilizadores());
 
-        //Registar os handlers das transições
-        menu.setHandler(1,() -> login());
-        menu.setHandler(2,() -> register(0));
-        //Executar o menu
-        menu.run();
-    }
-
-    private void errorMessage(String s){
-        System.out.println("\033[0;31m[Erro] " + s + "\033[0m");
-    }
 
     /*
      * UI para registo de um utilizador
      * @param tipo_de_utilizador 0 - apostador, 1 - especialista, 2 - administrador
      */
+    /*
     private void register(int tipo_de_utilizador){
         clearScreen();
         header("REGISTO");
@@ -176,7 +123,7 @@ public class TextUI {
         + "\n" + apostador.getEmail() + "\nSaldo: \n"
         + apostador.getCarteira().getEuros() + " €\n" +
         + apostador.getCarteira().getDollars() + " $\n");
-        menu.setTitulo("Menu Apostador");
+        menu.setTitulo("Menu Model.Apostador");
         menu.run();
     }
 
@@ -186,25 +133,25 @@ public class TextUI {
                 "Apostar",
                 "Definir odds"
         },"Bem vindo " + esp.getUsername() + "\n" + esp.getEmail()+"\n");
-        menu.setTitulo("Menu Especialista");
+        menu.setTitulo("Menu Model.Especialista");
         menu.run();
     }
 
     private void menuAdministrador(Administrador admin){
         clearScreen();
         Menu menu = new Menu(new String[]{
-                "Adicionar Administrador",
-                "Adicionar Especialista",
+                "Adicionar Model.Administrador",
+                "Adicionar Model.Especialista",
                 "Alterar estado aposta",
                 "Alterar odds",
                 "Listar Apostas",
                 "Listar Jogos",
                 "Listar Desportos",
                 "Listar Apostadores",
-                "Listar Especialista",
+                "Listar Model.Especialista",
                 "Listar Administradores"
         },"Bem vindo " + admin.getUsername() + "\n" + admin.getEmail()+"\n");
-        menu.setTitulo("Menu Administrador");
+        menu.setTitulo("Menu Model.Administrador");
         menu.setPreCondition(5, ()->database.existemApostas());
         menu.setPreCondition(6, ()->database.existemJogos());
         menu.setPreCondition(7, ()->database.existemDesportos());
@@ -259,7 +206,7 @@ public class TextUI {
         clearScreen();
         header("LISTA DE ESPECIALISTAS");
         for (String s : this.database.listarEspecialistas()) {
-            System.out.println("Especialista ───────────────────────────");
+            System.out.println("Model.Especialista ───────────────────────────");
             System.out.println(s);
         }
         System.out.println("FIM ──────────────────────────────────");
@@ -270,7 +217,7 @@ public class TextUI {
         clearScreen();
         header("LISTA DE ADMINISTRADORES");
         for (String s : this.database.listarAdministradores()) {
-            System.out.println("Administrador ───────────────────────────");
+            System.out.println("Model.Administrador ───────────────────────────");
             System.out.println(s);
         }
         System.out.println("FIM ──────────────────────────────────");
@@ -281,10 +228,12 @@ public class TextUI {
         clearScreen();
         header("LISTA DE APOSTADORES");
         for (String s : this.database.listarApostadores()) {
-            System.out.println("Apostador ───────────────────────────");
+            System.out.println("Model.Apostador ───────────────────────────");
             System.out.println(s);
         }
         System.out.println("FIM ──────────────────────────────────");
         pressEnterToContinue();
     }
+
+    */
 }
