@@ -1,6 +1,6 @@
 package UI;
 
-import Model.Game;
+import Model.*;
 
 import java.util.Scanner;
 
@@ -10,9 +10,10 @@ public class RasBetUI {
 	 * Scanner para leitura
 	 * */
 	private transient Scanner scanner;
+	private RasBetFacade rasBetFacade;
 
-	public RasBetUI(){
-
+	public RasBetUI(RasBetFacade rasBetFacade){
+		this.rasBetFacade = rasBetFacade;
 	}
 
 
@@ -61,20 +62,148 @@ public class RasBetUI {
 		Menu menu = new Menu(new String[]{
 				"Login",
 				"Registar",
-				"Apostar"
 		});
 
-		/*Registar pré-condições das transições
-		/menu.setPreCondition(1, ()->this.database.existemUtilizadores());
+		//Registar pré-condições das transições
+		//menu.setPreCondition(1, ()->this.database.existemUtilizadores());
 
 		//Registar os handlers das transições
 		menu.setHandler(1,() -> login());
 		menu.setHandler(2,() -> register(0));
-		//Executar o menu*/
+		//Executar o menu
 		menu.run();
 	}
 
+	private void login(){
+		clearScreen();
+		header("LOGIN");
+		System.out.print(" Email: ");
+		String email = this.scanner.nextLine();
+		System.out.print(" Password: ");
+		String password = this.scanner.nextLine();
+		boolean login_Successful = rasBetFacade.login(email, password);
+		if(login_Successful){
+			Object user = rasBetFacade.usersDataBase.getUser(email);
+			if(user instanceof Especialista) menuEspecialista((Especialista) user);
+			else if(user instanceof Administrador) menuAdministrador(((Administrador) user));
+			else menuApostador((Apostador)user);
 
+		} else {
+			errorMessage("Login Inválido");
+			pressEnterToContinue();
+		}
+		return;
+	}
+
+	private void menuApostador(Apostador apostador){
+		clearScreen();
+		Menu menu = new Menu(new String[]{
+				"Apostar",
+				"Alterar password"
+		},"Bem vindo " +  apostador.getNome() + "\nSaldo: \n" + apostador.getCarteira().getEuros()+ " €"
+		+ "\n" + apostador.getCarteira().getDollars()+ " $\n");
+		menu.setTitulo("Menu Apostador");
+		menu.run();
+	}
+
+	private void menuEspecialista(Especialista esp){
+		clearScreen();
+		Menu menu = new Menu(new String[]{
+				"Apostar",
+				"Definir odds"
+		},"Bem vindo" + esp.getNome());
+		menu.setTitulo("Menu Especialista");
+		menu.run();
+	}
+
+	private void menuAdministrador(Administrador admin){
+		clearScreen();
+		Menu menu = new Menu(new String[]{
+				"Adicionar Model.Administrador",
+				"Adicionar Model.Especialista",
+				"Alterar estado aposta",
+				"Alterar odds",
+				"Listar Apostas",
+				"Listar Jogos",
+				"Listar Desportos",
+				"Listar Apostadores",
+				"Listar Model.Especialista",
+				"Listar Administradores"
+		},"Bem vindo" + admin.getNome());
+		menu.setTitulo("Menu Administrador");
+		menu.run();
+	}
+
+	/*
+	 * UI para registo de um utilizador
+	 * @param tipo_de_utilizador 0 - apostador, 1 - especialista, 2 - administrador
+	 */
+    private void register(int tipo_de_utilizador){
+        clearScreen();
+        header("REGISTO");
+        String name = "",email = "", password = "",nif = "";
+        int tentativa = 0;
+        do {
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                errorMessage("Nome Inválido");
+            }
+            System.out.print("Insira o seu nome: ");
+            name = this.scanner.nextLine();
+            tentativa++;
+        } while (name.trim().length() == 0);
+        tentativa = 0;
+        System.out.println();
+        do {
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                errorMessage("Email inválido ou já utilizado");
+            }
+            System.out.print("Insira email: ");
+            email = this.scanner.nextLine();
+            tentativa++;
+        } while ( rasBetFacade.usersDataBase.userExists(email) || email.trim().length() == 0 || !email.matches("\\w+@\\w+\\.\\w+"));
+        tentativa = 0;
+		System.out.println();
+		do {
+			if(tentativa != 0) {
+				//Apagar as duas linhas superiores
+				System.out.print(String.format("\033[%dA",1));
+				System.out.print("\033[2K");
+				System.out.print(String.format("\033[%dA",1));
+				System.out.print("\033[2K");
+				errorMessage("NIF no formato incorreto (9 digitos)");
+			}
+			System.out.print("Insira NIF: ");
+			nif = this.scanner.nextLine();
+			tentativa++;
+		} while (nif.length() != 9);
+		tentativa = 0;
+        System.out.println();
+        do {
+            if(tentativa != 0) {
+                //Apagar as duas linhas superiores
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                System.out.print(String.format("\033[%dA",1));
+                System.out.print("\033[2K");
+                errorMessage("A password deve conter pelo menos 8 caractéres");
+                }
+            System.out.print("Insira password: ");
+            password = this.scanner.nextLine();
+            tentativa++;
+        } while (password.length() < 8);
+        this.rasBetFacade.register(name,email,password,nif,tipo_de_utilizador);
+        pressEnterToContinue();
+    }
 
 
 	/**

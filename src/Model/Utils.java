@@ -6,7 +6,7 @@ import java.util.UUID;
 public interface Utils {
     /**
      * Gera um identificador de 8 caracteres único
-     * @param <T>
+     * @param <T> Objeto guardado no map
      * @param m - Map onde se pretende criar um id unico
      * @return id gerado
      */

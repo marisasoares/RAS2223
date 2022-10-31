@@ -3,31 +3,22 @@ package Model;
 public class User {
 	/**
 	 * Nome do utilizador
-	 * */
+	 */
 	private String nome;
 	/**
 	 * Email
-	 * */
+	 */
 	public String mail;
 	/**
 	 * Hash da password utilizando o metodo hashCode da classe String
-	 * */
+	 */
 	private int passwordHash;
-	/**
-	 * Número de identificação fiscal do utilizador
-	 * */
-	private String nif;
-	/**
-	 * Model.Carteira que guarda a quantia que o utilizador possui nas diversas moedas
-	 * */
-	private Carteira carteira;
 
-	public User(String nome, String mail, int passwordHash, String nif) {
+
+	public User(String nome, String mail, int passwordHash) {
 		this.nome = nome;
 		this.mail = mail;
 		this.passwordHash = passwordHash;
-		this.nif = nif;
-		this.carteira = new Carteira();
 	}
 
 	public String getNome() {
@@ -50,15 +41,4 @@ public class User {
 		this.passwordHash = password.hashCode();
 	}
 
-	public String getNif() {
-		return this.nif;
-	}
-
-	public void setNif(String nif) {
-		this.nif = nif;
-	}
-
-	public Carteira getCarteira(){
-		return this.carteira;
-	}
 }

@@ -19,9 +19,19 @@ public class Apostador extends User {
 	 * Histórico de todas as transferências efetuadas pelo utilizador
 	 * */
 	private Map<String,Transfer> transHistory;
+	/**
+	 * Número de identificação fiscal do utilizador
+	 * */
+	private String nif;
+	/**
+	 * Model.Carteira que guarda a quantia que o utilizador possui nas diversas moedas
+	 * */
+	private Carteira carteira;
 
 	public Apostador(String nome, String mail, int passwordHash, String nif) {
-		super(nome, mail, passwordHash, nif);
+		super(nome, mail, passwordHash);
+		this.nif = nif;
+		this.carteira = new Carteira();
 	}
 
 	/**
@@ -60,6 +70,18 @@ public class Apostador extends User {
 		this.transHistory.put(id,transfer);
 		return id;
 	}
+	public String getNif() {
+		return this.nif;
+	}
+
+	public void setNif(String nif) {
+		this.nif = nif;
+	}
+
+	public Carteira getCarteira(){
+		return this.carteira;
+	}
+
 
 	/**
 	 * Efetuar uma aposta num jogo

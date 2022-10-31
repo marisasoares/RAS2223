@@ -30,11 +30,11 @@ public class UserDB {
 		if(!this.utilizadores.containsKey(email)){
 			switch (type){
 				case 1:
-					Especialista especialista = new Especialista(nome,email,password.hashCode(),nif);
+					Especialista especialista = new Especialista(nome,email,password.hashCode());
 					this.utilizadores.put(email,especialista);
 					break;
 				case 2:
-					Administrador administrador = new Administrador(nome,email,password.hashCode(),nif);
+					Administrador administrador = new Administrador(nome,email,password.hashCode());
 					this.utilizadores.put(email,administrador);
 					break;
 				default:

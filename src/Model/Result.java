@@ -13,37 +13,39 @@ public class Result {
 	 * Odd empate
 	 * */
 	private float oddDraw;
-	/**
-	 * Pontuação equipa da casa
-	 * */
-	private float scoreHomeTeam;
-	/**
-	 * Pontuação equipa de fora
-	 * */
-	private float scoreAwayTeam;
 
-	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw, float scoreHomeTeam, float scoreAwayTeam) {
+	/**
+	 * Nome da equipa vencedora
+	 * */
+	private String equipaVencedora;
+
+	/**
+	 * O resultado do jogo Exemplos: 0x0, 0x1, 2x3, 4x4 etc..
+	 * */
+	private  String scores;
+
+	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw, String scores , String equipaVencedora) {
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
-		this.scoreHomeTeam = scoreHomeTeam;
-		this.scoreAwayTeam = scoreAwayTeam;
+		this.scores = scores;
+		this.equipaVencedora = equipaVencedora;
 	}
 
 	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw) {
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
-		this.scoreAwayTeam = 0;
-		this.scoreHomeTeam = 0;
+		this.scores = "0x0";
+		this.equipaVencedora = "NaN";
 	}
 
 	public Result() {
 		this.oddAwayTeam = 0;
 		this.oddHomeTeam = 0;
 		this.oddDraw = 0;
-		this.scoreAwayTeam = 0;
-		this.scoreHomeTeam = 0;
+		this.scores = "0x0";
+		this.equipaVencedora = "NaN";
 	}
 
 	public float getOddAwayTeam() {
@@ -70,19 +72,19 @@ public class Result {
 		this.oddDraw = oddDraw;
 	}
 
-	public float getScoreHomeTeam() {
-		return this.scoreHomeTeam;
+	public String getEquipaVencedora() {
+		return this.equipaVencedora;
 	}
 
-	public void setScoreHomeTeam(float scoreHomeTeam) {
-		this.scoreHomeTeam = scoreHomeTeam;
+	public void setEquipaVencedora(String equipaVencedora) {
+		this.equipaVencedora = equipaVencedora;
 	}
 
-	public float getScoreAwayTeam() {
-		return this.scoreAwayTeam;
+	public String getScores() {
+		return this.scores;
 	}
 
-	public void setScoreAwayTeam(float scoreAwayTeam) {
-		this.scoreAwayTeam = scoreAwayTeam;
+	public void setScores(String scores) {
+		this.scores = scores;
 	}
 }

@@ -6,52 +6,59 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Migrate {
-    public static void createTables() {
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+    public static void createTables() throws ClassNotFoundException {
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS Utilizador (" +
-                    "id int NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "username varchar(32) DEFAULT 'n/d'," +
-                    "email varchar(320) DEFAULT 'n/d' unique," +
-                    "password varchar(32) DEFAULT 'n/d'," +
-                    "permissao int(5) NOT NULL DEFAULT 0,";
+                        "idUtilizador INT NOT NULL PRIMARY KEY,"  +
+                        "Nome VARCHAR(45) NOT NULL," +
+                        "Email VARCHAR(75) NOT NULL," +
+                        "PasswordHash INT NOT NULL," +
+                        "Tipo TINYINT(2) NOT NULL," +
+                        "NIF VARCHAR(45) NOT NULL";
 
             stm.executeUpdate(sql);
 
-            String sqlJ = "CREATE TABLE IF NOT EXISTS Jogador (" +
-                    "id int NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "nome varchar(64) DEFAULT 'n/d', " +
-                    "FOREIGN KEY (Equipa_id) REFERENCES Equipa(id))";
+            String sqlR = "CREATE TABLE IF NOT EXISTS Resultado (" +
+                    "ResultadoID VARCHAR(45) NOT NULL PRIMARY KEY," +
+                    "OddCasa FLOAT NOT NULL,"+
+                    "OddDraw FLOAT NOT NULL," +
+                    "OddAway FLOAT NOT NULL," +
+                    "Score VARCHAR(45) NOT NULL," +
+                    "EquipaVencedora VARCHAR(45) NOT NULL";
 
+            stm.executeUpdate(sqlR);
+
+            String sqlJ = "CREATE TABLE IF NOT EXISTS Jogo (" +
+                    "idJogo INT NOT NULL PRIMARY KEY ," +
+                    "HomeTeam VARCHAR(45) NOT NULL," +
+                    "AwayTeam VARCHAR(45) NOT NULL," +
+                    "CommenceTime VARCHAR(45) NOT NULL," +
+                    "Completed VARCHAR(45) NOT NULL," +
+                    "ResultadoId VARCHAR(45) NOT NULL PRIMARY KEY ," +
+                    "FOREIGN KEY (ResultadoId)" +
+                    "    REFERENCES Resultado(ResultadoID))";
             stm.executeUpdate(sqlJ);
 
-            String sqlE = "CREATE TABLE IF NOT EXISTS Equipa (" +
-                    "id int NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "nome varchar(64) NOT NULL," +
-                    "FOREIGN KEY (utilizador_id) REFERENCES Utilizador(id))";
-            stm.executeUpdate(sqlE);
+            String sqlAP = "CREATE TABLE IF NOT EXISTS Aposta (" +
+                    "idAposta INT NOT NULL PRIMARY KEY,"  +
+                    "Value FLOAT NOT NULL," +
+                    "Utilizador_id INT NOT NULL PRIMARY KEY ," +
+                    "Jogo_id INT NOT NULL PRIMARY KEY ," +
+                    "FOREIGN KEY (Utilizador_id)" +
+                            "REFERENCES Utilizador(idUtilizador)," +
+                    " FOREIGN KEY (Jogo_id)" +
+                            "REFERENCES Jogo(idJogo))";
+            stm.executeUpdate(sqlAP);
 
-            String sqlPU = "CREATE TABLE IF NOT EXISTS Utilizador_PontoDeInteresse (" +
-                    "id int(64) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "utilizador_id int NOT NULL," +
-                    "ponto_de_interesse_id int NOT NULL," +
-                    "FOREIGN KEY (utilizador_id) REFERENCES Utilizador(id) ON UPDATE CASCADE," +
-                    "FOREIGN KEY (ponto_de_interesse_id) REFERENCES PontoDeInteresse(id) ON UPDATE CASCADE)";
-            stm.executeUpdate(sqlPU);
+            String sqlCart = "CREATE TABLE IF NOT EXISTS Carteira (" +
+                    "idUtilizador INT NOT NULL PRIMARY KEY ," +
+                    "Euros VARCHAR(45) NOT NULL," +
+                    "Dollars VARCHAR(45) NOT NULL," +
+                    "FOREIGN KEY (idUtilizador)" +
+                    "    REFERENCES Utilizador(idUtilizador))";
+            stm.executeUpdate(sqlCart);
 
-            String sqlRepRev = "CREATE TABLE IF NOT EXISTS ReportedReview (" +
-                    "id int(64) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "utilizador_id int NOT NULL," +
-                    "review_id int NOT NULL," +
-                    "FOREIGN KEY (utilizador_id) REFERENCES Utilizador(id) ON UPDATE CASCADE," +
-                    "FOREIGN KEY (review_id) REFERENCES Review(id) ON UPDATE CASCADE)";
-            stm.executeUpdate(sqlRepRev);
-
-            String sqlLikeRev = "CREATE TABLE IF NOT EXISTS LikedReviews (" +
-                    "id int(64) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "utilizador_id int NOT NULL," +
-                    "review_id int NOT NULL)";
-            stm.executeUpdate(sqlLikeRev);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +66,7 @@ public class Migrate {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
         createTables();
     }
 }

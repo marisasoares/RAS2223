@@ -3,6 +3,10 @@ package Model;
 import DataLayer.GamesDB;
 import DataLayer.UserDB;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,9 +140,13 @@ public class RasBetFacade {
 		boolean validTransfer = true;
 		if(usersDataBase.userExists(email)) {
 			User user = usersDataBase.getUser(email);
-			//Não permitir tirar mais dinheiro que o existente
-			//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
-			if(user.getCarteira().getEuros()+valor < 0) validTransfer = false;
+			if(user instanceof Apostador){
+				//Não permitir tirar mais dinheiro que o existente
+				//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
+				if(((Apostador) user).getCarteira().getEuros()+valor < 0) validTransfer = false;
+			}
+
+
 		}
 		return validTransfer;
 	}
@@ -204,5 +212,29 @@ public class RasBetFacade {
 	 */
 	public void setUtilizadorAutenticado(User utilizadorAutenticado) {
 		this.utilizadorAutenticado = utilizadorAutenticado;
+	}
+
+	/**
+	 * Faz um request ao servidor "http://ucras.di.uminho.pt/v1/games/"
+	 * e devolve o json
+	 * @return o json de resposta ou null caso timeout
+	 * */
+	public String getServerData() {
+		StringBuffer content = new StringBuffer();
+		try {
+			URL url = new URL("http://ucras.di.uminho.pt/v1/games/");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setConnectTimeout(5000);
+			con.setRequestMethod("GET");
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				content.append(inputLine);
+			}
+			in.close();
+		} catch (IOException e) {
+			return null;
+		}
+		return content.toString();
 	}
 }
