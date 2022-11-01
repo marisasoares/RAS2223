@@ -34,4 +34,37 @@ public class ApostadorDAO {
         }
         return r;
     }
+
+    public static Apostador get(int id) {
+        Apostador ap = null;
+
+        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {  // A chave existe na tabela
+                ap = new Apostador(rs.getString("Nome"),
+                        rs.getString("mail"),
+                        rs.getInt("passwordHash"),
+                        rs.getString("nif"));
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return ap;
+    }
+
+    public static void delete(int id) {
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(DELETE);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package DataLayer;
 
-import Model.Apostador;
 import Model.Sport;
 
 import java.sql.*;
@@ -32,6 +31,36 @@ public class sportDAO {
             throw new NullPointerException(e.getMessage());
         }
         return r;
+    }
+
+    public static Sport get(int id) {
+        Sport sp = null;
+
+        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {  // A chave existe na tabela
+                sp = new Sport(rs.getInt("id"),
+                        rs.getString("Nome"));
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return sp;
+    }
+
+    public static void delete(int id) {
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(DELETE);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
