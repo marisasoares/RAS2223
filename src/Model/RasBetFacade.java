@@ -2,6 +2,7 @@ package Model;
 
 import DataLayer.GamesDB;
 import DataLayer.UserDB;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -236,5 +237,10 @@ public class RasBetFacade {
 			return null;
 		}
 		return content.toString();
+	}
+
+	public void parseJson(String json){
+		Gson g = new Gson();
+		Game game = g.fromJson(json,Model.Game.class);
 	}
 }

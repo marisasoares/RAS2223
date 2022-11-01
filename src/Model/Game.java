@@ -8,7 +8,7 @@ public class Game {
 	/**
 	 * Identificador de jogo
 	 * */
-	public String id;
+	public int id;
 	/**
 	 * Equipa que joga em casa
 	 * */
@@ -38,7 +38,7 @@ public class Game {
 	 * */
 	private Map<String,Bookmaker> bookmakers;
 
-	public Game(String id, String homeTeam, String awayTeam, LocalDateTime commenceTime, boolean completed, String scores) {
+	public Game(int id, String homeTeam, String awayTeam, LocalDateTime commenceTime, boolean completed, String scores) {
 		this.id = id;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
@@ -49,7 +49,7 @@ public class Game {
 		this.bookmakers = new HashMap<>();
 	}
 
-	public Game(String id, String homeTeam, String awayTeam, LocalDateTime commenceTime) {
+	public Game(int id, String homeTeam, String awayTeam, LocalDateTime commenceTime) {
 		this.id = id;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
@@ -60,11 +60,11 @@ public class Game {
 		this.bookmakers = new HashMap<>();
 	}
 
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

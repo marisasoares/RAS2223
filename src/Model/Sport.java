@@ -8,7 +8,7 @@ public class Sport {
 	/**
 	 * Identificador do desporto
 	 * */
-	private String id;
+	private int id;
 	/**
 	 * Nome do desporto
 	 * */
@@ -16,15 +16,15 @@ public class Sport {
 	/**
 	 * Mapa de jogos
 	 * */
-	private Map<String,Game> jogos;
+	private Map<Integer,Game> jogos;
 
-	public Sport(String id,String nome) {
+	public Sport(int id,String nome) {
 		this.id = id;
 		this.nome = nome;
 		this.jogos = new HashMap<>();
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 

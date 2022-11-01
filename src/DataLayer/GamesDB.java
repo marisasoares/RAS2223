@@ -11,7 +11,7 @@ public class GamesDB {
 	/**
 	 * Mapa de desportos
 	 * */
-	private Map<String, Sport> sports;
+	private Map<Integer, Sport> sports;
 
 	public GamesDB() {
 		this.sports = new HashMap<>();
@@ -22,8 +22,8 @@ public class GamesDB {
 	 * @param name - nome do desporto
 	 * @return id do desporto
 	 */
-	public String addSport(String name) {
-		String id = Utils.geraIdentificadorUnico(this.sports);
+	public int addSport(String name) {
+		int id = Utils.geraIdentificadorUnicoInteger(this.sports);
 		Sport sport = new Sport(id,name);
 		this.sports.put(sport.getId(),sport);
 		return id;

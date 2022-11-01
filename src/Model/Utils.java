@@ -1,9 +1,12 @@
 package Model;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public interface Utils {
+
+    public static Map<Integer,Integer> resultados = new HashMap<>();
     /**
      * Gera um identificador de 8 caracteres único
      * @param <T> Objeto guardado no map
@@ -15,6 +18,21 @@ public interface Utils {
         String id;
         do {
             id = UUID.randomUUID().toString().substring(0, 8);
+        } while (m.containsKey(id));
+        return id;
+    }
+
+    /**
+     * Gera um identificador de 8 caracteres único
+     * @param <T> Objeto guardado no map
+     * @param m - Map onde se pretende criar um id unico
+     * @return id gerado
+     */
+    public static <T> int geraIdentificadorUnicoInteger(Map<Integer,T> m){
+        //Gerar um identificador aleatório
+        int id;
+        do {
+            id = UUID.randomUUID().toString().substring(0, 8).hashCode();
         } while (m.containsKey(id));
         return id;
     }

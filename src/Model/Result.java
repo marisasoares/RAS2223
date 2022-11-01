@@ -1,6 +1,12 @@
 package Model;
 
+import jdk.jshell.execution.Util;
+
 public class Result {
+	/**
+	 * Identificador do resultado
+	 * */
+	private int resultID;
 	/**
 	 * Odd equipa de fora
 	 * */
@@ -25,6 +31,8 @@ public class Result {
 	private  String scores;
 
 	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw, String scores , String equipaVencedora) {
+		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.resultados);
+		Utils.resultados.put(resultID,resultID);
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
@@ -33,6 +41,8 @@ public class Result {
 	}
 
 	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw) {
+		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.resultados);
+		Utils.resultados.put(resultID,resultID);
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
@@ -46,6 +56,14 @@ public class Result {
 		this.oddDraw = 0;
 		this.scores = "0x0";
 		this.equipaVencedora = "NaN";
+	}
+
+	public int getResultID() {
+		return resultID;
+	}
+
+	public void setResultID(int resultID) {
+		this.resultID = resultID;
 	}
 
 	public float getOddAwayTeam() {
@@ -86,5 +104,10 @@ public class Result {
 
 	public void setScores(String scores) {
 		this.scores = scores;
+	}
+
+	@Override
+	public String toString() {
+		return scores;
 	}
 }
