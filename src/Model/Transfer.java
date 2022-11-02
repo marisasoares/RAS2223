@@ -7,7 +7,7 @@ public class Transfer {
 	/**
 	 * Identificador da transferência
 	 * */
-	public String id;
+	private int id;
 	/**
 	 * Valor da transferencia
 	 * */
@@ -22,20 +22,29 @@ public class Transfer {
 	 * */
 	private String description;
 
-	public Transfer(String id, float value, LocalDateTime date, String description) {
+	/**
+	 * Email do utilizador
+	 * */
+	private String email;
+
+	public Transfer(int id, float value, LocalDateTime date, String description,String email) {
 		this.id = id;
 		this.value = value;
 		this.date = date;
 		this.description = description;
+		this.email = email;
 	}
 
-	public Transfer(float value, LocalDateTime date, String description) {
+	public Transfer(float value, LocalDateTime date, String description,String email) {
+		this.id = Utils.geraIdentificadorUnicoInteger(Utils.transfers);
+		Utils.transfers.put(id,id);
 		this.value = value;
 		this.date = date;
 		this.description = description;
+		this.email = email;
 	}
 
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 
@@ -61,5 +70,24 @@ public class Transfer {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Transfer{" +
+				"id=" + id +
+				", value=" + value +
+				", date=" + date +
+				", description='" + description + '\'' +
+				", email='" + email + '\'' +
+				'}';
 	}
 }

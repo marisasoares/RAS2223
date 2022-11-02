@@ -8,10 +8,6 @@ import java.util.Map;
 public class Better extends User {
 
 	/**
-	 * Histórico de todas as transferências efetuadas pelo utilizador
-	 * */
-	private Map<String,Transfer> transHistory;
-	/**
 	 * Número de identificação fiscal do utilizador
 	 * */
 	private String nif;
@@ -31,6 +27,7 @@ public class Better extends User {
 	 * @return Lista das apostas em formato String
 	 * */
 	public List<String> getBetHistory() {
+		//TODO
 		/*List<String> history = new ArrayList<>();
 		for (Map.Entry<String, Bet> t: this.bets.entrySet()) {
 			history.add(t.getValue().toString());
@@ -44,11 +41,12 @@ public class Better extends User {
 	 * @return Lista das transações em formato String
 	 * */
 	public List<String> getTransHistory() {
-		List<String> history = new ArrayList<>();
-		for (Map.Entry<String, Transfer> t: this.transHistory.entrySet()) {
+		//TODO
+		/*List<String> history = new ArrayList<>();
+		for (Map.Entry<String, Transfer> t: this.transfers.entrySet()) {
 			history.add(t.getValue().toString());
-		}
-		return history;
+		}*/
+		return null;
 	}
 
 	/**
@@ -57,11 +55,12 @@ public class Better extends User {
 	 * @return id da transferencia
 	 */
 	public String addMovement(float value,String description) {
-		String id = Utils.geraIdentificadorUnico(this.transHistory);
+		//TODO
+		/*String id = Utils.geraIdentificadorUnico(this.transHistory);
 		Transfer transfer = new Transfer(id,value, LocalDateTime.now(),description);
 		this.getWallet().addEuros(value);
-		this.transHistory.put(id,transfer);
-		return id;
+		this.transHistory.put(id,transfer);*/
+		return "";
 	}
 	public String getNif() {
 		return this.nif;
@@ -109,7 +108,6 @@ public class Better extends User {
 	@Override
 	public String toString() {
 		return "Better{" +
-				"transHistory=" + transHistory +
 				", nif='" + nif + '\'' +
 				", wallet=" + wallet +
 				'}';

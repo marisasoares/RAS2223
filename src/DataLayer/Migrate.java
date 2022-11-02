@@ -16,6 +16,7 @@ public class Migrate {
                             "Game," +
                             "Bet," +
                             "Wallet," +
+                            "Transfer," +
                             "Sport," +
                             "SportGame;";
 
@@ -50,7 +51,6 @@ public class Migrate {
                     "AwayTeam VARCHAR(45) NOT NULL," +
                     "CommenceTime VARCHAR(45) NOT NULL," +
                     "Completed TINYINT NOT NULL," +
-                    "Score VARCHAR(45)," +
                     "ResultId INT NOT NULL," +
                     "FOREIGN KEY (ResultId) REFERENCES Result(ResultID))";
             stm.executeUpdate(sqlJ);
@@ -60,7 +60,7 @@ public class Migrate {
                     "value FLOAT NOT NULL," +
                     "Email VARCHAR(75) NOT NULL ," +
                     "Game_id VARCHAR(45) NOT NULL ,"+
-                    "BettedTeam VARCHAR(45) NOT NULL ,"+
+                    "BettedTeam INT NOT NULL ,"+
                     "FOREIGN KEY (Email) REFERENCES User(Email)," +
                     "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);
@@ -73,7 +73,7 @@ public class Migrate {
             stm.executeUpdate(sqlCart);
 
             String sqlT = "CREATE TABLE IF NOT EXISTS Transfer (" +
-                        "idTransfer VARCHAR(45) NOT NULL PRIMARY KEY ," +
+                        "idTransfer INT NOT NULL PRIMARY KEY ," +
                         "Value FLOAT NOT NULL," +
                         "Date VARCHAR(45) NOT NULL," +
                         "Description VARCHAR(100) NOT NULL," +
@@ -93,7 +93,6 @@ public class Migrate {
                         "FOREIGN KEY (idGame) References Game(idGame))";
             stm.executeUpdate(sqlDJ);
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
@@ -102,6 +101,6 @@ public class Migrate {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         createTables();
-        System.out.println("Database Migrada");
+        System.out.println("**************************** Database Migrada *************************************");
     }
 }

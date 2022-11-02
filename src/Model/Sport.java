@@ -16,7 +16,14 @@ public class Sport {
 	 * */
 	private String nome;
 
+	public Sport(int id,String nome){
+		this.id = id;
+		this.nome = nome;
+	}
+
 	public Sport(String nome) {
+		this.id = Utils.geraIdentificadorUnicoInteger(Utils.sports);
+		Utils.sports.put(id,id);
 		this.nome = nome;
 	}
 

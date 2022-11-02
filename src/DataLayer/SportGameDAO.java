@@ -4,18 +4,20 @@ import Model.Game;
 import Model.Sport;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SportGameDAO {
-    private static final String DELETE = "DELETE FROM SportGame WHERE id=?";
-    private static final String DELETE_ALL = "DELETE * FROM SportGame WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM SportGame";
-    private static final String REP_NUMBER = "SELECT * FROM SportGame WHERE id=?";
+    private static final String DELETE = "DELETE FROM SportGame WHERE idSport=?";
+    private static final String DELETE_ALL = "DELETE * FROM SportGame WHERE idSport=?";
+    private static final String FIND_ALL_GAMES_BY_IDSPORT = "SELECT * FROM SportGame WHERE idSport= ?";
+    private static final String REP_NUMBER = "SELECT * FROM SportGame WHERE idSport=?";
     private static final String FIND_BY_IDSport = "SELECT * FROM SportGame WHERE idSport=?";
     private static final String FIND_BY_IDGame = "SELECT * FROM SportGame WHERE idGame=?";
     private static final String INSERT = "INSERT INTO SportGame(idSport,idGame) VALUES(?,?)";
 
 
-    public static boolean add(Sport sp, Game gm) {
+    public static boolean store(Sport sp, Game gm) {
         boolean r = true;
         try {
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -26,6 +28,7 @@ public class SportGameDAO {
 
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
+            s.printStackTrace();
             r = false;
         } catch (SQLException e) {
             r = false;
@@ -36,22 +39,33 @@ public class SportGameDAO {
         return r ;
     }
 
-    public static Integer get_GameId_by_SportId(int idSport) {
-        int gameId  = -1;
+
+    /**
+     * Dado um id de desporto devolve a lista de jogos associados
+     * @param idSport O id de desporto
+     * @return A lista de jogos
+     * */
+    public static List<Game> get_AllGames_by_SportID(int idSport) {
+        List<Game> games = new ArrayList<>();
         try {Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            PreparedStatement stm = conn.prepareStatement(FIND_BY_IDSport);
+            PreparedStatement stm = conn.prepareStatement(FIND_ALL_GAMES_BY_IDSPORT);
             stm.setInt(1, idSport);
             ResultSet rs = stm.executeQuery();
-            if (rs.next()) {  // A chave existe na tabela
-                gameId = rs.getInt("idGame");
+            while (rs.next()) {
+                games.add(GameDAO.get(rs.getString("idGame")));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return gameId;
+        return games;
     }
 
+    /**
+     * Dado um id de jogo devolve o id do desporto associado
+     * @param idGame O id do jogo
+     * @return O id do desporto
+     * */
     public static int get_SportId_by_GameId(String idGame) {
         int sportId  = -1;
         try {Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -67,6 +81,8 @@ public class SportGameDAO {
         }
         return sportId;
     }
+
+
 
 
 

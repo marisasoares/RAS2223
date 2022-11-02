@@ -2,11 +2,14 @@ package DataLayer;
 import Model.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     private static final String DELETE = "DELETE FROM User WHERE Email=?";
     private static final String DELETE_ALL = "DELETE * FROM User WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM User";
+    private static final String FIND_ALL_TRANFERS = "SELECT * FROM Transfer WHERE Email=?";
     private static final String REP_NUMBER = "SELECT * FROM User WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM User WHERE Email=?";
     private static final String INSERT = "INSERT INTO User(Email, Name, PasswordHash,NIF,Type) VALUES(?,?,?,?,?)";
@@ -21,22 +24,24 @@ public class UserDAO {
             stm.setString(2, user.getName());
             stm.setString(3, String.valueOf(user.getPasswordHash()));
             if(user instanceof Better){
-                WalletDAO.store(((Better) user).getWallet());
                 stm.setString(4, ((Better) user).getNif());
                 stm.setInt(5,0);
             }
             else if (user instanceof Specialist) {
-                stm.setString(4, null);
+                stm.setString(4, "NaN");
                 stm.setInt(5,1);
             }
             else {
-                stm.setString(4, null);
+                System.out.println("[UserDAO:35] Adicionado admin: " + user.toString());
+                stm.setString(4, "NaN");
                 stm.setInt(5,2);
             }
             stm.executeUpdate();
+            if(user instanceof Better) WalletDAO.store(((Better) user).getWallet());
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
             r = false;
+            s.printStackTrace();
         } catch (SQLException e) {
             r = false;
             // Database error!
@@ -70,9 +75,8 @@ public class UserDAO {
                                 rs.getString("Email"),
                                 rs.getInt("PasswordHash"),
                                 rs.getString("NIF"));
-                        Wallet wallet = WalletDAO.get(user.getMail());
+                        Wallet wallet = WalletDAO.get(((Better) user).getWallet().getEmail());
                         ((Better) user).setWallet(wallet);
-
                         break;
                 }
             }
@@ -109,5 +113,24 @@ public class UserDAO {
         }
     }
 
+    public static List<Transfer> getTransHistory(String email) {
+        List<Transfer> transfers = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(FIND_ALL_TRANFERS);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {  // A chave existe na tabela
+                transfers.add(new Transfer(rs.getInt("idTransfer"),
+                        rs.getFloat("Value"),
+                        LocalDateTime.parse(rs.getString("Date")),
+                        rs.getString("Description"),
+                        rs.getString("Email")));
 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transfers;
+    }
 }

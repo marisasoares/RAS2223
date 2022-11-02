@@ -1,9 +1,11 @@
 package DataLayer;
 
-import Model.Better;
-import Model.Game;
+import Model.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDAO {
     private static final String DELETE = "DELETE FROM Game WHERE idGame=?";
@@ -12,22 +14,22 @@ public class GameDAO {
     private static final String REP_NUMBER = "SELECT * FROM Game WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM Game WHERE idGame=?";
     private static final String INSERT = "INSERT INTO Game(idGame, HomeTeam, AwayTeam, CommenceTime, Completed, ResultID) VALUES(?,?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE Game SET Completed= ? WHERE idGame=?";
 
-
-    public static boolean store(Game gm) {
+    public static boolean store(Game game) {
         boolean r = true;
         try {
-            ResultDAO.store(gm.getResult());
+            ResultDAO.store(game.getResult());
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
-            stm.setString(1, gm.getId());
-            stm.setString(2, gm.getHomeTeam());
-            stm.setString(3, gm.getAwayTeam());
-            stm.setString(4, gm.getCommenceTime());
-            stm.setInt(5, gm.getCompleted() ? 1:0);
-            stm.setInt(6, gm.getResult().getResultID());
+            stm.setString(1, game.getId());
+            stm.setString(2, game.getHomeTeam());
+            stm.setString(3, game.getAwayTeam());
+            stm.setString(4, game.getCommenceTime());
+            stm.setInt(5, game.getCompleted() ? 1:0);
+            stm.setInt(6, game.getResult().getResultID());
             stm.executeUpdate();
-
+            SportGameDAO.store(SportDAO.get(game.getSportId()),game);
         } catch (SQLIntegrityConstraintViolationException s) {
             r = false;
         } catch (SQLException e) {
@@ -39,7 +41,7 @@ public class GameDAO {
         return r;
     }
     public static Game get(String id) {
-        Game gm = null;
+        Game game = null;
 
         try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
            PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
@@ -48,17 +50,19 @@ public class GameDAO {
 
             if (rs.next()) {  // A chave existe na tabela
                 int sportId = SportGameDAO.get_SportId_by_GameId(rs.getString("idGame"));
-                gm = new Game(rs.getString("idGame"),
+                Result result = ResultDAO.get(rs.getInt("ResultID"));
+                game = new Game(rs.getString("idGame"),
                         rs.getString("HomeTeam"),
                         rs.getString("AwayTeam"),
                         rs.getString("CommenceTime"),
                         rs.getBoolean("Completed"),
-                        rs.getString("Score"),sportId);
+                        result,
+                        sportId);
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
-        return gm;
+        return game;
     }
 
     public static void delete(int id) {
@@ -72,5 +76,21 @@ public class GameDAO {
         }
     }
 
+    public static void update(Game game) {
+        try {
 
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+
+            stmt.setInt(1, game.getCompleted() ? 1:0);
+            stmt.executeUpdate();
+            Result result = game.getResult();
+
+            //TODO
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

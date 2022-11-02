@@ -31,6 +31,7 @@ public class Bet {
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
+		this.email = email;
 	}
 
 	public Bet(String gameId, float value, int bettedTeam,String email) {
@@ -38,6 +39,7 @@ public class Bet {
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
+		this.email = email;
 	}
 
 	public int getBetId(){

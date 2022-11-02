@@ -47,7 +47,7 @@ public class Game {
 	 * */
 	public int sportId;
 
-	public Game(String id, String homeTeam, String awayTeam, String commenceTime, boolean completed, String scores,int sportId) {
+	public Game(String id, String homeTeam, String awayTeam, String commenceTime, boolean completed, String scores,Result result,int sportId) {
 		this.id = id;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
@@ -55,7 +55,19 @@ public class Game {
 		this.completed = completed;
 		this.scores = scores;
 		this.bookmakers = new ArrayList<>();
-		this.result = new Result();
+		this.result = result;
+		this.sportId = sportId;
+	}
+
+	public Game(String id, String homeTeam, String awayTeam, String commenceTime, boolean completed,Result result,int sportId) {
+		this.id = id;
+		this.homeTeam = homeTeam;
+		this.awayTeam = awayTeam;
+		this.commenceTime = commenceTime;
+		this.completed = completed;
+		this.scores = "0x0";
+		this.bookmakers = new ArrayList<>();
+		this.result = result;
 		this.sportId = sportId;
 	}
 

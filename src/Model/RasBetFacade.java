@@ -31,15 +31,8 @@ public class RasBetFacade {
 	 * Dado um email de utilizador devolver o histórico de transações
 	 * @param email email do utilizador
 	 */
-	public List<String> transHistory(String email) {
-		List<String> historico = new ArrayList<>();
-		if(usersDataBase.userExists(email)){
-			User user = usersDataBase.getUser(email);
-			if(user instanceof Better){
-				historico = ((Better) user).getTransHistory();
-			}
-		}
-		return historico;
+	public List<Transfer> transHistory(String email) {
+		return UserDAO.getTransHistory(email);
 	}
 
 	/**
@@ -114,7 +107,7 @@ public class RasBetFacade {
 	 * @param type 0 - Model.Better, 1 - Model.Specialist e 2 - Model.Administrador
 	 * @return true se adicionado, false caso erro
 	 */
-	public boolean register(String nome,String email, String pwd, String nif,int type) {
+	public boolean registerUser(String nome, String email, String pwd, String nif, int type) {
 		boolean added = false;
 		switch (type){
 			case 1:
@@ -123,6 +116,7 @@ public class RasBetFacade {
 				break;
 			case 2:
 				Administrator adm = new Administrator(nome,email,pwd.hashCode());
+				System.out.println("[RasBetFacade:119] Adicionado admin: " + adm.toString());
 				added = UserDAO.store(adm);
 				break;
 			default:
@@ -234,7 +228,7 @@ public class RasBetFacade {
 	 * e devolve o json
 	 * @return o json de resposta ou null caso timeout
 	 * */
-	public String getServerData() {
+	public static String getServerData() {
 		StringBuffer content = new StringBuffer();
 		try {
 			URL url = new URL("http://ucras.di.uminho.pt/v1/games/");
@@ -258,7 +252,7 @@ public class RasBetFacade {
 	 * @param json A string json
 	 * @return A lista de jogos
 	 * */
-	public List<Game> parseJson(String json){
+	public static List<Game> parseJson(String json){
 		Type listType = new TypeToken<ArrayList<Game>>(){}.getType();
 		Gson g = new Gson();
 		return (List<Game>) g.fromJson(json, listType);

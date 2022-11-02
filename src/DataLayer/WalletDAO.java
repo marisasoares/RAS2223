@@ -7,12 +7,12 @@ import Model.Wallet;
 import java.sql.*;
 
 public class WalletDAO {
-    private static final String DELETE = "DELETE FROM Wallet WHERE email=?";
+    private static final String DELETE = "DELETE FROM Wallet WHERE Email=?";
     private static final String DELETE_ALL = "DELETE * FROM Wallet WHERE id=?";
     private static final String FIND_ALL = "SELECT * FROM Wallet";
     private static final String REP_NUMBER = "SELECT * FROM Wallet WHERE id=?";
-    private static final String FIND_BY_ID = "SELECT * FROM Wallet WHERE email=?";
-    private static final String INSERT = "INSERT INTO Wallet(email,euros,dollars) VALUES(?,?,?)";
+    private static final String FIND_BY_ID = "SELECT * FROM Wallet WHERE Email=?";
+    private static final String INSERT = "INSERT INTO Wallet(Email,Euros,Dollars) VALUES(?,?,?)";
     private static final String UPDATE = "UPDATE Wallet SET Euros= ?, Dollars = ? WHERE Email=?";
 
     public static boolean store(Wallet w) {
@@ -26,6 +26,7 @@ public class WalletDAO {
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
+            s.printStackTrace();
             r = false;
         } catch (SQLException e) {
             r = false;

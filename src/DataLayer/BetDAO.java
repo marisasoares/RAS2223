@@ -10,8 +10,8 @@ public class BetDAO {
     private static final String DELETE_ALL = "DELETE * FROM Bet WHERE id=?";
     private static final String FIND_ALL = "SELECT * FROM Bet";
     private static final String REP_NUMBER = "SELECT * FROM Bet WHERE id=?";
-    private static final String FIND_BY_ID = "SELECT * FROM Bet WHERE email=?";
-    private static final String INSERT = "INSERT INTO Bet(idBet,value,Email,Game_id) VALUES(?,?,?,?)";
+    private static final String FIND_BY_ID = "SELECT * FROM Bet WHERE Game_id=?";
+    private static final String INSERT = "INSERT INTO Bet(idBet,value,Email,Game_id,BettedTeam) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE Bet SET Euros= ?, Dollars = ? WHERE Email=?";
 
     public static boolean store(Bet b) {
@@ -23,9 +23,11 @@ public class BetDAO {
             stm.setFloat(2, b.getValue());
             stm.setString(3, b.getEmail());
             stm.setString(4, b.getGameId());
+            stm.setInt(5,b.getBettedTeam());
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
+            s.printStackTrace();
             r = false;
         } catch (SQLException e) {
             r = false;
@@ -36,12 +38,12 @@ public class BetDAO {
         return r;
     }
 
-    public static Bet get(int id) {
+    public static Bet get(String id) {
         Bet b = null;
 
         try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
-            stm.setInt(1, id);
+            stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {  // A chave existe na tabela
