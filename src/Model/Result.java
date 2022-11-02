@@ -23,39 +23,50 @@ public class Result {
 	/**
 	 * Nome da equipa vencedora
 	 * */
-	private String equipaVencedora;
+	private String winningTeam;
 
 	/**
 	 * O resultado do jogo Exemplos: 0x0, 0x1, 2x3, 4x4 etc..
 	 * */
 	private  String scores;
 
-	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw, String scores , String equipaVencedora) {
-		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.resultados);
-		Utils.resultados.put(resultID,resultID);
+	public Result(int resultID, float oddAwayTeam, float oddHomeTeam, float oddDraw, String winningTeam, String scores) {
+		this.resultID = resultID;
+		this.oddAwayTeam = oddAwayTeam;
+		this.oddHomeTeam = oddHomeTeam;
+		this.oddDraw = oddDraw;
+		this.winningTeam = winningTeam;
+		this.scores = scores;
+	}
+
+	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw, String scores , String winningTeam) {
+		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.results);
+		Utils.results.put(resultID,resultID);
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
 		this.scores = scores;
-		this.equipaVencedora = equipaVencedora;
+		this.winningTeam = winningTeam;
 	}
 
 	public Result(float oddAwayTeam, float oddHomeTeam, float oddDraw) {
-		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.resultados);
-		Utils.resultados.put(resultID,resultID);
+		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.results);
+		Utils.results.put(resultID,resultID);
 		this.oddAwayTeam = oddAwayTeam;
 		this.oddHomeTeam = oddHomeTeam;
 		this.oddDraw = oddDraw;
 		this.scores = "0x0";
-		this.equipaVencedora = "NaN";
+		this.winningTeam = "NaN";
 	}
 
 	public Result() {
+		this.resultID = Utils.geraIdentificadorUnicoInteger(Utils.results);
+		Utils.results.put(resultID,resultID);
 		this.oddAwayTeam = 0;
 		this.oddHomeTeam = 0;
 		this.oddDraw = 0;
 		this.scores = "0x0";
-		this.equipaVencedora = "NaN";
+		this.winningTeam = "NaN";
 	}
 
 	public int getResultID() {
@@ -90,12 +101,12 @@ public class Result {
 		this.oddDraw = oddDraw;
 	}
 
-	public String getEquipaVencedora() {
-		return this.equipaVencedora;
+	public String getwinningTeam() {
+		return this.winningTeam;
 	}
 
-	public void setEquipaVencedora(String equipaVencedora) {
-		this.equipaVencedora = equipaVencedora;
+	public void setwinningTeam(String winningTeam) {
+		this.winningTeam = winningTeam;
 	}
 
 	public String getScores() {
@@ -108,6 +119,13 @@ public class Result {
 
 	@Override
 	public String toString() {
-		return scores;
+		return "Result{" +
+				"resultID=" + resultID +
+				", oddAwayTeam=" + oddAwayTeam +
+				", oddHomeTeam=" + oddHomeTeam +
+				", oddDraw=" + oddDraw +
+				", winningTeam='" + winningTeam + '\'' +
+				", scores='" + scores + '\'' +
+				'}';
 	}
 }

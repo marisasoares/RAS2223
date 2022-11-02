@@ -1,38 +1,34 @@
 package DataLayer;
 
-import Model.Apostador;
+import Model.Better;
 import Model.Game;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-public class JogoDAO {
-    private static final String DELETE = "DELETE FROM Jogos WHERE id=?";
-    private static final String DELETE_ALL = "DELETE * FROM Jogos WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM Jogos";
-    private static final String REP_NUMBER = "SELECT * FROM Jogos WHERE id=?";
-    private static final String FIND_BY_ID = "SELECT * FROM Jogos WHERE id=?";
-    private static final String INSERT = "INSERT INTO Jogo(id , HomeTeam, AwayTeam, CommenceTime, Completed, ResultadoID) VALUES(?,?,?,?,?,?)";
+public class GameDAO {
+    private static final String DELETE = "DELETE FROM Game WHERE idGame=?";
+    private static final String DELETE_ALL = "DELETE * FROM Game WHERE id=?";
+    private static final String FIND_ALL = "SELECT * FROM Game";
+    private static final String REP_NUMBER = "SELECT * FROM Game WHERE id=?";
+    private static final String FIND_BY_ID = "SELECT * FROM Game WHERE idGame=?";
+    private static final String INSERT = "INSERT INTO Game(idGame, HomeTeam, AwayTeam, CommenceTime, Completed, ResultID) VALUES(?,?,?,?,?,?)";
 
 
-    public static boolean store_Jogo(Game gm) {
+    public static boolean store(Game gm) {
         boolean r = true;
         try {
+            ResultDAO.store(gm.getResult());
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
-            stm.setInt(1, gm.getId());
+            stm.setString(1, gm.getId());
             stm.setString(2, gm.getHomeTeam());
             stm.setString(3, gm.getAwayTeam());
-            stm.setString(4, gm.getCommenceTime().toString());
+            stm.setString(4, gm.getCommenceTime());
             stm.setInt(5, gm.getCompleted() ? 1:0);
-            stm.setInt(6, gm.getResultado().getResultID());
-
-
-
+            stm.setInt(6, gm.getResult().getResultID());
             stm.executeUpdate();
+
         } catch (SQLIntegrityConstraintViolationException s) {
-            // erro ao inserir user reptido
             r = false;
         } catch (SQLException e) {
             r = false;
@@ -42,27 +38,25 @@ public class JogoDAO {
         }
         return r;
     }
-    public static Game get(int id) {
+    public static Game get(String id) {
         Game gm = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
         try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
-            stm.setInt(1, id);
+           PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
+            stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
+
             if (rs.next()) {  // A chave existe na tabela
-                LocalDateTime dateTime = LocalDateTime.parse(rs.getString("CommenceTime"), formatter);
-                gm = new Game(rs.getInt("id"),
+                int sportId = SportGameDAO.get_SportId_by_GameId(rs.getString("idGame"));
+                gm = new Game(rs.getString("idGame"),
                         rs.getString("HomeTeam"),
                         rs.getString("AwayTeam"),
-                        dateTime,
+                        rs.getString("CommenceTime"),
                         rs.getBoolean("Completed"),
-                        rs.getString("Scores"));
+                        rs.getString("Score"),sportId);
             }
-        } catch (SQLException e) {
-            // Database error!
+        } catch (SQLException e){
             e.printStackTrace();
-            throw new NullPointerException(e.getMessage());
         }
         return gm;
     }

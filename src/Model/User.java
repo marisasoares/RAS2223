@@ -2,9 +2,9 @@ package Model;
 
 public class User {
 	/**
-	 * Nome do utilizador
+	 * name do utilizador
 	 */
-	private String nome;
+	private String name;
 	/**
 	 * Email
 	 */
@@ -15,18 +15,19 @@ public class User {
 	private int passwordHash;
 
 
-	public User(String nome, String mail, int passwordHash) {
-		this.nome = nome;
+
+	public User(String name, String mail, int passwordHash) {
+		this.name = name;
 		this.mail = mail;
 		this.passwordHash = passwordHash;
 	}
 
-	public String getNome() {
-		return this.nome;
+	public String getName() {
+		return this.name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getMail() {

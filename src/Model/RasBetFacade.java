@@ -1,32 +1,30 @@
 package Model;
 
-import DataLayer.GamesDB;
-import DataLayer.UserDB;
+import DataLayer.GamesMap;
+import DataLayer.ResultDAO;
+import DataLayer.UserDAO;
+import DataLayer.UsersMap;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RasBetFacade {
 
-	public User utilizadorAutenticado;
-	public GamesDB gamesDataBase;
-	public UserDB usersDataBase;
-
-	public RasBetFacade(User utilizadorAutenticado) {
-		this.utilizadorAutenticado = utilizadorAutenticado;
-		this.gamesDataBase = new GamesDB();
-		this.usersDataBase = new UserDB();
-	}
+	public User authenticatedUser;
+	public GamesMap gamesDataBase;
+	public UsersMap usersDataBase;
 
 	public RasBetFacade(){
-		this.utilizadorAutenticado = null;
-		this.gamesDataBase = new GamesDB();
-		this.usersDataBase = new UserDB();
+		this.authenticatedUser = null;
+		this.gamesDataBase = new GamesMap();
+		this.usersDataBase = new UsersMap();
 	}
 
 	/**
@@ -37,8 +35,8 @@ public class RasBetFacade {
 		List<String> historico = new ArrayList<>();
 		if(usersDataBase.userExists(email)){
 			User user = usersDataBase.getUser(email);
-			if(user instanceof Apostador){
-				historico = ((Apostador) user).getTransHistory();
+			if(user instanceof Better){
+				historico = ((Better) user).getTransHistory();
 			}
 		}
 		return historico;
@@ -55,7 +53,7 @@ public class RasBetFacade {
 		boolean updatedUser = false;
 		if(usersDataBase.userExists(email)){
 			User user = usersDataBase.getUser(email);
-			user.setNome(nome);
+			user.setName(nome);
 			user.setPassword(password);
 			updatedUser = true;
 		}
@@ -71,21 +69,21 @@ public class RasBetFacade {
 	 * @return true se adicionada, false caso contrário
 	 */
 	public boolean addBet(String sportID,String gameID,String email, float value, int equipaApostada) {
+		// TODO
 		boolean betAdded = false;
-		if(gamesDataBase.sportExists(sportID)){
+		/*if(gamesDataBase.sportExists(sportID)){
 			Sport sport = gamesDataBase.getSport(sportID);
 			if(sport.gameExists(gameID)){
 				Game game = sport.getGame(gameID);
 				if(usersDataBase.userExists(email)) {
 					User user = usersDataBase.getUser(email);
-					if(user instanceof Apostador){
-						((Apostador) user).addBet(gameID,value,equipaApostada);
+					if(user instanceof Better){
+						((Better) user).addBet(gameID,value,equipaApostada);
 						betAdded = true;
 					}
 				}
-
 			}
-		}
+		}*/
 		return betAdded;
 	}
 
@@ -97,11 +95,11 @@ public class RasBetFacade {
 	 */
 	public boolean login(String email, String pwd) {
 		boolean loginValid = false;
-		if(usersDataBase.userExists(email)) {
-			User user = usersDataBase.getUser(email);
+		User user = UserDAO.get(email);
+		if(user != null){
 			if (user.getPasswordHash() == pwd.hashCode()) {
 				loginValid = true;
-				this.utilizadorAutenticado = user;
+				this.authenticatedUser = user;
 			}
 		}
 		return loginValid;
@@ -113,11 +111,26 @@ public class RasBetFacade {
 	 * @param email email do utilizador
 	 * @param pwd password do utilizador
 	 * @param nif numero de identificação fiscal
-	 * @param type 0 - Model.Apostador, 1 - Model.Especialista e 2 - Model.Administrador
+	 * @param type 0 - Model.Better, 1 - Model.Specialist e 2 - Model.Administrador
 	 * @return true se adicionado, false caso erro
 	 */
 	public boolean register(String nome,String email, String pwd, String nif,int type) {
-		return this.usersDataBase.addUser(nome,email,pwd,nif,type);
+		boolean added = false;
+		switch (type){
+			case 1:
+				Specialist esp = new Specialist(nome,email,pwd.hashCode());
+				added = UserDAO.store(esp);
+				break;
+			case 2:
+				Administrator adm = new Administrator(nome,email,pwd.hashCode());
+				added = UserDAO.store(adm);
+				break;
+			default:
+				Better better = new Better(nome,email,pwd.hashCode(),nif);
+				added = UserDAO.store(better);
+				break;
+		}
+		return added;
 	}
 
 	/**
@@ -141,10 +154,10 @@ public class RasBetFacade {
 		boolean validTransfer = true;
 		if(usersDataBase.userExists(email)) {
 			User user = usersDataBase.getUser(email);
-			if(user instanceof Apostador){
+			if(user instanceof Better){
 				//Não permitir tirar mais dinheiro que o existente
 				//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
-				if(((Apostador) user).getCarteira().getEuros()+valor < 0) validTransfer = false;
+				if(((Better) user).getWallet().getEuros()+valor < 0) validTransfer = false;
 			}
 
 
@@ -162,8 +175,8 @@ public class RasBetFacade {
 		boolean addedMovement = false;
 		if(usersDataBase.userExists(email)) {
 			User user = usersDataBase.getUser(email);
-			if(user instanceof Apostador){
-				((Apostador) user).addMovement(valor,description);
+			if(user instanceof Better){
+				((Better) user).addMovement(valor,description);
 				addedMovement = true;
 			}
 		}
@@ -178,7 +191,8 @@ public class RasBetFacade {
 	 * @param type o tipo de odd (0 - ganha HomeTeam, 1 - ganha awayTeam e 2 - empate)
 	 */
 	public void inserirChange(float odd, String gameID,String sportID,int type) {
-		if(gamesDataBase.sportExists(sportID)) {
+		//TODO
+		/*if(gamesDataBase.sportExists(sportID)) {
 			Sport sport = gamesDataBase.getSport(sportID);
 			if (sport.gameExists(gameID)) {
 				Game game = sport.getGame(gameID);
@@ -194,25 +208,25 @@ public class RasBetFacade {
 						break;
 					default:
 						break;
-				}
+
 			}
-		}
+		}*/
 	}
 
 	/**
 	 * Devolve o utilizador autenticado no momento
 	 * @return o utilizador autenticado
 	 * */
-	public User getUtilizadorAutenticado() {
-		return this.utilizadorAutenticado;
+	public User getauthenticatedUser() {
+		return this.authenticatedUser;
 	}
 
 	/**
 	 * Define o utilizador autenticado
-	 * @param utilizadorAutenticado o utilizador autenticado
+	 * @param authenticatedUser o utilizador autenticado
 	 */
-	public void setUtilizadorAutenticado(User utilizadorAutenticado) {
-		this.utilizadorAutenticado = utilizadorAutenticado;
+	public void setauthenticatedUser(User authenticatedUser) {
+		this.authenticatedUser = authenticatedUser;
 	}
 
 	/**
@@ -239,8 +253,14 @@ public class RasBetFacade {
 		return content.toString();
 	}
 
-	public void parseJson(String json){
+	/**
+	 * Efetua o parsing do json recebido a partir da API fornecida e devolve uma lista de jogos
+	 * @param json A string json
+	 * @return A lista de jogos
+	 * */
+	public List<Game> parseJson(String json){
+		Type listType = new TypeToken<ArrayList<Game>>(){}.getType();
 		Gson g = new Gson();
-		Game game = g.fromJson(json,Model.Game.class);
+		return (List<Game>) g.fromJson(json, listType);
 	}
 }

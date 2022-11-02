@@ -13,7 +13,7 @@ public class Market {
 	/**
 	 * Lista de outcomes suportadas
 	 * */
-	private Map<String,Outcome> outcomes;
+	public List<Outcome> outcomes;
 
 
 	public String getKey() {
@@ -25,17 +25,11 @@ public class Market {
 	}
 
 	public List<Outcome> getOutcomes() {
-		List<Outcome> outcomeList = new ArrayList<>();
-		for (Map.Entry<String,Outcome> entry: this.outcomes.entrySet()) {
-			outcomeList.add(entry.getValue());
-		}
-		return outcomeList;
+		return outcomes;
 	}
 
 	public void setOutcomes(List<Outcome> outcomes) {
-		for (Outcome outcome: outcomes) {
-			this.outcomes.put(outcome.getName(),outcome);
-		}
+		this.outcomes = outcomes;
 	}
 
 	/**
@@ -43,7 +37,7 @@ public class Market {
 	 * @param outcome A outcome a adicionar
 	 * */
 	public void addOutcome(Outcome outcome){
-		this.outcomes.put(outcome.getName(),outcome);
+		this.outcomes.add(outcome);
 	}
 
 	/**

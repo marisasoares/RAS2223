@@ -13,7 +13,7 @@ public class Outcome {
 	/**
 	 * A odd da outcome
 	 * */
-	private float price;
+	public float price;
 
 	public Outcome(String name, float price) {
 		this.name = name;

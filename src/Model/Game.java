@@ -1,70 +1,81 @@
 package Model;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
 	/**
 	 * Identificador de jogo
 	 * */
-	public int id;
+	public String id;
 	/**
 	 * Equipa que joga em casa
 	 * */
-	private String homeTeam;
+	public String homeTeam;
 	/**
 	 * Equipa que joga fora
 	 * */
-	private String awayTeam;
+	public String awayTeam;
+
 	/**
 	 * Data agendada do jogo
 	 * */
-	private LocalDateTime commenceTime;
+	public String commenceTime;
+
 	/**
 	 * Indica se o jogo foi marcado como concluido
 	 * */
-	private boolean completed;
+	public boolean completed;
+
 	/**
-	 * O resultado do jogo Exemplos: 0x0, 0x1, 2x3, 4x4 etc..
+	 * O result do jogo Exemplos: 0x0, 0x1, 2x3, 4x4 etc..
 	 * */
-	private String scores;
-	/**
-	 * Classe que guarda o resultado
-	 * */
-	private Result resultado;
+	public String scores;
 	/**
 	 * Bookmakers com a informação sobre as odds
 	 * */
-	private Map<String,Bookmaker> bookmakers;
+	public List<Bookmaker> bookmakers;
 
-	public Game(int id, String homeTeam, String awayTeam, LocalDateTime commenceTime, boolean completed, String scores) {
+	/**
+	 * Classe que guarda o result
+	 * */
+	public Result result;
+
+	/**
+	 * Nome do desporto associado
+	 * */
+	public int sportId;
+
+	public Game(String id, String homeTeam, String awayTeam, String commenceTime, boolean completed, String scores,int sportId) {
 		this.id = id;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.commenceTime = commenceTime;
 		this.completed = completed;
 		this.scores = scores;
-		this.resultado = new Result();
-		this.bookmakers = new HashMap<>();
+		this.bookmakers = new ArrayList<>();
+		this.result = new Result();
+		this.sportId = sportId;
 	}
 
-	public Game(int id, String homeTeam, String awayTeam, LocalDateTime commenceTime) {
+	public Game(String id, String homeTeam, String awayTeam, String commenceTime,int sportId) {
 		this.id = id;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.commenceTime = commenceTime;
 		this.completed = false;
 		this.scores = "0x0";
-		this.resultado = new Result();
-		this.bookmakers = new HashMap<>();
+		this.bookmakers = new ArrayList<>();
+		this.result = new Result();
+		this.sportId = sportId;
 	}
 
-	public int getId() {
+	public String getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -84,12 +95,12 @@ public class Game {
 		this.awayTeam = awayTeam;
 	}
 
-	public LocalDateTime getCommenceTime() {
+	public String getCommenceTime() {
 		return this.commenceTime;
 	}
 
 	public void setCommenceTime(LocalDateTime commenceTime) {
-		this.commenceTime = commenceTime;
+		this.commenceTime = commenceTime.toString();
 	}
 
 	public boolean getCompleted() {
@@ -108,12 +119,24 @@ public class Game {
 		this.scores = scores;
 	}
 
-	public Result getResultado() {
-		return this.resultado;
+	public Result getResult() {
+		return this.result;
 	}
 
-	public void setResultado(Result resultado) {
-		this.resultado = resultado;
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
+	public int getSportId() {
+		return this.sportId;
+	}
+
+	public void setSportId(int sportId) {
+		this.sportId = sportId;
+	}
+
+	public void generateResult(){
+		this.result = new Result();
 	}
 
 	/**
@@ -124,25 +147,16 @@ public class Game {
 		else this.completed = true;
 	}
 
-	/**
-	 * Adicionar uma odd ao resultado
-	 * @param odd o valor da odd
-	 * @param type 0 - caso homeTeam ganhe, 1 - caso awayTeam ganhe, 2 - empate
-	 */
-	public void add(float odd,int type) {
-		switch (type){
-			case 0:
-				this.resultado.setOddHomeTeam(odd);
-				break;
-			case 1:
-				this.resultado.setOddAwayTeam(odd);
-				break;
-			case 2:
-				this.resultado.setOddDraw(odd);
-				break;
-			default:
-				break;
-		}
+	@Override
+	public String toString() {
+		return "Game{" +
+				"id='" + id + '\'' +
+				", homeTeam='" + homeTeam + '\'' +
+				", awayTeam='" + awayTeam + '\'' +
+				", commenceTime='" + commenceTime + '\'' +
+				", completed=" + completed +
+				", scores='" + scores + '\'' +
+				", bookmakers=" + bookmakers +
+				'}';
 	}
-
 }

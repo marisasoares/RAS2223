@@ -1,6 +1,7 @@
 package Model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class Bookmaker {
@@ -12,14 +13,14 @@ public class Bookmaker {
 	/**
 	 * Timestamp dos dados capturados
 	 * */
-	private LocalDateTime lastUpdate;
+	public String lastUpdate;
 
 	/**
 	 * Lista de markets de odds
 	 * */
-	private Map<String,Market> markets;
+	public List<Market> markets;
 
-	public Bookmaker(String key, LocalDateTime lastUpdate, Map<String, Market> markets) {
+	public Bookmaker(String key, String lastUpdate, List<Market> markets) {
 		this.key = key;
 		this.lastUpdate = lastUpdate;
 		this.markets = markets;
@@ -28,16 +29,16 @@ public class Bookmaker {
 	public String getKey() {
 		return this.key;
 	}
-	
+
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-	public LocalDateTime getLastUpdate() {
+	public String getLastUpdate() {
 		return this.lastUpdate;
 	}
-	
-	public void setLastUpdate(LocalDateTime lastUpdate) {
+
+	public void setLastUpdate(String lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
 
@@ -46,7 +47,7 @@ public class Bookmaker {
 	 * @param market O market a adicionar
 	 * */
 	public void addMarket(Market market){
-		this.markets.put(market.getKey(),market);
+		this.markets.add(market);
 	}
 
 	/**

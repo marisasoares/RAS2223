@@ -83,10 +83,10 @@ public class RasBetUI {
 		String password = this.scanner.nextLine();
 		boolean login_Successful = rasBetFacade.login(email, password);
 		if(login_Successful){
-			Object user = rasBetFacade.usersDataBase.getUser(email);
-			if(user instanceof Especialista) menuEspecialista((Especialista) user);
-			else if(user instanceof Administrador) menuAdministrador(((Administrador) user));
-			else menuApostador((Apostador)user);
+			Object user = rasBetFacade.getauthenticatedUser();
+			if(user instanceof Specialist) menuSpecialist((Specialist) user);
+			else if(user instanceof Administrator) menuAdministrator(((Administrator) user));
+			else menuBetter((Better)user);
 
 		} else {
 			errorMessage("Login Inválido");
@@ -95,48 +95,48 @@ public class RasBetUI {
 		return;
 	}
 
-	private void menuApostador(Apostador apostador){
+	private void menuBetter(Better Better){
 		clearScreen();
 		Menu menu = new Menu(new String[]{
 				"Apostar",
 				"Alterar password"
-		},"Bem vindo " +  apostador.getNome() + "\nSaldo: \n" + apostador.getCarteira().getEuros()+ " €"
-		+ "\n" + apostador.getCarteira().getDollars()+ " $\n");
-		menu.setTitulo("Menu Apostador");
+		},"Bem vindo " +  Better.getName() + "\nSaldo: \n" + Better.getWallet().getEuros()+ " €"
+		+ "\n" + Better.getWallet().getDollars()+ " $\n");
+		menu.setTitulo("Menu Better");
 		menu.run();
 	}
 
-	private void menuEspecialista(Especialista esp){
+	private void menuSpecialist(Specialist esp){
 		clearScreen();
 		Menu menu = new Menu(new String[]{
 				"Apostar",
 				"Definir odds"
-		},"Bem vindo" + esp.getNome());
-		menu.setTitulo("Menu Especialista");
+		},"Bem vindo" + esp.getName());
+		menu.setTitulo("Menu Specialist");
 		menu.run();
 	}
 
-	private void menuAdministrador(Administrador admin){
+	private void menuAdministrator(Administrator admin){
 		clearScreen();
 		Menu menu = new Menu(new String[]{
-				"Adicionar Model.Administrador",
-				"Adicionar Model.Especialista",
+				"Adicionar Model.Administrator",
+				"Adicionar Model.Specialist",
 				"Alterar estado aposta",
 				"Alterar odds",
 				"Listar Apostas",
 				"Listar Jogos",
 				"Listar Desportos",
-				"Listar Apostadores",
-				"Listar Model.Especialista",
-				"Listar Administradores"
-		},"Bem vindo" + admin.getNome());
-		menu.setTitulo("Menu Administrador");
+				"Listar Betteres",
+				"Listar Model.Specialist",
+				"Listar Administratores"
+		},"Bem vindo" + admin.getName());
+		menu.setTitulo("Menu Administrator");
 		menu.run();
 	}
 
 	/*
 	 * UI para registo de um utilizador
-	 * @param tipo_de_utilizador 0 - apostador, 1 - especialista, 2 - administrador
+	 * @param tipo_de_utilizador 0 - Better, 1 - Specialist, 2 - Administrator
 	 */
     private void register(int tipo_de_utilizador){
         clearScreen();
@@ -207,7 +207,7 @@ public class RasBetUI {
 
 
 	/**
-	 * 
+	 *
 	 * @param email
 	 * @param pwd
 	 */
@@ -217,7 +217,7 @@ public class RasBetUI {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param email
 	 * @param pwd
 	 * @param nif
@@ -237,13 +237,13 @@ public class RasBetUI {
 		throw new UnsupportedOperationException();
 	}
 
-	public void showHomePageApostador() {
-		// TODO - implement UI.RasBetUI.showHomePageApostador
+	public void showHomePageBetter() {
+		// TODO - implement UI.RasBetUI.showHomePageBetter
 		throw new UnsupportedOperationException();
 	}
 
-	public void showHomePageEspecialista() {
-		// TODO - implement UI.RasBetUI.showHomePageEspecialista
+	public void showHomePageSpecialist() {
+		// TODO - implement UI.RasBetUI.showHomePageSpecialist
 		throw new UnsupportedOperationException();
 	}
 

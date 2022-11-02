@@ -11,13 +11,13 @@ public class Migrate {
              Statement stm = conn.createStatement()) {
                 String disableForeignChecks = "SET FOREIGN_KEY_CHECKS=0";
                 stm.executeUpdate(disableForeignChecks);
-            String limpar = "DROP TABLE IF EXISTS Utilizador, " +
-                            "Resultado," +
-                            "Jogo," +
-                            "Aposta," +
-                            "Carteira," +
-                            "Desporto," +
-                            "DesportoJogo;";
+            String limpar = "DROP TABLE IF EXISTS User, " +
+                            "Result," +
+                            "Game," +
+                            "Bet," +
+                            "Wallet," +
+                            "Sport," +
+                            "SportGame;";
 
             stm.executeUpdate(limpar);
             String enableForeignChecks = "SET FOREIGN_KEY_CHECKS=1";
@@ -25,60 +25,71 @@ public class Migrate {
 
 
 
-            String sql = "CREATE TABLE IF NOT EXISTS Utilizador (" +
+            String sql = "CREATE TABLE IF NOT EXISTS User (" +
                         "Email VARCHAR(75) NOT NULL PRIMARY KEY," +
-                        "Nome VARCHAR(45) NOT NULL," +
-                        "PasswordHash VARCHAR(45) NOT NULL," +
-                        "NIF VARCHAR(45) NOT NULL)";
+                        "Name VARCHAR(45) NOT NULL," +
+                        "PasswordHash INT NOT NULL," +
+                        "NIF VARCHAR(45) NOT NULL," +
+                        "Type TINYINT NOT NULL)";
 
             stm.executeUpdate(sql);
 
-            String sqlR = "CREATE TABLE IF NOT EXISTS Resultado (" +
-                    "ResultadoID INT NOT NULL PRIMARY KEY," +
-                    "OddCasa FLOAT NOT NULL,"+
+            String sqlR = "CREATE TABLE IF NOT EXISTS Result (" +
+                    "ResultID INT NOT NULL PRIMARY KEY," +
+                    "OddHome FLOAT NOT NULL,"+
                     "OddDraw FLOAT NOT NULL," +
                     "OddAway FLOAT NOT NULL," +
                     "Score VARCHAR(45) NOT NULL," +
-                    "EquipaVencedora VARCHAR(45) NOT NULL)";
+                    "WinningTeam VARCHAR(45) NOT NULL)";
 
             stm.executeUpdate(sqlR);
 
-            String sqlJ = "CREATE TABLE IF NOT EXISTS Jogo (" +
-                    "idJogo INT NOT NULL PRIMARY KEY ," +
+            String sqlJ = "CREATE TABLE IF NOT EXISTS Game (" +
+                    "idGame VARCHAR(75) NOT NULL PRIMARY KEY ," +
                     "HomeTeam VARCHAR(45) NOT NULL," +
                     "AwayTeam VARCHAR(45) NOT NULL," +
                     "CommenceTime VARCHAR(45) NOT NULL," +
                     "Completed TINYINT NOT NULL," +
-                    "ResultadoId INT NOT NULL," +
-                    "FOREIGN KEY (ResultadoId) REFERENCES Resultado(ResultadoID))";
+                    "Score VARCHAR(45)," +
+                    "ResultId INT NOT NULL," +
+                    "FOREIGN KEY (ResultId) REFERENCES Result(ResultID))";
             stm.executeUpdate(sqlJ);
 
-            String sqlAP = "CREATE TABLE IF NOT EXISTS Aposta (" +
-                    "idAposta INT NOT NULL PRIMARY KEY,"  +
-                    "Value FLOAT NOT NULL," +
+            String sqlAP = "CREATE TABLE IF NOT EXISTS Bet (" +
+                    "idBet INT NOT NULL PRIMARY KEY,"  +
+                    "value FLOAT NOT NULL," +
                     "Email VARCHAR(75) NOT NULL ," +
-                    "Jogo_id INT NOT NULL ," +
-                    "FOREIGN KEY (Email) REFERENCES Utilizador(Email)," +
-                    "FOREIGN KEY (Jogo_id) REFERENCES Jogo(idJogo))";
+                    "Game_id VARCHAR(45) NOT NULL ," +
+                    "FOREIGN KEY (Email) REFERENCES User(Email)," +
+                    "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);
 
-            String sqlCart = "CREATE TABLE IF NOT EXISTS Carteira (" +
+            String sqlCart = "CREATE TABLE IF NOT EXISTS Wallet (" +
                     "Email VARCHAR(75) NOT NULL PRIMARY KEY ," +
                     "Euros VARCHAR(45) NOT NULL," +
                     "Dollars VARCHAR(45) NOT NULL," +
-                    "FOREIGN KEY (Email) REFERENCES Utilizador(Email))";
+                    "FOREIGN KEY (Email) REFERENCES User(Email))";
             stm.executeUpdate(sqlCart);
 
-            String sqlD = "CREATE TABLE IF NOT EXISTS Desporto (" +
-                        "idDesporto INT NOT NULL PRIMARY KEY ," +
-                        "Nome VARCHAR(45) NOT NULL)";
+            String sqlT = "CREATE TABLE IF NOT EXISTS Transfer (" +
+                        "idTransfer VARCHAR(45) NOT NULL PRIMARY KEY ," +
+                        "Value FLOAT NOT NULL," +
+                        "Date VARCHAR(45) NOT NULL," +
+                        "Description VARCHAR(100) NOT NULL," +
+                        "Email VARCHAR(75) NOT NULL," +
+                        "FOREIGN KEY (Email) REFERENCES User(Email))";
+            stm.executeUpdate(sqlT);
+
+            String sqlD = "CREATE TABLE IF NOT EXISTS Sport (" +
+                        "idSport INT NOT NULL PRIMARY KEY ," +
+                        "Name VARCHAR(45) NOT NULL)";
             stm.executeUpdate(sqlD);
 
-            String sqlDJ = "CREATE TABLE IF NOT EXISTS DesportoJogo (" +
-                        "idDesporto INT NOT NULL," +
-                        "idJogo INT NOT NULL,"+
-                        "FOREIGN KEY (idDesporto) References Desporto(idDesporto)," +
-                        "FOREIGN KEY (idJogo) References Jogo(idJogo))";
+            String sqlDJ = "CREATE TABLE IF NOT EXISTS SportGame (" +
+                        "idSport INT NOT NULL," +
+                        "idGame VARCHAR(45) NOT NULL,"+
+                        "FOREIGN KEY (idSport) References Sport(idSport)," +
+                        "FOREIGN KEY (idGame) References Game(idGame))";
             stm.executeUpdate(sqlDJ);
 
 

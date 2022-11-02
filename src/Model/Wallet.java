@@ -1,6 +1,12 @@
 package Model;
 
-public class Carteira {
+public class Wallet {
+
+    /**
+     * Identificador da carteira
+     * */
+    private int id;
+
     /**
      * Quantia em euros guardada nesta carteira
      * */
@@ -9,12 +15,16 @@ public class Carteira {
      * Quantia em dolars guardada nesta carteira*/
     private float dollars;
 
-    public Carteira() {
+    public Wallet() {
+        this.id = Utils.geraIdentificadorUnicoInteger(Utils.wallets);
+        Utils.wallets.put(id,id);
         this.euros = 0;
         this.dollars = 0;
     }
 
-    public Carteira(float euros, float dollars) {
+    public Wallet(float euros, float dollars) {
+        this.id = Utils.geraIdentificadorUnicoInteger(Utils.wallets);
+        Utils.wallets.put(id,id);
         this.euros = euros;
         this.dollars = dollars;
     }
@@ -33,6 +43,14 @@ public class Carteira {
 
     public void setDollars(float dollars) {
         this.dollars = dollars;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Apostador extends User {
+public class Better extends User {
 
 	/**
 	 * Mapa de apostas do utilizador (APOSTAS ATIVAS????)
 	 * */
 	private Map<String,Bet> bets;
-	/**
-	 * Histórico de todas as apostas realizadas por um utilizador
-	 * */
-	private Map<String,Bet> betHistory;
+
 	/**
 	 * Histórico de todas as transferências efetuadas pelo utilizador
 	 * */
@@ -24,14 +21,14 @@ public class Apostador extends User {
 	 * */
 	private String nif;
 	/**
-	 * Model.Carteira que guarda a quantia que o utilizador possui nas diversas moedas
+	 * Wallet que guarda a quantia que o utilizador possui nas diversas moedas
 	 * */
-	private Carteira carteira;
+	private Wallet Wallet;
 
-	public Apostador(String nome, String mail, int passwordHash, String nif) {
+	public Better(String nome, String mail, int passwordHash, String nif) {
 		super(nome, mail, passwordHash);
 		this.nif = nif;
-		this.carteira = new Carteira();
+		this.Wallet = new Wallet();
 	}
 
 	/**
@@ -40,7 +37,7 @@ public class Apostador extends User {
 	 * */
 	public List<String> getBetHistory() {
 		List<String> history = new ArrayList<>();
-		for (Map.Entry<String, Bet> t: this.betHistory.entrySet()) {
+		for (Map.Entry<String, Bet> t: this.bets.entrySet()) {
 			history.add(t.getValue().toString());
 		}
 		return history;
@@ -66,7 +63,7 @@ public class Apostador extends User {
 	public String addMovement(float value,String description) {
 		String id = Utils.geraIdentificadorUnico(this.transHistory);
 		Transfer transfer = new Transfer(id,value, LocalDateTime.now(),description);
-		this.getCarteira().addEuros(value);
+		this.getWallet().addEuros(value);
 		this.transHistory.put(id,transfer);
 		return id;
 	}
@@ -78,8 +75,8 @@ public class Apostador extends User {
 		this.nif = nif;
 	}
 
-	public Carteira getCarteira(){
-		return this.carteira;
+	public Wallet getWallet(){
+		return this.Wallet;
 	}
 
 

@@ -5,14 +5,14 @@ import Model.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDB {
+public class UsersMap {
 
 	/**
 	 * Mapa de utilizadores
 	 * */
 	Map<String, User> utilizadores;
 
-	public UserDB() {
+	public UsersMap() {
 		this.utilizadores = new HashMap<>();
 	}
 
@@ -30,15 +30,15 @@ public class UserDB {
 		if(!this.utilizadores.containsKey(email)){
 			switch (type){
 				case 1:
-					Especialista especialista = new Especialista(nome,email,password.hashCode());
+					Specialist especialista = new Specialist(nome,email,password.hashCode());
 					this.utilizadores.put(email,especialista);
 					break;
 				case 2:
-					Administrador administrador = new Administrador(nome,email,password.hashCode());
+					Administrator administrador = new Administrator(nome,email,password.hashCode());
 					this.utilizadores.put(email,administrador);
 					break;
 				default:
-					Apostador apostador = new Apostador(nome,email,password.hashCode(),nif);
+					Better apostador = new Better(nome,email,password.hashCode(),nif);
 					this.utilizadores.put(email,apostador);
 					break;
 			}
@@ -58,7 +58,7 @@ public class UserDB {
 		boolean updatedInfo = false;
 		if(this.utilizadores.containsKey(email)){
 			User user = this.utilizadores.get(email);
-			user.setNome(nome);
+			user.setName(nome);
 			user.setPassword(password);
 			updatedInfo = true;
 		}
