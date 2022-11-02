@@ -3,10 +3,6 @@ package UI;
 import java.util.Scanner;
 
 
-import Model.Administrador;
-import Model.Apostador;
-import Model.Especialista;
-
 public class TextUI {
 
 

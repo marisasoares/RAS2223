@@ -59,7 +59,8 @@ public class Migrate {
                     "idBet INT NOT NULL PRIMARY KEY,"  +
                     "value FLOAT NOT NULL," +
                     "Email VARCHAR(75) NOT NULL ," +
-                    "Game_id VARCHAR(45) NOT NULL ," +
+                    "Game_id VARCHAR(45) NOT NULL ,"+
+                    "BettedTeam VARCHAR(45) NOT NULL ,"+
                     "FOREIGN KEY (Email) REFERENCES User(Email)," +
                     "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);

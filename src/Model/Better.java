@@ -8,11 +8,6 @@ import java.util.Map;
 public class Better extends User {
 
 	/**
-	 * Mapa de apostas do utilizador (APOSTAS ATIVAS????)
-	 * */
-	private Map<String,Bet> bets;
-
-	/**
 	 * Histórico de todas as transferências efetuadas pelo utilizador
 	 * */
 	private Map<String,Transfer> transHistory;
@@ -23,12 +18,12 @@ public class Better extends User {
 	/**
 	 * Wallet que guarda a quantia que o utilizador possui nas diversas moedas
 	 * */
-	private Wallet Wallet;
+	private Wallet wallet;
 
 	public Better(String nome, String mail, int passwordHash, String nif) {
 		super(nome, mail, passwordHash);
 		this.nif = nif;
-		this.Wallet = new Wallet();
+		this.wallet = new Wallet(this.mail);
 	}
 
 	/**
@@ -36,11 +31,12 @@ public class Better extends User {
 	 * @return Lista das apostas em formato String
 	 * */
 	public List<String> getBetHistory() {
-		List<String> history = new ArrayList<>();
+		/*List<String> history = new ArrayList<>();
 		for (Map.Entry<String, Bet> t: this.bets.entrySet()) {
 			history.add(t.getValue().toString());
 		}
-		return history;
+		return history;*/
+		return null;
 	}
 
 	/**
@@ -76,7 +72,10 @@ public class Better extends User {
 	}
 
 	public Wallet getWallet(){
-		return this.Wallet;
+		return this.wallet;
+	}
+	public void setWallet(Wallet wallet){
+		this.wallet = wallet;
 	}
 
 
@@ -88,10 +87,12 @@ public class Better extends User {
 	 * @return id da aposta
 	 */
 	public String addBet(String game, float value,int equipaApostada) {
-		String id = Utils.geraIdentificadorUnico(this.bets);
+		//TODO
+		/*String id = Utils.geraIdentificadorUnico(this.bets);
 		Bet bet = new Bet(id,game,value,equipaApostada);
 		this.bets.put(id,bet);
-		return id;
+		return id;*/
+		return null;
 	}
 
 	/**
@@ -100,7 +101,17 @@ public class Better extends User {
 	 * @return true se existir, false caso contrário
 	 * */
 	public boolean betExists(String id){
-		return this.bets.containsKey(id);
+		//TODO
+		/*return this.bets.containsKey(id);*/
+		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "Better{" +
+				"transHistory=" + transHistory +
+				", nif='" + nif + '\'' +
+				", wallet=" + wallet +
+				'}';
+	}
 }

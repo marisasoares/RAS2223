@@ -4,7 +4,7 @@ public class Bet {
 	/**
 	 * Identificador da aposta
 	 * */
-	public String id;
+	public int id;
 	/**
 	 * Identificador do jogo correspondente
 	 * */
@@ -17,25 +17,30 @@ public class Bet {
 	 * Equipa vencedora
 	 * 0 - homeTeam
 	 * 1 - awayTeam
-	 * 2 - empate
+	 * 2 - draw
 	 * */
-	public int equipaApostada;
+	public int bettedTeam;
 
-	public Bet(String id, String gameId, float value, int equipaVencedora) {
+	/**
+	 * Email do utilizador
+	 * */
+	public String email;
+
+	public Bet(int id, String gameId, float value, int bettedTeam,String email) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
-		this.equipaApostada = equipaVencedora;
+		this.bettedTeam = bettedTeam;
 	}
 
-	public Bet(String gameId, float value, int equipaVencedora) {
-		this.id = null;
+	public Bet(String gameId, float value, int bettedTeam,String email) {
+		this.id = 0;
 		this.gameId = gameId;
 		this.value = value;
-		this.equipaApostada = equipaVencedora;
+		this.bettedTeam = bettedTeam;
 	}
 
-	public String getBetId(){
+	public int getBetId(){
 		return this.id;
 	}
 
@@ -55,11 +60,30 @@ public class Bet {
 		this.value = value;
 	}
 
-	public int getEquipaApostada() {
-		return this.equipaApostada;
+	public int getBettedTeam() {
+		return this.bettedTeam;
 	}
 
-	public void setEquipaApostada(int equipaApostada) {
-		this.equipaApostada = equipaApostada;
+	public void setBettedTeam(int bettedTeam) {
+		this.bettedTeam = bettedTeam;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Bet{" +
+				"id=" + id +
+				", gameId='" + gameId + '\'' +
+				", value=" + value +
+				", bettedTeam=" + bettedTeam +
+				", email='" + email + '\'' +
+				'}';
 	}
 }

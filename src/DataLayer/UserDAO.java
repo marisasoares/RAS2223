@@ -1,8 +1,5 @@
 package DataLayer;
-import Model.Administrator;
-import Model.Better;
-import Model.Specialist;
-import Model.User;
+import Model.*;
 
 import java.sql.*;
 
@@ -13,16 +10,18 @@ public class UserDAO {
     private static final String REP_NUMBER = "SELECT * FROM User WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM User WHERE Email=?";
     private static final String INSERT = "INSERT INTO User(Email, Name, PasswordHash,NIF,Type) VALUES(?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE User SET Name= ?, PasswordHash = ? WHERE Email=?";
 
     public static boolean store(User user) {
         boolean r = true;
-        try {
+        try{
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setString(1, user.getMail());
             stm.setString(2, user.getName());
             stm.setString(3, String.valueOf(user.getPasswordHash()));
             if(user instanceof Better){
+                WalletDAO.store(((Better) user).getWallet());
                 stm.setString(4, ((Better) user).getNif());
                 stm.setInt(5,0);
             }
@@ -71,6 +70,9 @@ public class UserDAO {
                                 rs.getString("Email"),
                                 rs.getInt("PasswordHash"),
                                 rs.getString("NIF"));
+                        Wallet wallet = WalletDAO.get(user.getMail());
+                        ((Better) user).setWallet(wallet);
+
                         break;
                 }
             }
@@ -92,5 +94,20 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+
+    public static void update(User user){
+        try {
+            if(user instanceof Better) WalletDAO.update(((Better) user).getWallet());
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+            stmt.setString(1, user.getName());
+            stmt.setInt(2, user.getPasswordHash());
+            stmt.setString(3, user.getMail());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -3,28 +3,28 @@ package Model;
 public class Wallet {
 
     /**
-     * Identificador da carteira
-     * */
-    private int id;
+     * Email do utilizador que possui a carteira
+     */
+    private String email;
 
     /**
      * Quantia em euros guardada nesta carteira
      * */
     private float euros;
+
     /**
      * Quantia em dolars guardada nesta carteira*/
     private float dollars;
 
-    public Wallet() {
-        this.id = Utils.geraIdentificadorUnicoInteger(Utils.wallets);
-        Utils.wallets.put(id,id);
+
+    public Wallet(String email) {
+        this.email = email;
         this.euros = 0;
         this.dollars = 0;
     }
 
-    public Wallet(float euros, float dollars) {
-        this.id = Utils.geraIdentificadorUnicoInteger(Utils.wallets);
-        Utils.wallets.put(id,id);
+    public Wallet(String email,float euros, float dollars) {
+        this.email = email;
         this.euros = euros;
         this.dollars = dollars;
     }
@@ -45,12 +45,12 @@ public class Wallet {
         this.dollars = dollars;
     }
 
-    public int getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
@@ -65,5 +65,14 @@ public class Wallet {
      * */
     public void addDollars(float amount){
         this.setDollars(this.getDollars()+amount);
+    }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "email='" + email + '\'' +
+                ", euros=" + euros +
+                ", dollars=" + dollars +
+                '}';
     }
 }

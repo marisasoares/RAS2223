@@ -1,9 +1,7 @@
+import DataLayer.BetDAO;
 import DataLayer.GameDAO;
 import DataLayer.UserDAO;
-import Model.Bet;
-import Model.Better;
-import Model.Game;
-import Model.RasBetFacade;
+import Model.*;
 import UI.RasBetUI;
 import UI.TextUI;
 
@@ -31,11 +29,20 @@ public class Main {
 
         for (int i = 1; i <= 20; i++){
             model.register("user" + i,"user"+i + "@gmail.com","12345678", String.valueOf(12345678+i),0);
-            ((Better)UserDAO.get("user"+i+"@gmail.com")).getWallet().setEuros(new Random().nextFloat()*100);
-            ((Better)UserDAO.get("user"+i+"@gmail.com")).getWallet().setDollars(new Random().nextFloat()*100);
+            User user = ((Better)UserDAO.get("user"+i+"@gmail.com"));
+            ((Better) user).getWallet().setEuros(new Random().nextFloat()*100);
+            ((Better) user).getWallet().setDollars(new Random().nextFloat()*100);
+            UserDAO.update(user);
+            System.out.println(((Better)UserDAO.get("user"+i+"@gmail.com")).toString());
+
         }
         model.register("especialista","esp@gmail.com","12345678","00000000",1);
         model.register("admin","admin@gmail.com","12345678","000000000",1);
+
+        Bet bet = new Bet(1,"09ed0664c62c7641dd7d9d8be41f7992",45,0,"user1@gmail.com");
+        BetDAO.store(bet);
+        System.out.println(BetDAO.get(1).toString());
+
         try {
             new RasBetUI(model).run();
         }
