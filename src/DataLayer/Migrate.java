@@ -62,6 +62,7 @@ public class Migrate {
                     "Game_id VARCHAR(45) NOT NULL ,"+
                     "BettedTeam INT NOT NULL ,"+
                     "MultipleId INT ,"+
+                    "IsSuspended TINYINT NOT NULL ,"+
                     "FOREIGN KEY (Email) REFERENCES User(Email)," +
                     "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);

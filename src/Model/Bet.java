@@ -33,31 +33,39 @@ public class Bet {
 	 * */
 	public String email;
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email) {
+	/**
+	* Informa se a aposta está ativa ou suspensa
+	 **/
+	public boolean isSuspended;
+
+	public Bet(int id, String gameId, float value, int bettedTeam,String email, boolean isSuspended) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
 		this.multipleId = 0;
+		this.isSuspended = isSuspended;
 	}
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId) {
+	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
 		this.multipleId = multipleId;
+		this.isSuspended = isSuspended;
 	}
 
-	public Bet(String gameId, float value, int bettedTeam,String email) {
+	public Bet(String gameId, float value, int bettedTeam,String email, boolean isSuspended) {
 		this.id = 0;
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
 		this.multipleId = 0;
+		this.isSuspended = false;
 	}
 
 	public int getBetId(){
@@ -104,6 +112,14 @@ public class Bet {
 		this.multipleId = multipleId;
 	}
 
+	public boolean isSuspended() {
+		return isSuspended;
+	}
+
+	public void setSuspended(boolean isSuspended) {
+		this.isSuspended = isSuspended;
+	}
+
 	@Override
 	public String toString() {
 		return "Bet{" +
@@ -113,6 +129,7 @@ public class Bet {
 				", value=" + value +
 				", bettedTeam=" + bettedTeam +
 				", email='" + email + '\'' +
+				", isSuspended=" + isSuspended +
 				'}';
 	}
 }

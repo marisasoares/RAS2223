@@ -47,9 +47,12 @@ public class ListMenu {
         System.out.println("\u001B[36m" + titulo + "\u001B[0m");
         int i = 1;
         for (String string : this.opcoes) {
-            System.out.println("(" + i + "): " + string);
+            System.out.print("[\033[1;36m"+i+"\033[0m]");
+            System.out.print(" - ");
+            System.out.println(string);
             i++;
         }
+        System.out.println("[\033[1;36m0\033[0m] - Sair");
         if(cursorVisible) System.out.print("> ");
     }
 }

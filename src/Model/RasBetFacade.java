@@ -84,8 +84,8 @@ public class RasBetFacade {
 	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public boolean addBet(int sportID,String gameID,String email, float value, int bettedTeam, int multipleId) {
-		Bet bet = new Bet(sportID,gameID,value,bettedTeam,email,multipleId);
+	public boolean addBet(int sportID,String gameID,String email, float value, int bettedTeam, int multipleId,boolean isSuspended) {
+		Bet bet = new Bet(sportID,gameID,value,bettedTeam,email,multipleId,isSuspended);
 
 		return BetDAO.store(bet);
 	}

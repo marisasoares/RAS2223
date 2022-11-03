@@ -42,7 +42,7 @@ public class RasBetUI {
 		System.out.println("╔══════════╗");
 		System.out.println("║  Rasbet  ╠════════════════════════");
 		System.out.println("╚══════════╝ ");
-		System.out.println("\n    " + string + "      \033[0m\n\n");
+		System.out.println("    " + string + "      \033[0m\n");
 	}
 
 	private void errorMessage(String s){
@@ -61,7 +61,7 @@ public class RasBetUI {
 		//database.loadUsersFromDB();
 		//database.loadJogosAndSportsFromDB();
 		//database.loadApostasFromDB();
-		//TODO MUDARRRRR TODO
+		//TODO MUDAR TODO
 		this.menuPrincipal();
 		//rasBetFacade.setEmailAuthenticatedUser("user1@gmail.com");
 		//this.menuBetter("user1@gmail.com");
@@ -146,7 +146,7 @@ public class RasBetUI {
 			menuSports.adicionaOpcao(sport.getNome());
 		}
 		menuSports.show(true);
-		selected = Utils.InputInteger(this.scanner,0,sportList.size());
+		selected = Utils.InputInteger(this.scanner,1,sportList.size());
 		return sportList.get(selected-1).getId();
 	}
 
@@ -218,28 +218,39 @@ public class RasBetUI {
 		menu.run();
 	}
 
-	private void menuAlterarOdd(){
+	private boolean menuAlterarOdd(){
 		int sportId = selectSport();
 		String gameId = selectGame(sportId);
+		boolean sair = false;
+		while(!sair){
+			sair = menuOdds(gameId);
+		}
+
+		return false;
+	}
+
+	private boolean menuOdds(String gameId){
+		boolean sair = false;
 		Game game = GameDAO.get(gameId);
 		Result result = ResultDAO.get(game.getResult().getResultID());
-		int selected = -1;
 		clearScreen();
 		header("Selecione uma Odd");
 		ListMenu odds = new ListMenu();
-		odds.adicionaOpcao( "Odd Casa " + result.getOddHomeTeam() + game.getHomeTeam());
-		odds.adicionaOpcao( "Odd FORA" + result.getOddAwayTeam() + game.getAwayTeam());
+		odds.adicionaOpcao( "Odd Casa " + result.getOddHomeTeam() + " " +game.getHomeTeam());
+		odds.adicionaOpcao( "Odd Fora " + result.getOddAwayTeam() + " " +game.getAwayTeam());
 		odds.adicionaOpcao( "Odd Empate - " + result.getOddDraw() + "Empate");
 		odds.show(true);
-		int escolha = Utils.InputInteger(this.scanner,1,3);
+		int escolha = Utils.InputInteger(this.scanner,0,3);
+		if(escolha == 0) return true;
 		System.out.println("Insira nova Odd");
 		float odd;
 		odd = Utils.InputFloat(this.scanner);
 		switch (escolha) {
-			case 1 -> rasBetFacade.inserirChange(odd, gameId, 0);
-			case 2 -> rasBetFacade.inserirChange(odd, gameId, 1);
-			default -> rasBetFacade.inserirChange(odd, gameId, 2);
+			case 1 -> rasBetFacade.inserirChange(odd, game.getId(), 0);
+			case 2 -> rasBetFacade.inserirChange(odd, game.getId(), 1);
+			default -> rasBetFacade.inserirChange(odd, game.getId(), 2);
 		}
+		return sair;
 	}
 
 	private void menuAdministrator(String email){
@@ -258,7 +269,10 @@ public class RasBetUI {
 				"Listar Administratores"
 		},"Bem vindo " + admin.getName()+"\n");
 		menu.setTitulo("Menu Administrator");
-		//menu.setHandler(1,()-> ....);
+		menu.setHandler(1,()-> register(2));
+		menu.setHandler(2,()-> register(1));
+		menu.setHandler(4,()-> menuAlterarOdd());
+		menu.setHandler(5,()-> menuAlterarOdd());
 		menu.run();
 	}
 
@@ -332,6 +346,8 @@ public class RasBetUI {
         this.rasBetFacade.registerUser(name,email,password,nif,tipo_de_utilizador);
         pressEnterToContinue();
     }
+
+	private void showError(){};
 
 
 	/**

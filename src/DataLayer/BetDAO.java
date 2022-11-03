@@ -10,7 +10,7 @@ import java.util.List;
 public class BetDAO {
     private static final String DELETE = "DELETE FROM Bet WHERE email=?";
     private static final String FIND_BY_ID = "SELECT * FROM Bet WHERE idBet=?";
-    private static final String INSERT = "INSERT INTO Bet(idBet,value,Email,Game_id,BettedTeam,MultipleId) VALUES(?,?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO Bet(idBet,value,Email,Game_id,BettedTeam,MultipleId,IsSuspended) VALUES(?,?,?,?,?,?,?)";
     private static final String UPDATE = "UPDATE Bet SET Euros= ?, Dollars = ? WHERE Email=?";
 
     public static boolean store(Bet b) {
@@ -24,6 +24,7 @@ public class BetDAO {
             stm.setString(4, b.getGameId());
             stm.setInt(5,b.getBettedTeam());
             stm.setInt(6,b.getMultipleId());
+            stm.setInt(7,b.getMultipleId());
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
@@ -52,7 +53,8 @@ public class BetDAO {
                         rs.getFloat("value"),
                         rs.getInt("BettedTeam"),
                         rs.getString("Email"),
-                        rs.getInt("MultipleId"));
+                        rs.getInt("MultipleId"),
+                        rs.getBoolean("IsSuspended"));
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -74,7 +76,8 @@ public class BetDAO {
                         rs.getFloat("value"),
                         rs.getInt("BettedTeam"),
                         rs.getString("Email"),
-                        rs.getInt("MultipleId")));
+                        rs.getInt("MultipleId"),
+                        rs.getBoolean("IsSuspended")));
             }
         } catch (SQLException e){
             e.printStackTrace();
