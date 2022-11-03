@@ -126,7 +126,6 @@ public class RasBetFacade {
 				break;
 			case 2:
 				Administrator adm = new Administrator(nome,email,pwd.hashCode());
-				System.out.println("[RasBetFacade:119] Adicionado admin: " + adm.toString());
 				added = UserDAO.store(adm);
 				break;
 			default:
@@ -329,6 +328,13 @@ public class RasBetFacade {
 	}
 
 	/**
+	 * Devolve a lista de desportos
+	 * */
+	public List<Bet> getBetList(String gameId){
+		return BetDAO.getBetsByGameId(gameId);
+	}
+
+	/**
 	 * Devolve a lista de jogos de um desporto
 	 * */
 	public List<Game> getGameList(int sportId){
@@ -347,6 +353,16 @@ public class RasBetFacade {
 			}
 		}
 		return gameList;
+	}
+
+	public void alteraEstado(int betId) {
+		Bet bet = BetDAO.get(betId);
+		if(bet.isSuspended == false) bet.isSuspended = true;
+		else bet.isSuspended = false;
+		BetDAO.update(bet);
+	}
+	public Game getGame(String gameId) {
+		return GameDAO.get(gameId);
 	}
 
 }

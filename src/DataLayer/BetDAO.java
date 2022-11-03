@@ -10,8 +10,9 @@ import java.util.List;
 public class BetDAO {
     private static final String DELETE = "DELETE FROM Bet WHERE email=?";
     private static final String FIND_BY_ID = "SELECT * FROM Bet WHERE idBet=?";
+    private static final String FIND_BY_Gameid = "SELECT * FROM Bet WHERE Game_id=?";
     private static final String INSERT = "INSERT INTO Bet(idBet,value,Email,Game_id,BettedTeam,MultipleId,IsSuspended) VALUES(?,?,?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE Bet SET Euros= ?, Dollars = ? WHERE Email=?";
+    private static final String UPDATE = "UPDATE Bet SET value=?,Game_id=?,BettedTeam=?,MultipleId=?,IsSuspended=? WHERE Email=?";
 
     public static boolean store(Bet b) {
         boolean r = true;
@@ -24,11 +25,10 @@ public class BetDAO {
             stm.setString(4, b.getGameId());
             stm.setInt(5,b.getBettedTeam());
             stm.setInt(6,b.getMultipleId());
-            stm.setInt(7,b.getMultipleId());
+            stm.setBoolean(7,b.getisSuspended());
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
-            s.printStackTrace();
             r = false;
         } catch (SQLException e) {
             r = false;
@@ -85,6 +85,29 @@ public class BetDAO {
         return bets;
     }
 
+    public static List<Bet> getBetsByGameId(String gameid) {
+        List<Bet> bets = new ArrayList<>();
+
+        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stm = conn.prepareStatement(FIND_BY_Gameid);
+            stm.setString(1, gameid);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {  // A chave existe na tabela
+                bets.add( new Bet(rs.getInt("idBet"),
+                        rs.getString("Game_id"),
+                        rs.getFloat("value"),
+                        rs.getInt("BettedTeam"),
+                        rs.getString("Email"),
+                        rs.getInt("MultipleId"),
+                        rs.getBoolean("IsSuspended")));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return bets;
+    }
+
 
     public static void delete(int betId) {
         try {
@@ -97,17 +120,20 @@ public class BetDAO {
         }
     }
 
-    /*
-    public static void update(Bet bet){
+
+    public static void update(Bet b){
         try {
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            PreparedStatement stmt = conn.prepareStatement(UPDATE);
-            stmt.setFloat(1, bet.getEuros());
-            stmt.setFloat(2, wallet.getDollars());
-            stmt.setString(3, wallet.getEmail());
-            stmt.executeUpdate();
+            PreparedStatement stm = conn.prepareStatement(UPDATE);
+            stm.setFloat(1, b.getValue());
+            stm.setString(2, b.getGameId());
+            stm.setInt(3,b.getBettedTeam());
+            stm.setInt(4,b.getMultipleId());
+            stm.setBoolean(5,b.getisSuspended());
+            stm.setString(6,b.getEmail());
+            stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

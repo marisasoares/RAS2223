@@ -56,10 +56,10 @@ public class Main {
         model.registerUser("especialista","esp@gmail.com","12345678","00000001",1);
         model.registerUser("admin","admin@gmail.com","12345678","000000001",2);
 
-        //Bet bet = new Bet(1,"09ed0664c62c7641dd7d9d8be41f7992",45,0,"user1@gmail.com",0);
-        //System.out.println("EMAIL = " + bet.getEmail());
-        //BetDAO.store(bet);
-        //System.out.println(BetDAO.get(bet.getBetId()));
+        Bet bet = new Bet(1,"538136a794711c8c9bc24b48353c396c",45,0,"user1@gmail.com",false);
+        System.out.println("EMAIL = " + bet.getEmail());
+        BetDAO.store(bet);
+        System.out.println(BetDAO.get(bet.getBetId()));
 
         //List<Game> futebolGames = SportGameDAO.get_AllGames_by_SportID(futebol.getId());
         //System.out.println(futebolGames.toString());

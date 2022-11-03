@@ -112,7 +112,7 @@ public class Bet {
 		this.multipleId = multipleId;
 	}
 
-	public boolean isSuspended() {
+	public boolean getisSuspended() {
 		return isSuspended;
 	}
 

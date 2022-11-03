@@ -31,7 +31,7 @@ public class UserDAO {
                 stm.setInt(5,1);
             }
             else {
-                System.out.println("[UserDAO:35] Adicionado admin: " + user.toString());
+
                 stm.setString(4, "NaN");
                 stm.setInt(5,2);
             }
@@ -40,7 +40,6 @@ public class UserDAO {
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
             r = false;
-            s.printStackTrace();
         } catch (SQLException e) {
             r = false;
             // Database error!

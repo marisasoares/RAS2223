@@ -24,7 +24,6 @@ public class SportDAO {
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
-            s.printStackTrace();
             r = false;
         } catch (SQLException e) {
             r = false;

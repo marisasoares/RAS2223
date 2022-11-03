@@ -1,5 +1,6 @@
 package UI;
 
+import DataLayer.BetDAO;
 import DataLayer.GameDAO;
 import DataLayer.ResultDAO;
 import DataLayer.UserDAO;
@@ -128,9 +129,45 @@ public class RasBetUI {
 		String gameId = selectGame(sportId);
 		rasBetFacade.setIdCurrentSelectedGame(gameId);
 		Game game = GameDAO.get(gameId);
-		selectResult(game);
+		int bettedteam = selectResult(game);
+		ListMenu menu = new ListMenu();
+		menu.adicionaOpcao("Dollars "+" Dinheiro Disponível: " + ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getDollars());
+		menu.adicionaOpcao("Euros " +" Dinheiro Disponível: "+ ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getEuros());
+		menu.show(true);
+		int escolha = Utils.InputInteger(this.scanner,1,2);
+
 		System.out.print("Insira o valor a apostar: ");
 		float valor = 0;
+		valor = Utils.InputFloat(this.scanner);
+		String email = rasBetFacade.getAuthenticatedUser().getMail();
+		if(escolha == 1) {
+			if(rasBetFacade.validateTransferDollars(-valor,email)){
+				int multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
+				Utils.multipleIds.put(multipleId,multipleId);
+				rasBetFacade.addBet(sportId,gameId,email,valor,bettedteam,multipleId,false);
+				rasBetFacade.addMovementDollars(-valor,email,"Aposta");
+				System.out.println("Aposta Realizada");
+				pressEnterToContinue();
+			}
+			else {
+				errorMessage("Não tem dinheiro suficiente");
+				pressEnterToContinue();
+			}
+		}
+		else {
+			if (rasBetFacade.validateTransferEuros(-valor, rasBetFacade.getAuthenticatedUser().getMail())) {
+				int multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
+				Utils.multipleIds.put(multipleId, multipleId);
+				rasBetFacade.addBet(sportId, gameId, email, valor, bettedteam, multipleId, false);
+				rasBetFacade.addMovementEuros(-valor,email,"Aposta");
+				System.out.println("Aposta Realizada");
+				pressEnterToContinue();
+			}
+			else {
+				errorMessage("Não tem dinheiro suficiente");
+				pressEnterToContinue();
+			}
+		}
 
 
 	}
@@ -167,7 +204,7 @@ public class RasBetUI {
 		return games.get(selected-1).getId();
 	}
 
-	public void selectResult(Game game){
+	public int selectResult(Game game){
 		clearScreen();
 		header("Selecionar um resultado");
 		ListMenu menuAposta = new ListMenu();
@@ -176,6 +213,7 @@ public class RasBetUI {
 		menuAposta.adicionaOpcao( "Empate - " + game.getResult().getOddDraw());
 		menuAposta.show(true);
 		int selected = Utils.InputInteger(this.scanner,1,3);
+		return selected-1;
 	}
 
 	private void alterarNome(){
@@ -271,9 +309,51 @@ public class RasBetUI {
 		menu.setTitulo("Menu Administrator");
 		menu.setHandler(1,()-> register(2));
 		menu.setHandler(2,()-> register(1));
+		menu.setHandler(3,()-> menuAlterarEstadoAposta());
 		menu.setHandler(4,()-> menuAlterarOdd());
 		menu.setHandler(5,()-> menuAlterarOdd());
 		menu.run();
+	}
+
+	private void menuAlterarEstadoAposta() {
+		int sportId = selectSport();
+		String gameID = selectGame(sportId);
+		boolean sair = false;
+		while (!sair){
+			sair = escolherAlterarApostaAtiva(gameID);
+
+		}
+
+
+	}
+
+	public boolean escolherAlterarApostaAtiva(String gameId){
+		boolean sair = false;
+		List<Bet> bets = rasBetFacade.getBetList(gameId);
+		clearScreen();
+		header("Apostas Ativas");
+		ListMenu betsMenu = new ListMenu();
+		for (Bet b:bets) {
+			String winningTeam = "" ;
+				if(b.getBettedTeam() == 0) winningTeam = rasBetFacade.getGame(gameId).getHomeTeam();
+				else if(b.getBettedTeam() == 1) winningTeam = rasBetFacade.getGame(gameId).getAwayTeam();
+				else winningTeam = "Empate";
+				String bet = "ID da aposta: " + b.getBetId() + ", Equipa apostada: " + winningTeam + ", Valor: " + b.getValue() + " , Email do apostador: " + b.getEmail() + ", Suspensa: " + b.getisSuspended();
+			betsMenu.adicionaOpcao(bet);
+		}
+		betsMenu.show(true);
+		int escolha = Utils.InputInteger(this.scanner,0,bets.size());
+		Bet betselected = null;
+		if(escolha != 0){
+			betselected = bets.get(escolha-1);
+		}
+		else sair = true;
+		ListMenu betMenu = new ListMenu();
+		betMenu.adicionaOpcao("Alterar estado de suspensão");
+		betMenu.show(true);
+		escolha = Utils.InputInteger(this.scanner,0,1);
+		if(escolha == 1) rasBetFacade.alteraEstado(betselected.getBetId());
+		return  sair;
 	}
 
 	/*
@@ -287,11 +367,7 @@ public class RasBetUI {
         int tentativa = 0;
         do {
             if(tentativa != 0) {
-                //Apagar as duas linhas superiores
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
+                erraseLines();
                 errorMessage("Nome Inválido");
             }
             System.out.print("Insira o seu nome: ");
@@ -302,11 +378,7 @@ public class RasBetUI {
         System.out.println();
         do {
             if(tentativa != 0) {
-                //Apagar as duas linhas superiores
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
+                erraseLines();
                 errorMessage("Email inválido ou já utilizado");
             }
             System.out.print("Insira email: ");
@@ -317,11 +389,7 @@ public class RasBetUI {
 		System.out.println();
 		do {
 			if(tentativa != 0) {
-				//Apagar as duas linhas superiores
-				System.out.print(String.format("\033[%dA",1));
-				System.out.print("\033[2K");
-				System.out.print(String.format("\033[%dA",1));
-				System.out.print("\033[2K");
+				erraseLines();
 				errorMessage("NIF no formato incorreto (9 digitos)");
 			}
 			System.out.print("Insira NIF: ");
@@ -332,11 +400,7 @@ public class RasBetUI {
         System.out.println();
         do {
             if(tentativa != 0) {
-                //Apagar as duas linhas superiores
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
-                System.out.print(String.format("\033[%dA",1));
-                System.out.print("\033[2K");
+                erraseLines();
                 errorMessage("A password deve conter pelo menos 8 caractéres");
                 }
             System.out.print("Insira password: ");
@@ -347,7 +411,12 @@ public class RasBetUI {
         pressEnterToContinue();
     }
 
-	private void showError(){};
+	private void erraseLines(){
+		System.out.print(String.format("\033[%dA",1));
+		System.out.print("\033[2K");
+		System.out.print(String.format("\033[%dA",1));
+		System.out.print("\033[2K");
+	};
 
 
 	/**

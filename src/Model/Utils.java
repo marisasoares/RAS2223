@@ -9,6 +9,8 @@ public interface Utils {
     public static Map<String,String> games = new HashMap<>();
     public static Map<Integer,Integer> wallets = new HashMap<>();
     public static Map<Integer,Integer> transfers = new HashMap<>();
+    public static Map<Integer,Integer> multipleIds = new HashMap<>();
+
 
     /**
      * Gera um identificador de 8 caracteres único
