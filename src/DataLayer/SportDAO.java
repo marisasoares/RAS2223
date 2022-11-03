@@ -1,14 +1,16 @@
 package DataLayer;
 
 import Model.Sport;
+import Model.Transfer;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SportDAO {
     private static final String DELETE = "DELETE FROM Sport WHERE idSport=?";
-    private static final String DELETE_ALL = "DELETE * FROM Sport WHERE id=?";
     private static final String FIND_ALL = "SELECT * FROM Sport";
-    private static final String REP_NUMBER = "SELECT * FROM Sport WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM Sport WHERE idSport=?";
     private static final String INSERT = "INSERT INTO Sport(idSport , Name) VALUES(?,?)";
 
@@ -60,6 +62,21 @@ public class SportDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Sport> getSportList() {
+        List<Sport> sports = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(FIND_ALL);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                sports.add(new Sport(rs.getInt("idSport"),rs.getString("Name")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sports;
     }
 
 }

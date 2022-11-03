@@ -1,9 +1,5 @@
 package Model;
-
-import DataLayer.GamesMap;
-import DataLayer.ResultDAO;
-import DataLayer.UserDAO;
-import DataLayer.UsersMap;
+import DataLayer.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -12,19 +8,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RasBetFacade {
 
-	public User authenticatedUser;
-	public GamesMap gamesDataBase;
-	public UsersMap usersDataBase;
+	public String emailAuthenticatedUser;
+	public String idCurrentSelectedGame;
+
 
 	public RasBetFacade(){
-		this.authenticatedUser = null;
-		this.gamesDataBase = new GamesMap();
-		this.usersDataBase = new UsersMap();
+		this.emailAuthenticatedUser = null;
+	}
+
+	public String getIdCurrentSelectedGame() {
+		return idCurrentSelectedGame;
+	}
+
+	public void setIdCurrentSelectedGame(String idCurrentSelectedGame) {
+		this.idCurrentSelectedGame = idCurrentSelectedGame;
 	}
 
 	/**
@@ -44,10 +47,28 @@ public class RasBetFacade {
 	 */
 	public boolean changeInfo(String nome, String password, String email) {
 		boolean updatedUser = false;
-		if(usersDataBase.userExists(email)){
-			User user = usersDataBase.getUser(email);
+		User user = UserDAO.get(email);
+		if(user != null){
 			user.setName(nome);
 			user.setPassword(password);
+			UserDAO.update(user);
+			updatedUser = true;
+		}
+		return updatedUser;
+	}
+
+	/**
+	 * Mudar a informação de um utilizador
+	 * @param nome novo nome
+	 * @param email email do utilizador a alterar
+	 * @return true se alterado, false caso erro
+	 */
+	public boolean changeInfo(String nome,String email) {
+		boolean updatedUser = false;
+		User user = UserDAO.get(email);
+		if(user != null){
+			user.setName(nome);
+			UserDAO.update(user);
 			updatedUser = true;
 		}
 		return updatedUser;
@@ -58,26 +79,15 @@ public class RasBetFacade {
 	 * @param sportID id do desporto
 	 * @param gameID id do jogo
 	 * @param value o valor da aposta
-	 * @param equipaApostada 0 - equipa da casa, 1 - equipa de fora e 2 empate
+	 * @param bettedTeam 0 - equipa da casa, 1 - equipa de fora e 2 - empate
+	 * @param email email do utilizador
+	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public boolean addBet(String sportID,String gameID,String email, float value, int equipaApostada) {
-		// TODO
-		boolean betAdded = false;
-		/*if(gamesDataBase.sportExists(sportID)){
-			Sport sport = gamesDataBase.getSport(sportID);
-			if(sport.gameExists(gameID)){
-				Game game = sport.getGame(gameID);
-				if(usersDataBase.userExists(email)) {
-					User user = usersDataBase.getUser(email);
-					if(user instanceof Better){
-						((Better) user).addBet(gameID,value,equipaApostada);
-						betAdded = true;
-					}
-				}
-			}
-		}*/
-		return betAdded;
+	public boolean addBet(int sportID,String gameID,String email, float value, int bettedTeam, int multipleId) {
+		Bet bet = new Bet(sportID,gameID,value,bettedTeam,email,multipleId);
+
+		return BetDAO.store(bet);
 	}
 
 	/**
@@ -92,7 +102,7 @@ public class RasBetFacade {
 		if(user != null){
 			if (user.getPasswordHash() == pwd.hashCode()) {
 				loginValid = true;
-				this.authenticatedUser = user;
+				this.emailAuthenticatedUser = user.getMail();
 			}
 		}
 		return loginValid;
@@ -134,93 +144,127 @@ public class RasBetFacade {
 	 * @return true se dados validos, false caso contrário
 	 */
 	public boolean validatePayment(float valor,String email) {
-		// TODO - validação dos pagamentos
+		// TODO - validação dos pagamentoss
 		return true;
 	}
 
 	/**
-	 * Validar transferencia
+	 * Validar transferencia em euros
 	 * @param valor valor da transferencia
 	 * @param email email do utilizador
 	 * @return true se válida, false caso contrário
 	 */
-	public boolean validateTransfer(float valor, String email) {
+	public boolean validateTransferEuros(float valor, String email) {
 		boolean validTransfer = true;
-		if(usersDataBase.userExists(email)) {
-			User user = usersDataBase.getUser(email);
-			if(user instanceof Better){
-				//Não permitir tirar mais dinheiro que o existente
-				//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
-				if(((Better) user).getWallet().getEuros()+valor < 0) validTransfer = false;
-			}
+		User user = UserDAO.get(email);
+		if(user != null && user instanceof Better){
+			//Não permitir tirar mais dinheiro que o existente
+			//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
+			if(((Better) user).getWallet().getEuros()+valor < 0) validTransfer = false;
+		}
+		return validTransfer;
+	}
 
-
+	/**
+	 * Validar transferencia em dollars
+	 * @param valor valor da transferencia
+	 * @param email email do utilizador
+	 * @return true se válida, false caso contrário
+	 */
+	public boolean validateTransferDollars(float valor, String email) {
+		boolean validTransfer = true;
+		User user = UserDAO.get(email);
+		if(user != null && user instanceof Better){
+			//Não permitir tirar mais dinheiro que o existente
+			//e.g. valor = -30 e euros = 25 -> 25+(-30) = -5 (inválido)
+			if(((Better) user).getWallet().getDollars()+valor < 0) validTransfer = false;
 		}
 		return validTransfer;
 	}
 
 	/**
 	 * Adicionar movimento a um utilizador
-	 * @param valor valor movimentado
+	 * @param value valor movimentado
 	 * @param email email do utilizador
 	 * @param description descrição do movimento
 	 */
-	public boolean addMovement(float valor, String email,String description) {
-		boolean addedMovement = false;
-		if(usersDataBase.userExists(email)) {
-			User user = usersDataBase.getUser(email);
-			if(user instanceof Better){
-				((Better) user).addMovement(valor,description);
-				addedMovement = true;
+	public boolean addMovementEuros(float value, String email,String description) {
+		boolean addedMov = false;
+		if(validateTransferEuros(value,email)){
+			Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email);
+			User user = UserDAO.get(email);
+			if (user != null && user instanceof Better){
+				((Better) user).getWallet().addEuros(value);
+				addedMov = TransferDAO.store(transfer);
+				UserDAO.update(user);
 			}
 		}
-		return addedMovement;
+
+		return addedMov;
+	}
+
+	/**
+	 * Adicionar movimento a um utilizador
+	 * @param value valor movimentado
+	 * @param email email do utilizador
+	 * @param description descrição do movimento
+	 */
+	public boolean addMovementDollars(float value, String email,String description) {
+		boolean addedMov = false;
+		if(validateTransferDollars(value,email)){
+			Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email);
+			User user = UserDAO.get(email);
+			if(user != null && user instanceof Better){
+				((Better) user).getWallet().addDollars(value);
+				addedMov = TransferDAO.store(transfer);
+				UserDAO.update(user);
+			}
+		}
+		return addedMov;
 	}
 
 	/**
 	 * Alterar odd de um determinado jogo
 	 * @param odd o valor da odd
 	 * @param gameID o id do jogo
-	 * @param sportID o id do desporto
 	 * @param type o tipo de odd (0 - ganha HomeTeam, 1 - ganha awayTeam e 2 - empate)
 	 */
-	public void inserirChange(float odd, String gameID,String sportID,int type) {
-		//TODO
-		/*if(gamesDataBase.sportExists(sportID)) {
-			Sport sport = gamesDataBase.getSport(sportID);
-			if (sport.gameExists(gameID)) {
-				Game game = sport.getGame(gameID);
-				switch (type) {
-					case 0:
-						game.getResultado().setOddHomeTeam(odd);
-						break;
-					case 1:
-						game.getResultado().setOddAwayTeam(odd);
-						break;
-					case 2:
-						game.getResultado().setOddDraw(odd);
-						break;
-					default:
-						break;
+	public void inserirChange(float odd, String gameID,int type) {
+		Game game = GameDAO.get(gameID);
+		if(game != null){
+			switch (type) {
+				case 0:
+					game.getResult().setOddHomeTeam(odd);
+					break;
+				case 1:
+					game.getResult().setOddAwayTeam(odd);
+					break;
+				case 2:
+					game.getResult().setOddDraw(odd);
+					break;
+				default:
+					break;
 
 			}
-		}*/
+			GameDAO.update(game);
+		}
+
 	}
 
 	/**
 	 * Devolve o utilizador autenticado no momento
 	 * @return o utilizador autenticado
 	 * */
-	public User getauthenticatedUser() {
-		return this.authenticatedUser;
+	public User getAuthenticatedUser() {
+		return UserDAO.get(this.emailAuthenticatedUser);
 	}
 
 	/**
 	 * Define o utilizador autenticado
-	 * @param authenticatedUser o utilizador autenticado
+	 * @param emailAuthenticatedUser o email do utilizador autenticado
 	 */
-	public void setauthenticatedUser(User authenticatedUser) {
-		this.authenticatedUser = authenticatedUser;
+	public void setEmailAuthenticatedUser(String emailAuthenticatedUser) {
+		this.emailAuthenticatedUser = emailAuthenticatedUser;
 	}
 
 	/**
@@ -257,4 +301,52 @@ public class RasBetFacade {
 		Gson g = new Gson();
 		return (List<Game>) g.fromJson(json, listType);
 	}
+
+	/**
+	 * Diz se existem utilizadores registados na base de dados
+	 * */
+	public static boolean existemUtilizadores(){
+		return UserDAO.countUsers() == 0? false : true;
+	}
+
+	/**
+	 * Devolve uma lista com o nome de todos os desportos
+	 * */
+	public List<String> listSports(){
+		List<String> sportList = new ArrayList<>();
+		List<Sport> sports = SportDAO.getSportList();
+		for (Sport s : sports ) {
+			sportList.add(s.getNome());
+		}
+		return sportList;
+	}
+
+	/**
+	 * Devolve a lista de desportos
+	 * */
+	public List<Sport> getSportList(){
+		return SportDAO.getSportList();
+	}
+
+	/**
+	 * Devolve a lista de jogos de um desporto
+	 * */
+	public List<Game> getGameList(int sportId){
+		return SportGameDAO.get_AllGames_by_SportID(sportId);
+	}
+
+	/**
+	 * Devolve uma lista com os jogos ativos
+	 * */
+	public List<Game> listActivesGames(int sportId){
+		List<Game> gameList = new ArrayList<>();
+		List<Game> games = SportGameDAO.get_AllGames_by_SportID(sportId);
+		for (Game gm : games ) {
+			if(!gm.getCompleted()) {
+				gameList.add(gm);
+			}
+		}
+		return gameList;
+	}
+
 }

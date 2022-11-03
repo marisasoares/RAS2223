@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 
 public class TransferDAO {
     private static final String DELETE = "DELETE FROM Transfer WHERE idTransfer=?";
-    private static final String DELETE_ALL = "DELETE * FROM Transfer WHERE idTransfer=?";
-    private static final String FIND_ALL = "SELECT * FROM Transfer";
-    private static final String REP_NUMBER = "SELECT * FROM Transfer WHERE idTransfer=?";
     private static final String FIND_BY_ID = "SELECT * FROM Transfer WHERE idTransfer=?";
     private static final String INSERT = "INSERT INTO Transfer(idTransfer,Value,Date,Description,Email) VALUES(?,?,?,?,?)";
 

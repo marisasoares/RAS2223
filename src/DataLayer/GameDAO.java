@@ -9,9 +9,6 @@ import java.util.List;
 
 public class GameDAO {
     private static final String DELETE = "DELETE FROM Game WHERE idGame=?";
-    private static final String DELETE_ALL = "DELETE * FROM Game WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM Game";
-    private static final String REP_NUMBER = "SELECT * FROM Game WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM Game WHERE idGame=?";
     private static final String INSERT = "INSERT INTO Game(idGame, HomeTeam, AwayTeam, CommenceTime, Completed, ResultID) VALUES(?,?,?,?,?,?)";
     private static final String UPDATE = "UPDATE Game SET Completed= ? WHERE idGame=?";
@@ -83,12 +80,10 @@ public class GameDAO {
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
 
             stmt.setInt(1, game.getCompleted() ? 1:0);
+            stmt.setString(2, game.getId());
             stmt.executeUpdate();
             Result result = game.getResult();
-
-            //TODO
-
-            stmt.executeUpdate();
+            ResultDAO.update(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }

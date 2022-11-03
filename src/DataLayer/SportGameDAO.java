@@ -9,10 +9,7 @@ import java.util.List;
 
 public class SportGameDAO {
     private static final String DELETE = "DELETE FROM SportGame WHERE idSport=?";
-    private static final String DELETE_ALL = "DELETE * FROM SportGame WHERE idSport=?";
     private static final String FIND_ALL_GAMES_BY_IDSPORT = "SELECT * FROM SportGame WHERE idSport= ?";
-    private static final String REP_NUMBER = "SELECT * FROM SportGame WHERE idSport=?";
-    private static final String FIND_BY_IDSport = "SELECT * FROM SportGame WHERE idSport=?";
     private static final String FIND_BY_IDGame = "SELECT * FROM SportGame WHERE idGame=?";
     private static final String INSERT = "INSERT INTO SportGame(idSport,idGame) VALUES(?,?)";
 

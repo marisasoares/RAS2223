@@ -8,12 +8,11 @@ import java.util.List;
 
 public class UserDAO {
     private static final String DELETE = "DELETE FROM User WHERE Email=?";
-    private static final String DELETE_ALL = "DELETE * FROM User WHERE id=?";
     private static final String FIND_ALL_TRANFERS = "SELECT * FROM Transfer WHERE Email=?";
-    private static final String REP_NUMBER = "SELECT * FROM User WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM User WHERE Email=?";
     private static final String INSERT = "INSERT INTO User(Email, Name, PasswordHash,NIF,Type) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE User SET Name= ?, PasswordHash = ? WHERE Email=?";
+    private static final String COUNT = "SELECT count(*) FROM User";
 
     public static boolean store(User user) {
         boolean r = true;
@@ -133,4 +132,18 @@ public class UserDAO {
         }
         return transfers;
     }
+
+    public static int countUsers(){
+        int i = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(COUNT);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) i = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return i;
+    }
+
 }

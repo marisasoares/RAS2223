@@ -8,9 +8,6 @@ import java.sql.*;
 
 public class WalletDAO {
     private static final String DELETE = "DELETE FROM Wallet WHERE Email=?";
-    private static final String DELETE_ALL = "DELETE * FROM Wallet WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM Wallet";
-    private static final String REP_NUMBER = "SELECT * FROM Wallet WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM Wallet WHERE Email=?";
     private static final String INSERT = "INSERT INTO Wallet(Email,Euros,Dollars) VALUES(?,?,?)";
     private static final String UPDATE = "UPDATE Wallet SET Euros= ?, Dollars = ? WHERE Email=?";

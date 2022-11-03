@@ -81,8 +81,10 @@ public class Menu implements Serializable{
       * @param opcoes Uma lista de Strings com as opções do menu.
       */
      public Menu(List<String> opcoes) { this("Menu", opcoes,""); }
+    public Menu(List<String> opcoes,String initialMessage) { this("Menu", opcoes,initialMessage); }
 
-     /**
+
+    /**
       * Constructor para objectos da classe Menu (com título e array de opções).
       *
       * Cria um menu de opções sem event handlers.

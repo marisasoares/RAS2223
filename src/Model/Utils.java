@@ -1,9 +1,6 @@
 package Model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public interface Utils {
 
@@ -66,4 +63,44 @@ public interface Utils {
     public static <T> boolean isEmpty(Map<String,T> m){
         return m.isEmpty();
     }
+
+    public static int InputInteger(Scanner scanner,int lowerLimit, int upperLimit){
+        int input = 0;
+        while(true) {
+            try {
+                do {
+                    input = Integer.parseInt(scanner.nextLine());
+                }while(input < lowerLimit || input > upperLimit);
+                break;
+            }catch (NumberFormatException e) {
+                continue;
+            }
+        }
+        return input;
+    }
+    public static int InputInteger(Scanner scanner){
+        int input = 0;
+        while(true) {
+            try {
+                    input = Integer.parseInt(scanner.nextLine());
+                break;
+            }catch (NumberFormatException e) {
+                continue;
+            }
+        }
+        return input;
+    }
+    public static float InputFloat(Scanner scanner){
+        float input = 0;
+        while(true) {
+            try {
+                input = Float.parseFloat(scanner.nextLine());
+                break;
+            }catch (NumberFormatException e) {
+                continue;
+            }
+        }
+        return input;
+    }
+
 }

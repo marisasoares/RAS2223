@@ -1,7 +1,16 @@
 package UI;
 
+import DataLayer.GameDAO;
+import DataLayer.ResultDAO;
+import DataLayer.UserDAO;
 import Model.*;
+import com.sun.jdi.Value;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class RasBetUI {
@@ -52,7 +61,10 @@ public class RasBetUI {
 		//database.loadUsersFromDB();
 		//database.loadJogosAndSportsFromDB();
 		//database.loadApostasFromDB();
+		//TODO MUDARRRRR TODO
 		this.menuPrincipal();
+		//rasBetFacade.setEmailAuthenticatedUser("user1@gmail.com");
+		//this.menuBetter("user1@gmail.com");
 		clearScreen();
 	}
 
@@ -62,11 +74,11 @@ public class RasBetUI {
 		Menu menu = new Menu(new String[]{
 				"Login",
 				"Registar",
+
 		});
 
 		//Registar pré-condições das transições
-		//menu.setPreCondition(1, ()->this.database.existemUtilizadores());
-
+		menu.setPreCondition(1, ()-> RasBetFacade.existemUtilizadores());
 		//Registar os handlers das transições
 		menu.setHandler(1,() -> login());
 		menu.setHandler(2,() -> register(0));
@@ -83,10 +95,10 @@ public class RasBetUI {
 		String password = this.scanner.nextLine();
 		boolean login_Successful = rasBetFacade.login(email, password);
 		if(login_Successful){
-			Object user = rasBetFacade.getauthenticatedUser();
-			if(user instanceof Specialist) menuSpecialist((Specialist) user);
-			else if(user instanceof Administrator) menuAdministrator(((Administrator) user));
-			else menuBetter((Better)user);
+			Object user = rasBetFacade.getAuthenticatedUser();
+			if(user instanceof Specialist) menuSpecialist(((User) user).getMail());
+			else if(user instanceof Administrator) menuAdministrator(((User) user).getMail());
+			else menuBetter(((User) user).getMail());
 
 		} else {
 			errorMessage("Login Inválido");
@@ -95,42 +107,158 @@ public class RasBetUI {
 		return;
 	}
 
-	private void menuBetter(Better Better){
+	private void menuBetter(String email){
+		Better better = (Better) UserDAO.get(email);
 		clearScreen();
 		Menu menu = new Menu(new String[]{
 				"Apostar",
+				"Alterar Nome",
 				"Alterar password"
-		},"Bem vindo " +  Better.getName() + "\nSaldo: \n" + Better.getWallet().getEuros()+ " €"
-		+ "\n" + Better.getWallet().getDollars()+ " $\n");
+		},"Bem vindo\nSaldo: \n" + better.getWallet().getEuros()+ " €"
+		+ "\n" + better.getWallet().getDollars()+ " $\n");
 		menu.setTitulo("Menu Better");
+		menu.setHandler(1,() -> menuAposta());
+		menu.setHandler(2,() -> alterarNome());
+		menu.setHandler(3,() -> alterarPassword());
 		menu.run();
 	}
 
-	private void menuSpecialist(Specialist esp){
+	private void menuAposta(){
+		int sportId = selectSport();
+		String gameId = selectGame(sportId);
+		rasBetFacade.setIdCurrentSelectedGame(gameId);
+		Game game = GameDAO.get(gameId);
+		selectResult(game);
+		System.out.print("Insira o valor a apostar: ");
+		float valor = 0;
+
+
+	}
+
+	public int selectSport(){
+		clearScreen();
+		int selected = -1;
+		header("Lista de desportos");
+		ListMenu menuSports = new ListMenu();
+		menuSports.setTitulo("Desportos disponíveis");
+		List<Sport> sportList = rasBetFacade.getSportList();
+		for (Sport sport : sportList) {
+			menuSports.adicionaOpcao(sport.getNome());
+		}
+		menuSports.show(true);
+		selected = Utils.InputInteger(this.scanner,0,sportList.size());
+		return sportList.get(selected-1).getId();
+	}
+
+	public String selectGame(int sportId){
+		int selected = -1;
+		clearScreen();
+		ListMenu menuGames = new ListMenu();
+		List<Game> games = rasBetFacade.listActivesGames(sportId);
+		menuGames.setTitulo("Jogos disponíveis");
+		for (Game game : games ) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			LocalDateTime dateTime = LocalDateTime.parse(game.getCommenceTime(), formatter);
+			String date = dateTime.getDayOfMonth() + "/" + dateTime.getMonthValue() + " " + dateTime.getHour()+ ":" + dateTime.getMinute();
+			menuGames.adicionaOpcao(game.getHomeTeam() + " x " + game.getAwayTeam() + " em " + date);
+		}
+		menuGames.show(true);
+		selected = Utils.InputInteger(this.scanner,0,games.size());
+		return games.get(selected-1).getId();
+	}
+
+	public void selectResult(Game game){
+		clearScreen();
+		header("Selecionar um resultado");
+		ListMenu menuAposta = new ListMenu();
+		menuAposta.adicionaOpcao( game.getHomeTeam()  + " - " +  game.getResult().getOddHomeTeam());
+		menuAposta.adicionaOpcao( game.getAwayTeam()  + " - " +  game.getResult().getOddAwayTeam());
+		menuAposta.adicionaOpcao( "Empate - " + game.getResult().getOddDraw());
+		menuAposta.show(true);
+		int selected = Utils.InputInteger(this.scanner,1,3);
+	}
+
+	private void alterarNome(){
+		clearScreen();
+		header("Alterar Nome");
+		System.out.println("Insira novo nome: ");
+		String nome;
+		do{
+			nome = this.scanner.nextLine();
+		}while (nome.trim().length() == 0);
+		User user = rasBetFacade.getAuthenticatedUser();
+		rasBetFacade.changeInfo(nome,user.getMail());
+		System.out.println("Nome alterado com sucesso");
+		pressEnterToContinue();
+	}
+
+	private void alterarPassword(){
+		clearScreen();
+		header("Alterar Password");
+		System.out.println("Insira nova Password");
+		String password;
+		do{
+			password = this.scanner.nextLine();
+		}while (password.length() < 8);
+
+		User user = rasBetFacade.getAuthenticatedUser();
+		rasBetFacade.changeInfo(user.getName(),password,user.getMail());
+		System.out.println("Password alterada com sucesso");
+		pressEnterToContinue();
+	}
+
+	private void menuSpecialist(String email){
+		Specialist esp = (Specialist) UserDAO.get(email);
 		clearScreen();
 		Menu menu = new Menu(new String[]{
-				"Apostar",
-				"Definir odds"
-		},"Bem vindo" + esp.getName());
+				"Alterar odds"
+		},"Bem vindo " + esp.getName()+"\n");
 		menu.setTitulo("Menu Specialist");
+		menu.setHandler(1,()->menuAlterarOdd());
 		menu.run();
 	}
 
-	private void menuAdministrator(Administrator admin){
+	private void menuAlterarOdd(){
+		int sportId = selectSport();
+		String gameId = selectGame(sportId);
+		Game game = GameDAO.get(gameId);
+		Result result = ResultDAO.get(game.getResult().getResultID());
+		int selected = -1;
+		clearScreen();
+		header("Selecione uma Odd");
+		ListMenu odds = new ListMenu();
+		odds.adicionaOpcao( "Odd Casa " + result.getOddHomeTeam() + game.getHomeTeam());
+		odds.adicionaOpcao( "Odd FORA" + result.getOddAwayTeam() + game.getAwayTeam());
+		odds.adicionaOpcao( "Odd Empate - " + result.getOddDraw() + "Empate");
+		odds.show(true);
+		int escolha = Utils.InputInteger(this.scanner,1,3);
+		System.out.println("Insira nova Odd");
+		float odd;
+		odd = Utils.InputFloat(this.scanner);
+		switch (escolha) {
+			case 1 -> rasBetFacade.inserirChange(odd, gameId, 0);
+			case 2 -> rasBetFacade.inserirChange(odd, gameId, 1);
+			default -> rasBetFacade.inserirChange(odd, gameId, 2);
+		}
+	}
+
+	private void menuAdministrator(String email){
+		Administrator admin = (Administrator) UserDAO.get(email);
 		clearScreen();
 		Menu menu = new Menu(new String[]{
-				"Adicionar Model.Administrator",
-				"Adicionar Model.Specialist",
+				"Adicionar Administrator",
+				"Adicionar Especialista",
 				"Alterar estado aposta",
 				"Alterar odds",
 				"Listar Apostas",
 				"Listar Jogos",
 				"Listar Desportos",
-				"Listar Betteres",
-				"Listar Model.Specialist",
+				"Listar Apostadores",
+				"Listar Especialistas",
 				"Listar Administratores"
-		},"Bem vindo" + admin.getName());
+		},"Bem vindo " + admin.getName()+"\n");
 		menu.setTitulo("Menu Administrator");
+		//menu.setHandler(1,()-> ....);
 		menu.run();
 	}
 
@@ -170,7 +298,7 @@ public class RasBetUI {
             System.out.print("Insira email: ");
             email = this.scanner.nextLine();
             tentativa++;
-        } while ( rasBetFacade.usersDataBase.userExists(email) || email.trim().length() == 0 || !email.matches("\\w+@\\w+\\.\\w+"));
+        } while ( email.trim().length() == 0 || !email.matches("\\w+@\\w+\\.\\w+"));
         tentativa = 0;
 		System.out.println();
 		do {
@@ -201,7 +329,7 @@ public class RasBetUI {
             password = this.scanner.nextLine();
             tentativa++;
         } while (password.length() < 8);
-        this.rasBetFacade.register(name,email,password,nif,tipo_de_utilizador);
+        this.rasBetFacade.registerUser(name,email,password,nif,tipo_de_utilizador);
         pressEnterToContinue();
     }
 

@@ -8,11 +8,9 @@ import java.sql.*;
 
 public class ResultDAO {
     private static final String DELETE = "DELETE FROM Result WHERE ResultId=?";
-    private static final String DELETE_ALL = "DELETE * FROM Result WHERE id=?";
-    private static final String FIND_ALL = "SELECT * FROM Result";
-    private static final String REP_NUMBER = "SELECT * FROM Result WHERE id=?";
     private static final String FIND_BY_ID = "SELECT * FROM Result WHERE ResultId=?";
-    private static final String INSERT = "INSERT INTO Result(ResultId,oddAway,oddHome,oddDraw,score,winningTeam) VALUES(?,?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO Result(ResultId,OddAway,OddHome,OddDraw,Score,WinningTeam) VALUES(?,?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE Result SET Score= ?, OddAway=?, OddHome=?, OddDraw=?, WinningTeam=? WHERE ResultId=?";
 
     public static boolean store(Result res) {
         boolean r = true;
@@ -65,6 +63,26 @@ public class ResultDAO {
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(DELETE);
             stmt.setString(1, ResultId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void update(Result result) {
+        try {
+
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+
+            stmt.setString(1,result.getScores());
+            stmt.setFloat(2,result.getOddAwayTeam());
+            stmt.setFloat(3,result.getOddHomeTeam());
+            stmt.setFloat(4,result.getOddDraw());
+            stmt.setString(5,result.getwinningTeam());
+            stmt.setInt(6,result.getResultID());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -5,6 +5,13 @@ public class Bet {
 	 * Identificador da aposta
 	 * */
 	public int id;
+
+	/**
+	 * Identificador do grupo de apostas
+	 * Apostas com o mesmo grupo de aposta constituem uma aposta múltipla
+	 * */
+	public int multipleId;
+
 	/**
 	 * Identificador do jogo correspondente
 	 * */
@@ -32,6 +39,16 @@ public class Bet {
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
+		this.multipleId = 0;
+	}
+
+	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId) {
+		this.id = id;
+		this.gameId = gameId;
+		this.value = value;
+		this.bettedTeam = bettedTeam;
+		this.email = email;
+		this.multipleId = multipleId;
 	}
 
 	public Bet(String gameId, float value, int bettedTeam,String email) {
@@ -40,6 +57,7 @@ public class Bet {
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
+		this.multipleId = 0;
 	}
 
 	public int getBetId(){
@@ -78,10 +96,19 @@ public class Bet {
 		this.email = email;
 	}
 
+	public int getMultipleId() {
+		return multipleId;
+	}
+
+	public void setMultipleId(int multipleId) {
+		this.multipleId = multipleId;
+	}
+
 	@Override
 	public String toString() {
 		return "Bet{" +
 				"id=" + id +
+				", multipleId=" + multipleId +
 				", gameId='" + gameId + '\'' +
 				", value=" + value +
 				", bettedTeam=" + bettedTeam +
