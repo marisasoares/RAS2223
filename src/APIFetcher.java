@@ -79,6 +79,7 @@ public class APIFetcher implements Runnable{
                     if (multipleIdanterior != b.getMultipleId() && b.getBetState() != 1) {
                         if(apostaMultiplaCompleta) {
                             b.setBetState(1);
+                            model.updateBet(b);
                             switch (b.getBettedTeam()) {
                                 case 0:
                                     if (game.getHomeTeam().equalsIgnoreCase(game.getResult().getwinningTeam())) {
