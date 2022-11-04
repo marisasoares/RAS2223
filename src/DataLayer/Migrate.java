@@ -18,6 +18,7 @@ public class Migrate {
                             "Wallet," +
                             "Transfer," +
                             "Sport," +
+                            "Notification," +
                             "SportGame;";
 
             stm.executeUpdate(limpar);
@@ -63,6 +64,8 @@ public class Migrate {
                     "BettedTeam INT NOT NULL ,"+
                     "MultipleId INT ,"+
                     "IsSuspended TINYINT NOT NULL ,"+
+                    "BetState TINYINT NOT NULL, "+
+                    "Currency VARCHAR(45) NOT NULL, "+
                     "FOREIGN KEY (Email) REFERENCES User(Email)," +
                     "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);
@@ -94,6 +97,15 @@ public class Migrate {
                         "FOREIGN KEY (idSport) References Sport(idSport)," +
                         "FOREIGN KEY (idGame) References Game(idGame))";
             stm.executeUpdate(sqlDJ);
+
+                String sqlNot = "CREATE TABLE IF NOT EXISTS Notification (" +
+                        "idNot INT NOT NULL PRIMARY KEY ," +
+                        "Email VARCHAR(75) NOT NULL," +
+                        "Content VARCHAR(200) NOT NULL," +
+                        "IsRead TINYINT NOT NULL," +
+                        "Date VARCHAR(45) NOT NULL," +
+                        "FOREIGN KEY (Email) REFERENCES User(Email))";
+                stm.executeUpdate(sqlNot);
 
         } catch (SQLException e) {
             e.printStackTrace();

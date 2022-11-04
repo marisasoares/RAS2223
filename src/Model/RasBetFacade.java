@@ -76,7 +76,6 @@ public class RasBetFacade {
 
 	/**
 	 * Adicionar Aposta
-	 * @param sportID id do desporto
 	 * @param gameID id do jogo
 	 * @param value o valor da aposta
 	 * @param bettedTeam 0 - equipa da casa, 1 - equipa de fora e 2 - empate
@@ -84,8 +83,8 @@ public class RasBetFacade {
 	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public boolean addBet(int sportID,String gameID,String email, float value, int bettedTeam, int multipleId,boolean isSuspended) {
-		Bet bet = new Bet(sportID,gameID,value,bettedTeam,email,multipleId,isSuspended);
+	public boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,boolean isSuspended,int betState,String currency) {
+		Bet bet = new Bet(gameID,value,bettedTeam,email,multipleId,isSuspended,betState,currency);
 
 		return BetDAO.store(bet);
 	}
@@ -330,8 +329,14 @@ public class RasBetFacade {
 	/**
 	 * Devolve a lista de desportos
 	 * */
-	public List<Bet> getBetList(String gameId){
+	public List<Bet> getBetListGameId(String gameId){
 		return BetDAO.getBetsByGameId(gameId);
+	}
+	/**
+	 * Devolve a lista de desportos
+	 * */
+	public List<Bet> getBetListEmail(String email){
+		return BetDAO.getBetsByEmail(email);
 	}
 
 	/**
@@ -357,12 +362,52 @@ public class RasBetFacade {
 
 	public void alteraEstado(int betId) {
 		Bet bet = BetDAO.get(betId);
-		if(bet.isSuspended == false) bet.isSuspended = true;
-		else bet.isSuspended = false;
+		bet.isSuspended = !bet.isSuspended;
 		BetDAO.update(bet);
 	}
+
 	public Game getGame(String gameId) {
 		return GameDAO.get(gameId);
+	}
+
+	public void addGame(Game game ){
+		GameDAO.store(game);
+	}
+
+	/**
+	 * Devolve uma lista com as Notificaçoes não lidas
+	 * */
+	public List<Notification> listNotReadNotifications(String email){
+		List<Notification> returnList = new ArrayList<>();
+		List<Notification> notifications = NotificationDAO.get(email);
+		for (Notification not : notifications ) {
+			if(!not.getIsRead()) returnList.add(not);
+			not.setRead(true);
+			NotificationDAO.update(not);
+		}
+		return returnList;
+	}
+
+	/**
+	 * Devolve uma lista com as Notificaçoes todas
+	 * */
+	public List<Notification> listAllNotifications(String email){
+		List<Notification> returnList = new ArrayList<>();
+		List<Notification> notifications = NotificationDAO.get(email);
+
+		for (Notification not : notifications ) {
+			returnList.add(not);
+			if(!not.getIsRead()){
+				not.setRead(true);
+				NotificationDAO.update(not);
+			}
+		}
+		return returnList;
+	}
+
+
+	public Result getResultByResultId(int resultid){
+		return ResultDAO.get(resultid);
 	}
 
 }

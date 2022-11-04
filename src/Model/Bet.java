@@ -38,7 +38,20 @@ public class Bet {
 	 **/
 	public boolean isSuspended;
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email, boolean isSuspended) {
+	/**
+	 * Estado da aposta
+	 * 0 - Lost
+	 * 1 - Won
+	 * 2 - Ativa
+	 * */
+	public int betState;
+
+	/**
+	 * Define a moeda a ser usada e.g "euro" ou "dollar"
+	 * */
+	public String currency;
+
+	public Bet(int id, String gameId, float value, int bettedTeam,String email, boolean isSuspended,int betState,String currency) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
@@ -46,9 +59,11 @@ public class Bet {
 		this.email = email;
 		this.multipleId = 0;
 		this.isSuspended = isSuspended;
+		this.betState = betState;
+		this.currency = currency;
 	}
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended) {
+	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended,int betState,String currency) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
@@ -56,16 +71,21 @@ public class Bet {
 		this.email = email;
 		this.multipleId = multipleId;
 		this.isSuspended = isSuspended;
+		this.betState = betState;
+		this.currency = currency;
 	}
 
-	public Bet(String gameId, float value, int bettedTeam,String email, boolean isSuspended) {
-		this.id = 0;
+	public Bet(String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended,int betState,String currency) {
+		this.id = Utils.geraIdentificadorUnicoInteger(Utils.bets);
+		Utils.bets.put(id,id);
 		this.gameId = gameId;
 		this.value = value;
 		this.bettedTeam = bettedTeam;
 		this.email = email;
-		this.multipleId = 0;
+		this.multipleId = multipleId;
 		this.isSuspended = false;
+		this.betState = betState;
+		this.currency = currency;
 	}
 
 	public int getBetId(){
@@ -118,6 +138,22 @@ public class Bet {
 
 	public void setSuspended(boolean isSuspended) {
 		this.isSuspended = isSuspended;
+	}
+
+	public int getBetState() {
+		return betState;
+	}
+
+	public void setBetState(int betState) {
+		this.betState = betState;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	@Override

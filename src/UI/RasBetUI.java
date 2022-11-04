@@ -1,13 +1,13 @@
 package UI;
 
-import DataLayer.BetDAO;
 import DataLayer.GameDAO;
 import DataLayer.ResultDAO;
 import DataLayer.UserDAO;
 import Model.*;
-import com.sun.jdi.Value;
 
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Formatter;
@@ -30,7 +30,7 @@ public class RasBetUI {
 	// Funções auxiliares ---------------------------------------------------------------
 
 	public void pressEnterToContinue(){
-		System.out.println(" - press enter to continue -");
+		System.out.println(" - Pressione enter para continuar -");
 		this.scanner.nextLine();
 	}
 
@@ -105,7 +105,6 @@ public class RasBetUI {
 			errorMessage("Login Inválido");
 			pressEnterToContinue();
 		}
-		return;
 	}
 
 	private void menuBetter(String email){
@@ -113,21 +112,240 @@ public class RasBetUI {
 		clearScreen();
 		Menu menu = new Menu(new String[]{
 				"Apostar",
+				"Histórico de Apostas",
+				"Histórico de Transferencias",
+				"Consultar saldo",
+				"Depositar dinheiro",
+				"Retirar dinheiro",
+				"Ver notificações",
+				"Ver histórico de notificações",
+				"Ver estatísticas",
 				"Alterar Nome",
 				"Alterar password"
-		},"Bem vindo\nSaldo: \n" + better.getWallet().getEuros()+ " €"
-		+ "\n" + better.getWallet().getDollars()+ " $\n");
+		},"Bem vindo\n");
 		menu.setTitulo("Menu Better");
 		menu.setHandler(1,() -> menuAposta());
-		menu.setHandler(2,() -> alterarNome());
-		menu.setHandler(3,() -> alterarPassword());
+		menu.setHandler(2,() -> menuHistoricoApostas());
+		menu.setHandler(3,() -> menuHistoricoTransferencias());
+		menu.setHandler(4,() -> consultarSaldo());
+		menu.setHandler(5,() -> menuDepositar());
+		menu.setHandler(6,() -> menuLevantar());
+		menu.setHandler(7,() -> menuUnreadNotifications());
+		menu.setHandler(8,() -> menuNotificationHistory());
+		menu.setHandler(9,() -> menuStats());
+		menu.setHandler(10,() -> alterarNome());
+		menu.setHandler(11,() -> alterarPassword());
 		menu.run();
 	}
 
+	private void menuStats(){
+		clearScreen();
+		header("Estatísticas");
+		String email = rasBetFacade.getAuthenticatedUser().getMail();
+		System.out.println("Ganhos totais: ");
+		List<Bet> betsUser = rasBetFacade.getBetListEmail(email);
+		float totalEuros = 0;
+		float totalDollars = 0;
+		for (Bet b : betsUser) {
+			Game game = rasBetFacade.getGame(b.getGameId());
+			if(game.getCompleted()){
+				Result result = rasBetFacade.getResultByResultId(game.getResult().getResultID());
+				String winningteam = result.getwinningTeam();
+				int bettedteam = b.getBettedTeam();
+				switch (bettedteam){
+					case 0:
+						if(b.getCurrency().equals("euros")){
+							if(winningteam.equalsIgnoreCase(game.getHomeTeam())) {
+								totalEuros += result.getOddHomeTeam() * b.getValue();
+							}
+						}else {
+							if(winningteam.equalsIgnoreCase(game.getHomeTeam())) {
+								totalDollars += result.getOddHomeTeam() * b.getValue();
+							}
+						}
+						break;
+					case 1:
+						if(b.getCurrency().equals("euros")) {
+							if(winningteam.equalsIgnoreCase(game.getAwayTeam())) {
+								totalEuros += result.getOddAwayTeam() * b.getValue();
+							}
+						}else{
+							if(winningteam.equalsIgnoreCase(game.getAwayTeam())) {
+								totalDollars += result.getOddAwayTeam() * b.getValue();
+							}
+						}
+						break;
+					default:
+						if(b.getCurrency().equals("euros")) {
+							if(winningteam.equalsIgnoreCase("Draw")) {
+								totalEuros += result.getOddAwayTeam() * b.getValue();
+							}
+						}else {
+							if (winningteam.equalsIgnoreCase("Draw")) {
+								totalDollars += result.getOddAwayTeam() * b.getValue();
+							}
+							break;
+						}
+				}
+
+			}
+
+		}
+
+	}
+
+	private void menuUnreadNotifications(){
+		clearScreen();
+		header("Notificações não lidas");
+		List<Notification> notifications = rasBetFacade.listNotReadNotifications(rasBetFacade.getAuthenticatedUser().getMail());
+		for (Notification n : notifications ) {
+			String date = n.getDate().getDayOfMonth()+"/"+n.getDate().getMonthValue()+"/"+n.getDate().getYear()+" " + n.getDate().getHour()+":" + String.format("%02d",n.getDate().getMinute());
+			System.out.println("•" + date+ " " + n.getContent());
+		}
+		if(notifications.isEmpty()) errorMessage("Sem notificações por ler");
+		pressEnterToContinue();
+	}
+
+	private void menuNotificationHistory() {
+		clearScreen();
+		header("Histórico de notificações");
+		List<Notification> notifications = rasBetFacade.listAllNotifications(rasBetFacade.getAuthenticatedUser().getMail());
+		for (Notification n : notifications ) {
+			String date = n.getDate().getDayOfMonth()+"/"+n.getDate().getMonthValue()+"/"+n.getDate().getYear()+" " + n.getDate().getHour()+":" + String.format("%02d",n.getDate().getMinute());
+			System.out.println("•" + date + " " + n.getContent());
+		}
+		if(notifications.isEmpty()) errorMessage("Sem notificações");
+		pressEnterToContinue();
+	}
+
+	private void menuLevantar() {
+		String email = rasBetFacade.getAuthenticatedUser().getMail();
+
+		ListMenu menu = new ListMenu();
+		menu.adicionaOpcao("Levantar Dollars" );
+		menu.adicionaOpcao("Levantar Euros ");
+		menu.show(true);
+		int escolha = Utils.InputInteger(this.scanner,0,2);
+		if (escolha == 0) return;
+		if(escolha == 1 ){
+			System.out.print("Valor a Levantar: ");
+			float value = Utils.InputFloat(this.scanner);
+			if(rasBetFacade.addMovementDollars(-value,email,"Levantamento")) {
+				float dollars = ((Better) rasBetFacade.getAuthenticatedUser()).getWallet().getDollars();
+				System.out.println("Levantado " + value + " $");
+				System.out.println("Saldo Atual " + dollars + " $");
+			} else errorMessage("Saldo insuficiente");
+
+		}
+		else {
+			System.out.print("Valor a Levantar: ");
+			float value = Utils.InputFloat(this.scanner);
+			if(rasBetFacade.addMovementEuros(-value,email,"Levantamento")){
+				float euros = ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getEuros();
+				System.out.println("Levantado " + value + " €");
+				System.out.println("Saldo Atual " + euros + " €");
+			} else errorMessage("Saldo insuficiente");
+
+		}
+		pressEnterToContinue();
+
+	}
+
+	private void menuDepositar() {
+		String email = rasBetFacade.getAuthenticatedUser().getMail();
+		ListMenu menu = new ListMenu();
+		menu.adicionaOpcao("Adicionar Dollars" );
+		menu.adicionaOpcao("Adicionar Euros ");
+		menu.show(true);
+		int escolha = Utils.InputInteger(this.scanner,0,2);
+		if (escolha == 0) return;
+		if(escolha == 1 ){
+			System.out.print("Valor a depositar: ");
+			float value = Utils.InputFloat(this.scanner);
+			if(rasBetFacade.addMovementDollars(value,email,"Deposito")) {
+				float dollars = ((Better) rasBetFacade.getAuthenticatedUser()).getWallet().getDollars();
+				System.out.println("Depositado " + value + " $");
+				System.out.println("Saldo Atual " + dollars + " $");
+			}
+		}
+		else {
+			System.out.print("Valor a depositar: ");
+			float value = Utils.InputFloat(this.scanner);
+			if(rasBetFacade.addMovementEuros(value,email,"Deposito")) {
+				float euros = ((Better) rasBetFacade.getAuthenticatedUser()).getWallet().getEuros();
+				System.out.println("Depositado " + value + " €");
+				System.out.println("Saldo Atual " + euros + " €");
+			}
+		}
+		pressEnterToContinue();
+	}
+
+	public void consultarSaldo(){
+		System.out.println("Saldo disponível: ");
+		float dollars = ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getDollars();
+		float euros = ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getEuros();
+		System.out.println(dollars + " $");
+		System.out.println(euros + " €");
+		pressEnterToContinue();
+	}
+
+	private void menuHistoricoTransferencias() {
+		clearScreen();
+		header("Histórico de Transferências");
+		List<Transfer> trans = rasBetFacade.transHistory(rasBetFacade.getAuthenticatedUser().getMail());
+
+		for (Transfer t : trans) {
+			String date = t.getDate().getDayOfMonth()+"/"+t.getDate().getMonthValue()+"/"+t.getDate().getYear()+" " + t.getDate().getHour()+":" + String.format("%02d",t.getDate().getMinute());
+			System.out.println("•  ID Transferência : " + t.getId() + ", Valor : " + t.getValue()  + ", Data : " + date + ", Descrição : " + t.getDescription());
+		}
+		pressEnterToContinue();
+	}
+
+	private void menuHistoricoApostas(){
+		clearScreen();
+		header("Histórico de Apostas");
+		List<Bet> bets = rasBetFacade.getBetListEmail(rasBetFacade.getAuthenticatedUser().getMail());
+		for (Bet b:bets) {
+			Game game = rasBetFacade.getGame(b.getGameId());
+			String bettedTeam = null;
+			String estado = null;
+			if (b.getBettedTeam() == 0) bettedTeam = game.getHomeTeam();
+			else if (b.getBettedTeam() == 1) bettedTeam = game.getAwayTeam();
+			else bettedTeam = "Empate";
+			if (b.getBetState() == 1) estado = "Ganha";
+			else if (b.getBetState() == 0) estado = "Perdida";
+			else estado = "Ativa";
+			if (b.getCurrency().equals("euros"))
+				System.out.println("• ID da aposta: " + b.getBetId() + ", Valor : " + b.getValue() + " €" + ", " + game.getHomeTeam() + " x " + game.getAwayTeam() + ", Equipa apostada : " + bettedTeam + ", Estado : " + estado);
+			else System.out.println("• ID da aposta: " + b.getBetId() + ", Valor : " + b.getValue() + " $" + ", " + game.getHomeTeam() + " x " + game.getAwayTeam() + ", Equipa apostada : " + bettedTeam + ", Estado : " + estado);
+		}
+		pressEnterToContinue();
+	}
+
 	private void menuAposta(){
+		int multipleId = -1;
+		String input;
+		boolean sair = false;
 		int sportId = selectSport();
 		String gameId = selectGame(sportId);
 		rasBetFacade.setIdCurrentSelectedGame(gameId);
+		multipleId = realizaAposta(gameId,multipleId,false);
+		do {
+			    System.out.println("Pretende adicionar mais apostas nesta aposta [Y/N]");
+			do {
+				input = this.scanner.nextLine();
+			} while (!input.equalsIgnoreCase("y") && !input.equalsIgnoreCase("n"));
+			if(input.equals("n")) sair = true;
+			else{
+				sportId = selectSport();
+				gameId= selectGame(sportId);
+				rasBetFacade.setIdCurrentSelectedGame(gameId);
+				multipleId = realizaAposta(gameId,multipleId,true);
+			}
+		}while (!sair);
+	}
+
+	public int realizaAposta(String gameId,int multipleId,boolean sameAposta){
 		Game game = GameDAO.get(gameId);
 		int bettedteam = selectResult(game);
 		ListMenu menu = new ListMenu();
@@ -135,16 +353,46 @@ public class RasBetUI {
 		menu.adicionaOpcao("Euros " +" Dinheiro Disponível: "+ ((Better)rasBetFacade.getAuthenticatedUser()).getWallet().getEuros());
 		menu.show(true);
 		int escolha = Utils.InputInteger(this.scanner,1,2);
-
 		System.out.print("Insira o valor a apostar: ");
-		float valor = 0;
-		valor = Utils.InputFloat(this.scanner);
+		float valor = Utils.InputFloat(this.scanner);
 		String email = rasBetFacade.getAuthenticatedUser().getMail();
+		int resultid = game.getResult().getResultID();
+		float odd;
+		Result result = rasBetFacade.getResultByResultId(resultid);
+		System.out.println("Jogo: " +  game.getHomeTeam() + " x " + game.getAwayTeam() + " em " + game.commenceTime);
+		if(bettedteam == 0){
+			odd = result.getOddHomeTeam();
+			System.out.println("Equipa apostada: " + game.getHomeTeam() + " [" + odd + "]");
+		}
+		else if(bettedteam == 1){
+			odd = result.getOddAwayTeam();
+			System.out.println("Equipa apostada: " + game.getAwayTeam() + " [" + odd + "]");
+		}
+		else odd = result.getOddDraw();
+		if(escolha == 1) System.out.println("Ganhos esperados: " + valor*odd + " $");
+		else System.out.println("Ganhos esperados: " + valor*odd + " €");
+		System.out.print("Confirma os dados acima referidos [Y/N]: ");
+		String input;
+		do {
+			input = this.scanner.nextLine();
+
+		} while (!input.equalsIgnoreCase("y") && !input.equalsIgnoreCase("n"));
+		if(input.equals("n")) {
+			errorMessage("Aposta cancelada");
+			pressEnterToContinue();
+			return -1;
+		}
+		if(!sameAposta) {
+			multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
+			Utils.multipleIds.put(multipleId, multipleId);
+		}
 		if(escolha == 1) {
 			if(rasBetFacade.validateTransferDollars(-valor,email)){
-				int multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
-				Utils.multipleIds.put(multipleId,multipleId);
-				rasBetFacade.addBet(sportId,gameId,email,valor,bettedteam,multipleId,false);
+				if(multipleId == -1) {
+					multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
+					Utils.multipleIds.put(multipleId, multipleId);
+				}
+				rasBetFacade.addBet(gameId,email,valor,bettedteam,multipleId,false,2,"dollars");
 				rasBetFacade.addMovementDollars(-valor,email,"Aposta");
 				System.out.println("Aposta Realizada");
 				pressEnterToContinue();
@@ -156,9 +404,9 @@ public class RasBetUI {
 		}
 		else {
 			if (rasBetFacade.validateTransferEuros(-valor, rasBetFacade.getAuthenticatedUser().getMail())) {
-				int multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
+				multipleId = Utils.geraIdentificadorUnicoInteger(Utils.multipleIds);
 				Utils.multipleIds.put(multipleId, multipleId);
-				rasBetFacade.addBet(sportId, gameId, email, valor, bettedteam, multipleId, false);
+				rasBetFacade.addBet(gameId, email, valor, bettedteam, multipleId, false,2,"euros");
 				rasBetFacade.addMovementEuros(-valor,email,"Aposta");
 				System.out.println("Aposta Realizada");
 				pressEnterToContinue();
@@ -168,8 +416,7 @@ public class RasBetUI {
 				pressEnterToContinue();
 			}
 		}
-
-
+		return multipleId;
 	}
 
 	public int selectSport(){
@@ -249,11 +496,52 @@ public class RasBetUI {
 		Specialist esp = (Specialist) UserDAO.get(email);
 		clearScreen();
 		Menu menu = new Menu(new String[]{
-				"Alterar odds"
+				"Alterar odds",
+				"Adicionar Jogo"
 		},"Bem vindo " + esp.getName()+"\n");
 		menu.setTitulo("Menu Specialist");
 		menu.setHandler(1,()->menuAlterarOdd());
+		menu.setHandler(2,()->menuAddGame());
 		menu.run();
+	}
+
+	private void menuAddGame() {
+			int sportId = selectSport();
+
+			String id = Utils.geraIdentificadorUnico(Utils.games);
+			System.out.print("Insira Equipa da casa: ");
+			String hometeam = this.scanner.nextLine();
+			System.out.print("Insira Equipa de fora: ");
+			String awayteam = this.scanner.nextLine();
+			System.out.print("Insira a data no formato yyyy/MM/dd HH:mm: ");
+			boolean dateValid = true;
+			String insertedDate;
+		    String commenceTime = "NaN";
+			do{
+				insertedDate = this.scanner.nextLine();
+		    	SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm");
+				try{
+					Date date = (Date) sdf.parse(insertedDate);
+					sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+					commenceTime = sdf.format(date)+"Z";
+					dateValid=true;
+				}catch (ParseException e){
+					errorMessage("Data no formato inválido");
+					dateValid = false;
+				}
+			}while (!dateValid);
+			System.out.print("Insira Odd Equipa da casa: ");
+			float hometeamOdd = Utils.InputFloat(this.scanner);
+			System.out.print("Insira Odd Equipa de fora: ");
+			float awayteamOdd = Utils.InputFloat(this.scanner);
+			System.out.print("Insira Odd Empate: ");
+			float drawOdd= Utils.InputFloat(this.scanner);
+
+			Result result = new Result(awayteamOdd,hometeamOdd,drawOdd);
+
+			Game game = new Game(id,hometeam,awayteam,commenceTime,false,"0x0",result,sportId);
+
+			rasBetFacade.addGame(game);
 	}
 
 	private boolean menuAlterarOdd(){
@@ -321,15 +609,12 @@ public class RasBetUI {
 		boolean sair = false;
 		while (!sair){
 			sair = escolherAlterarApostaAtiva(gameID);
-
 		}
-
-
 	}
 
 	public boolean escolherAlterarApostaAtiva(String gameId){
 		boolean sair = false;
-		List<Bet> bets = rasBetFacade.getBetList(gameId);
+		List<Bet> bets = rasBetFacade.getBetListGameId(gameId);
 		clearScreen();
 		header("Apostas Ativas");
 		ListMenu betsMenu = new ListMenu();
@@ -363,7 +648,7 @@ public class RasBetUI {
     private void register(int tipo_de_utilizador){
         clearScreen();
         header("REGISTO");
-        String name = "",email = "", password = "",nif = "";
+        String name = "",email = "", password = "",nif = "999999999";
         int tentativa = 0;
         do {
             if(tentativa != 0) {
@@ -386,16 +671,18 @@ public class RasBetUI {
             tentativa++;
         } while ( email.trim().length() == 0 || !email.matches("\\w+@\\w+\\.\\w+"));
         tentativa = 0;
-		System.out.println();
-		do {
-			if(tentativa != 0) {
-				erraseLines();
-				errorMessage("NIF no formato incorreto (9 digitos)");
-			}
-			System.out.print("Insira NIF: ");
-			nif = this.scanner.nextLine();
-			tentativa++;
-		} while (nif.length() != 9);
+		if(tipo_de_utilizador == 0) {
+			System.out.println();
+			do {
+				if (tentativa != 0) {
+					erraseLines();
+					errorMessage("NIF no formato incorreto (9 digitos)");
+				}
+				System.out.print("Insira NIF: ");
+				nif = this.scanner.nextLine();
+				tentativa++;
+			} while (nif.length() != 9);
+		}
 		tentativa = 0;
         System.out.println();
         do {

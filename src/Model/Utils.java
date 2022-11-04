@@ -10,6 +10,7 @@ public interface Utils {
     public static Map<Integer,Integer> wallets = new HashMap<>();
     public static Map<Integer,Integer> transfers = new HashMap<>();
     public static Map<Integer,Integer> multipleIds = new HashMap<>();
+    public static Map<Integer,Integer> bets = new HashMap<>();
 
 
     /**
@@ -24,6 +25,7 @@ public interface Utils {
         do {
             id = UUID.randomUUID().toString().substring(0, 8);
         } while (m.containsKey(id));
+        m.put(id, (T) id);
         return id;
     }
 
