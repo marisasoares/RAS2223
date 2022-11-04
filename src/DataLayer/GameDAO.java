@@ -73,12 +73,25 @@ public class GameDAO {
         }
     }
 
+    public static void updateStatusGame(Game game){
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+            stmt.setInt(1, game.getCompleted() ? 1:0);
+            stmt.setString(2, game.getId());
+            stmt.executeUpdate();
+            Result result = game.getResult();
+            ResultDAO.updateScore(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void update(Game game) {
         try {
 
             Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
-
             stmt.setInt(1, game.getCompleted() ? 1:0);
             stmt.setString(2, game.getId());
             stmt.executeUpdate();

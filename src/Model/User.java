@@ -42,4 +42,8 @@ public class User {
 		this.passwordHash = password.hashCode();
 	}
 
+	@Override
+	public String toString() {
+		return " • nome = " + name  +" , mail = " + mail ;
+	}
 }

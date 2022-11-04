@@ -15,20 +15,12 @@ import java.util.List;
 public class RasBetFacade {
 
 	public String emailAuthenticatedUser;
-	public String idCurrentSelectedGame;
 
 
 	public RasBetFacade(){
 		this.emailAuthenticatedUser = null;
 	}
 
-	public String getIdCurrentSelectedGame() {
-		return idCurrentSelectedGame;
-	}
-
-	public void setIdCurrentSelectedGame(String idCurrentSelectedGame) {
-		this.idCurrentSelectedGame = idCurrentSelectedGame;
-	}
 
 	/**
 	 * Dado um email de utilizador devolver o histórico de transações
@@ -83,9 +75,8 @@ public class RasBetFacade {
 	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,boolean isSuspended,int betState,String currency) {
-		Bet bet = new Bet(gameID,value,bettedTeam,email,multipleId,isSuspended,betState,currency);
-
+	public boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,boolean isSuspended,int betState,String currency,float possibleGain) {
+		Bet bet = new Bet(gameID,value,bettedTeam,email,multipleId,isSuspended,betState,currency,possibleGain);
 		return BetDAO.store(bet);
 	}
 
@@ -258,6 +249,22 @@ public class RasBetFacade {
 	}
 
 	/**
+	 * Devolve o email do utilizador autenticado no momento
+	 * @return o email do utilizador autenticado
+	 * */
+	public String getEmailAuthenticatedUser() {
+		return this.emailAuthenticatedUser;
+	}
+
+	/**
+	 * Dado um id de um grupo de apostas devolve todas que possuam esse grupo
+	 * @return a lista de aposats que pertencem ao mesmo grupo
+	 * */
+	public List<Bet> getBetsByMultipleID(int multipleID){
+		return BetDAO.getBetsByMultipleId(multipleID);
+	}
+
+	/**
 	 * Define o utilizador autenticado
 	 * @param emailAuthenticatedUser o email do utilizador autenticado
 	 */
@@ -306,6 +313,14 @@ public class RasBetFacade {
 	public static boolean existemUtilizadores(){
 		return UserDAO.countUsers() == 0? false : true;
 	}
+
+	/**
+	 * Diz se existem utilizadores registados na base de dados
+	 * */
+	public static boolean gameExists(String gameId){
+		return (GameDAO.get(gameId) != null);
+	}
+
 
 	/**
 	 * Devolve uma lista com o nome de todos os desportos
@@ -405,9 +420,40 @@ public class RasBetFacade {
 		return returnList;
 	}
 
+	/**
+	 * Notifica um utilizador
+	 * @param email o email do utilizador
+	 * @param content O conteúdo do utilizador
+	 * */
+	public void notificaUser(String email, String content){
+		Notification notification = new Notification(email,content,LocalDateTime.now());
+		NotificationDAO.store(notification);
+	}
+
 
 	public Result getResultByResultId(int resultid){
 		return ResultDAO.get(resultid);
 	}
 
+	public void updateBet(Bet b){
+		BetDAO.update(b);
+	}
+
+	public Result getResult(int resultId){
+		return ResultDAO.get(resultId);
+	}
+
+	public List<User> getBetters() {
+		return UserDAO.getUsersByType(0);
+	}
+	public List<User> getAdmins() {
+		return UserDAO.getUsersByType(2);
+	}
+	public List<User> getSpecialist() {
+		return UserDAO.getUsersByType(1);
+	}
+
+	public void addSport(String desporto) {
+		SportDAO.store(new Sport(desporto));
+	}
 }

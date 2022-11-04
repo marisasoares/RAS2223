@@ -36,6 +36,15 @@ public class Notification {
         this.date = date;
     }
 
+    public Notification(String email, String content,LocalDateTime date) {
+        this.id = Utils.geraIdentificadorUnicoInteger(Utils.notifications);
+        Utils.notifications.put(id,id);
+        this.email = email;
+        this.content = content;
+        this.isRead = false;
+        this.date = date;
+    }
+
     public int getId(){
         return this.id;
     }

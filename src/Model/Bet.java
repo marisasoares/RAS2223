@@ -40,9 +40,8 @@ public class Bet {
 
 	/**
 	 * Estado da aposta
-	 * 0 - Lost
-	 * 1 - Won
-	 * 2 - Ativa
+	 * 0 - Concluida
+	 * Qualquer ot valor - Ativa
 	 * */
 	public int betState;
 
@@ -51,7 +50,12 @@ public class Bet {
 	 * */
 	public String currency;
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email, boolean isSuspended,int betState,String currency) {
+	/**
+	 * Ganho possivel
+	 * */
+	public float possibleGain;
+
+	public Bet(int id, String gameId, float value, int bettedTeam,String email, boolean isSuspended,int betState,String currency,float possibleGain) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
@@ -61,9 +65,10 @@ public class Bet {
 		this.isSuspended = isSuspended;
 		this.betState = betState;
 		this.currency = currency;
+		this.possibleGain = possibleGain;
 	}
 
-	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended,int betState,String currency) {
+	public Bet(int id, String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended,int betState,String currency,float possibleGain) {
 		this.id = id;
 		this.gameId = gameId;
 		this.value = value;
@@ -73,9 +78,10 @@ public class Bet {
 		this.isSuspended = isSuspended;
 		this.betState = betState;
 		this.currency = currency;
+		this.possibleGain = possibleGain;
 	}
 
-	public Bet(String gameId, float value, int bettedTeam,String email,int multipleId, boolean isSuspended,int betState,String currency) {
+	public Bet(String gameId, float value, int bettedTeam,String email,int multipleId,boolean isSuspended,int betState,String currency,float possibleGain) {
 		this.id = Utils.geraIdentificadorUnicoInteger(Utils.bets);
 		Utils.bets.put(id,id);
 		this.gameId = gameId;
@@ -83,9 +89,10 @@ public class Bet {
 		this.bettedTeam = bettedTeam;
 		this.email = email;
 		this.multipleId = multipleId;
-		this.isSuspended = false;
+		this.isSuspended = isSuspended;
 		this.betState = betState;
 		this.currency = currency;
+		this.possibleGain = possibleGain;
 	}
 
 	public int getBetId(){
@@ -156,6 +163,14 @@ public class Bet {
 		this.currency = currency;
 	}
 
+	public float getPossibleGain() {
+		return possibleGain;
+	}
+
+	public void setPossibleGain(float possibleGain) {
+		this.possibleGain = possibleGain;
+	}
+
 	@Override
 	public String toString() {
 		return "Bet{" +
@@ -166,6 +181,9 @@ public class Bet {
 				", bettedTeam=" + bettedTeam +
 				", email='" + email + '\'' +
 				", isSuspended=" + isSuspended +
+				", betState=" + betState +
+				", currency='" + currency + '\'' +
+				", possibleGain=" + possibleGain +
 				'}';
 	}
 }

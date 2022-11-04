@@ -9,6 +9,7 @@ import java.util.List;
 public class UserDAO {
     private static final String DELETE = "DELETE FROM User WHERE Email=?";
     private static final String FIND_ALL_TRANFERS = "SELECT * FROM Transfer WHERE Email=?";
+    private static final String FIND_ALL_USER_BY_TYPE= "SELECT * FROM User WHERE Type=?";
     private static final String FIND_BY_ID = "SELECT * FROM User WHERE Email=?";
     private static final String INSERT = "INSERT INTO User(Email, Name, PasswordHash,NIF,Type) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE User SET Name= ?, PasswordHash = ? WHERE Email=?";
@@ -130,6 +131,25 @@ public class UserDAO {
             e.printStackTrace();
         }
         return transfers;
+    }
+
+    public static List<User> getUsersByType(int type) {
+        List<User> users = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(FIND_ALL_USER_BY_TYPE);
+            stmt.setInt(1, type);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {  // A chave existe na tabela
+                users.add(new User(rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getInt("PasswordHash")));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public static int countUsers(){

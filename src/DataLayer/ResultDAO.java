@@ -11,6 +11,7 @@ public class ResultDAO {
     private static final String FIND_BY_ID = "SELECT * FROM Result WHERE ResultId=?";
     private static final String INSERT = "INSERT INTO Result(ResultId,OddAway,OddHome,OddDraw,Score,WinningTeam) VALUES(?,?,?,?,?,?)";
     private static final String UPDATE = "UPDATE Result SET Score= ?, OddAway=?, OddHome=?, OddDraw=?, WinningTeam=? WHERE ResultId=?";
+    private static final String UPDATEScore = "UPDATE Result SET Score= ?, WinningTeam=? WHERE ResultId=?";
 
     public static boolean store(Result res) {
         boolean r = true;
@@ -85,6 +86,21 @@ public class ResultDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void updateScore(Result result) {
+        try {
+
+            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(UPDATEScore);
+
+            stmt.setString(1,result.getScores());
+            stmt.setString(2,result.getwinningTeam());
+            stmt.setInt(3,result.getResultID());
+
+            stmt.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

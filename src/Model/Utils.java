@@ -10,6 +10,7 @@ public interface Utils {
     public static Map<Integer,Integer> wallets = new HashMap<>();
     public static Map<Integer,Integer> transfers = new HashMap<>();
     public static Map<Integer,Integer> multipleIds = new HashMap<>();
+    public static Map<Integer,Integer> notifications = new HashMap<>();
     public static Map<Integer,Integer> bets = new HashMap<>();
 
 

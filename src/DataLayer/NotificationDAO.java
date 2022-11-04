@@ -25,6 +25,7 @@ public class NotificationDAO {
             stm.setString(2, not.getEmail());
             stm.setString(3, not.getContent());
             stm.setBoolean(4, not.getIsRead());
+            stm.setString(5,not.getDate().toString());
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             r = false;

@@ -66,6 +66,7 @@ public class Migrate {
                     "IsSuspended TINYINT NOT NULL ,"+
                     "BetState TINYINT NOT NULL, "+
                     "Currency VARCHAR(45) NOT NULL, "+
+                    "PossibleGain FLOAT NOT NULL, "+
                     "FOREIGN KEY (Email) REFERENCES User(Email)," +
                     "FOREIGN KEY (Game_id) REFERENCES Game(idGame))";
             stm.executeUpdate(sqlAP);

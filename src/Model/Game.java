@@ -169,6 +169,8 @@ public class Game {
 				", completed=" + completed +
 				", scores='" + scores + '\'' +
 				", bookmakers=" + bookmakers +
+				", result=" + result +
+				", sportId=" + sportId +
 				'}';
 	}
 }
