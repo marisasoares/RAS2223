@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RasbetMain {
 
     public static void main(String[] args) {
-        RasBetFacade.emailAuthenticatedUser = "a@gmail.com";
+        RasBetFacade.emailAuthenticatedUser = null;
         SpringApplication.run(RasbetMain.class, args);
     }
 

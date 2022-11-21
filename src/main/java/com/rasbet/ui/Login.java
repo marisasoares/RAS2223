@@ -16,18 +16,24 @@ import java.util.UUID;
 @Controller
 public class Login {
 
-    @GetMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
-        Better b = new Better("Miguel","mig@gmail.com","12345678".hashCode(),"123456789");
-        Better b1 = new Better("Benjamim","benja@gmail.com","12345678".hashCode(),"123456789");
-        Better b2 = new Better("Diogo","diogo@gmail.com","12345678".hashCode(),"123456789");
-        List<User> users = new ArrayList<>();
-        users.add(b); users.add(b1);users.add(b2);
-        model.addAttribute("users",users);
+        model.addAttribute("games", RasBetFacade.games);
         return "login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(@RequestParam String nome, @RequestParam String email,@RequestParam String password,@RequestParam String nif,Model model) {
+        RasBetFacade.registerUser(nome,email,password,nif,0);
+        return "login";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String showRegisterPage(Model model) {
+        return "register";
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.POST)
     public String verifyLogin(@RequestParam String email,@RequestParam String password ,Model model) {
         String view = "login";
         if(RasBetFacade.login(email,password)) {
@@ -37,15 +43,13 @@ public class Login {
             else if (user instanceof Administrator) view = "homePageAdmin";
             else view = "homePageBetter";
         } else model.addAttribute("invalidLogin",true);
-        // TEST --------------
-        view = "homePageBetter";
-        Better user = new Better("Miguel","mig@gmail.com","12345678".hashCode(),"123456789");
-        user.getWallet().setEuros(32.5f);
-        user.getWallet().setDollars(23.45f);
-        model.addAttribute("user",user);
-        model.addAttribute("games",RasBetFacade.games);
-        // -------------------- $
+        model.addAttribute("games", RasBetFacade.games);
         return view;
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String returnToMain(Model model) {
+        return "redirect:login";
     }
 
 }

@@ -115,7 +115,7 @@ public class Game {
 	public String getFormattedDate(){
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		LocalDateTime dateTime = LocalDateTime.parse(this.commenceTime, formatter);
-		return dateTime.getDayOfMonth() + "/" + dateTime.getMonthValue() + "/" + dateTime.getYear() +  " às " + dateTime.getHour()+ ":" + dateTime.getMinute();
+		return dateTime.getDayOfMonth() + "/" + dateTime.getMonthValue() + "/" + dateTime.getYear() +  " às " + dateTime.getHour()+ ":" + String.format("%02d",dateTime.getMinute());
 	}
 
 	public void setCommenceTime(LocalDateTime commenceTime) {
@@ -162,8 +162,7 @@ public class Game {
 	 * Alterar o estado de conclusão do jogo
 	 * */
 	public void changeState() {
-		if(this.completed) this.completed= false;
-		else this.completed = true;
+		this.completed= !this.completed;
 	}
 
 	@Override

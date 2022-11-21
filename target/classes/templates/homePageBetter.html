@@ -1,75 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
-    <meta charset="UTF-8">
-    <title>Página Inicial</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Início</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="theme-color" content="#712cf9">
+    <style>
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Show it is fixed to the top */
+        body {
+            min-height: 75rem;
+            padding-top: 7rem;
+        }
+    </style>
 </head>
-<body style="background-color:#ecfcdd;">
-        <div class="card" style="border-radius: 0 ;background-color: #ddd1ff">
-            <div class="card-body p-3">
-                <div class="d-flex text-black">
-                    <div class="flex-shrink-0">
-                        <img src="avatar.png"
-                                     alt="Generic user image" class="img-fluid"
-                                     style="width: 180px; border-radius: 10px;">
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h2 class="mb-1">
-                            Bem vindo <span th:text="${user.getName()}"></span >!
-                        </h2>
-                        <p class="mb-2 pb-1" style="color: #2b2a2a;">Apostador</p>
-                        <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
-                                     style="background-color: rgba(239,239,239,0.63);">
-                            <div>
-                                <p class="small text-muted mb-1">Euros €</p>
-                                <p class="sm-0">
-                                    <span th:text="${user.getWallet().getEuros()}"></span>
-                                </p>
-                            </div>
-                            <div class="px-3">
-                                <p class="small text-muted mb-1">Dollars $</p>
-                                <p class="sm"><span th:text="${user.getWallet().getDollars()}"></span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+<body>
+
+<nav style="background-color: #2069ff;" class="navbar navbar-expand-md navbar-dark fixed-top ">
+    <div class="container-fluid text-white ">
+        <h5 class="d-flex align-items-center mb-2 pe-3 mb-lg-0 text-white"> RASBET </h5>
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="avatar.png" alt="mdo" class="User image" width="50" height="50">
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+                    <li><a class="dropdown-item" href="changeUserInfo">Definições</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/login">Terminar sessão</a></li>
+                </ul>
+            </div>
+            <p class="nav col-1 col-lg-auto me-lg-auto ms-2 mb-2 justify-content-start mb-md-0">Bem vindo, &nbsp;<span th:text="${user.getName()}"></span>!</p>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/notifications" class="nav-link px-2 link-light">Notificações</a></li>
+                <li><a href="/transactions" class="nav-link px-2 link-light">Transações</a></li>
+            </ul>
+
+            <div class="d-flex justify-content-start rounded-3 p-2 mb-2" style="background-color: rgba(239,239,239,0.63);">
+                <div>
+                    <p class="small text-muted mb-1">Euros</p>
+                    <p class="sm-0 text-black">
+                        <span th:text="${user.getWallet().getEuros()}"></span> €
+                    </p>
+                </div>
+                <div class="px-3">
+                    <p class="small text-muted mb-1">Dollars</p>
+                    <p class="sm text-black">
+                        <span th:text="${user.getWallet().getDollars()}"></span> $
+                    </p>
                 </div>
             </div>
         </div>
-        <div class="container-fluid py-2 ms-1" >
-        <h2>Jogos recentes:</h2>
+</nav>
+
+<div th:each="game:${games}">
+<main class="container mb-3 card" >
+    <div class="d-flex p-5 rounded ">
+        <div class="flex-shrink-0">
+            <img src="sport.png"
+                 alt="Generic sport image" class="img-fluid"
+                 style="width: 180px; border-radius: 10px;">
         </div>
-     <div class="container-fluid py-2 ms-1" th:each="game:${games}">
-        <div class="card" style="border-radius: 15px;background-color: #e5cfb9">
-            <div class="card-body p-3">
-                <div class="d-flex text-black">
-                    <div class="flex-shrink-0">
-                        <img src="sport.png"
-                             alt="Generic sport image" class="img-fluid"
-                             style="width: 180px; border-radius: 10px;">
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h2 class="mb-1">
-                            <span th:text="${game.getHomeTeam()}"></span> x <span th:text="${game.getAwayTeam()}" ></span>
-                        </h2>
-                        <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                            <span th:text="${game.getFormattedDate()}"></span>
-                        </p>
-                        <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
-                             style="background-color: rgba(239,239,239,0.68);">
-                            <div>
-                                <p class="small text-muted mb-1">Resultado</p>
-                                <h4 class="mb-0" th:text="${game.getCompleted()} ? ${game.getScores()} : 'Agendado ou a decorrer'"></h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="flex-grow-1 ms-3">
+        <h1>
+            <span th:text="${game.getHomeTeam()}"></span> x <span th:text="${game.getAwayTeam()}"></span>
+        </h1>
+        <p class="mb-2 pb-1" style="color: #2b2a2a;">
+            <span th:text="${game.getFormattedDate()}"></span>
+        </p>
+        <div class="justify-content rounded-3 mb-3 p-2"
+             style="background-color: rgba(239,239,239,0.68); margin-right:75%">
+            <div>
+                <p class="small text-muted mb-1">Resultado</p>
+                <h4 class="mb-0"
+                    th:text="${game.getCompleted()} ? ${game.getScores()} : 'Agendado ou a decorrer'"></h4>
             </div>
         </div>
+        <a class="btn btn-lg btn-primary" href="#" role="button">Apostar</a>
+        </div>
+    </div>
+</main>
     </div>
 </body>
 </html>
