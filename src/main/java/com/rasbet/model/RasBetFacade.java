@@ -458,6 +458,8 @@ public class RasBetFacade {
 	}
 
 
+
+
 	public static Result getResultByResultId(int resultid){
 		return ResultDAO.get(resultid);
 	}

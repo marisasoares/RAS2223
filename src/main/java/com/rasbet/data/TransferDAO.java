@@ -11,9 +11,10 @@ public class TransferDAO {
     private static final String INSERT = "INSERT INTO Transfer(idTransfer,Value,Date,Description,Email) VALUES(?,?,?,?,?)";
 
     public static boolean store(Transfer ts) {
+        Connection conn = null;
         boolean r = true;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setInt(1, ts.getId());
             stm.setFloat(2, ts.getValue());
@@ -30,12 +31,20 @@ public class TransferDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return r;
     }
     public static Transfer get(String idTransfer) {
+        Connection conn = null;
         Transfer trans = null;
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
             stm.setString(1, idTransfer);
             ResultSet rs = stm.executeQuery();
@@ -48,18 +57,33 @@ public class TransferDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return trans;
     }
 
     public static void delete(String idTransfer) {
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(DELETE);
             stmt.setString(1, idTransfer);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

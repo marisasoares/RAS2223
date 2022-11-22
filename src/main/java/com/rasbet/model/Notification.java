@@ -81,6 +81,9 @@ public class Notification {
         return date;
     }
 
+    public String getFormattedDate(){
+        return date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear() +  " às " + date.getHour()+ ":" + String.format("%02d",date.getMinute());
+    }
     public void setDate(LocalDateTime date) {
         this.date = date;
     }

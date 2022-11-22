@@ -12,9 +12,10 @@ public class WalletDAO {
     private static final String UPDATE = "UPDATE Wallet SET Euros= ?, Dollars = ? WHERE Email=?";
 
     public static boolean store(Wallet w) {
+        Connection conn = null;
         boolean r = true;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setString(1, w.getEmail());
             stm.setFloat(2, w.getEuros());
@@ -29,14 +30,21 @@ public class WalletDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return r;
     }
 
     public static Wallet get(String email) {
         Wallet w = null;
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try {conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
             stm.setString(1, email);
             ResultSet rs = stm.executeQuery();
@@ -48,6 +56,13 @@ public class WalletDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return w;
     }
@@ -64,8 +79,9 @@ public class WalletDAO {
     }
 
     public static void update(Wallet wallet){
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
             stmt.setFloat(1, wallet.getEuros());
             stmt.setFloat(2, wallet.getDollars());
@@ -73,7 +89,13 @@ public class WalletDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
-
 }

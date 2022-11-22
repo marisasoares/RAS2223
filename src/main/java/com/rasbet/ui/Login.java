@@ -25,7 +25,7 @@ public class Login {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@RequestParam String nome, @RequestParam String email,@RequestParam String password,@RequestParam String nif,Model model) {
         RasBetFacade.registerUser(nome,email,password,nif,0);
-        return "login";
+        return "redirect:login";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -35,7 +35,7 @@ public class Login {
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
     public String verifyLogin(@RequestParam String email,@RequestParam String password ,Model model) {
-        String view = "login";
+        String view = "redirect:login?error";
         if(RasBetFacade.login(email,password)) {
             User user = RasBetFacade.getAuthenticatedUser();
             model.addAttribute("user",user);

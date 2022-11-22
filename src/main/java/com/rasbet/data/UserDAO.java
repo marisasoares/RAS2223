@@ -16,9 +16,10 @@ public class UserDAO {
     private static final String COUNT = "SELECT count(*) FROM User";
 
     public static boolean store(User user) {
+        Connection conn = null;
         boolean r = true;
         try{
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setString(1, user.getMail());
             stm.setString(2, user.getName());
@@ -46,14 +47,21 @@ public class UserDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return r;
     }
 
     public static User get(String email) {
         User user = null;
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
             stm.setString(1, email);
             ResultSet rs = stm.executeQuery();
@@ -83,25 +91,41 @@ public class UserDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return user;
     }
 
     public static void delete(String email) {
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(DELETE);
             stmt.setString(1, email);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
     public static void update(User user){
+        Connection conn = null;
         try {
             if(user instanceof Better) WalletDAO.update(((Better) user).getWallet());
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
             stmt.setString(1, user.getName());
             stmt.setInt(2, user.getPasswordHash());
@@ -109,13 +133,21 @@ public class UserDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
     public static List<Transfer> getTransHistory(String email) {
+        Connection conn = null;
         List<Transfer> transfers = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(FIND_ALL_TRANFERS);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -129,14 +161,22 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return transfers;
     }
 
     public static List<User> getUsersByType(int type) {
+        Connection conn = null;
         List<User> users = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(FIND_ALL_USER_BY_TYPE);
             stmt.setInt(1, type);
             ResultSet rs = stmt.executeQuery();
@@ -148,19 +188,34 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return users;
     }
 
     public static int countUsers(){
+        Connection conn = null;
         int i = 0;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(COUNT);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) i = rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return i;
     }

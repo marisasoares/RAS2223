@@ -15,9 +15,10 @@ public class GameDAO {
 
     public static boolean store(Game game) {
         boolean r = true;
+        Connection conn = null;
         try {
             ResultDAO.store(game.getResult());
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setString(1, game.getId());
             stm.setString(2, game.getHomeTeam());
@@ -34,13 +35,20 @@ public class GameDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return r;
     }
     public static Game get(String id) {
         Game game = null;
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
            PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
@@ -58,24 +66,40 @@ public class GameDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return game;
     }
 
     public static void delete(int id) {
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(DELETE);
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
     public static void updateStatusGame(Game game){
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
             stmt.setInt(1, game.getCompleted() ? 1:0);
             stmt.setString(2, game.getId());
@@ -85,12 +109,20 @@ public class GameDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     public static void update(Game game) {
+        Connection conn = null;
         try {
-
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
             stmt.setInt(1, game.getCompleted() ? 1:0);
             stmt.setString(2, game.getId());
@@ -99,6 +131,13 @@ public class GameDAO {
             ResultDAO.update(result);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

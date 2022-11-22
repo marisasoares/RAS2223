@@ -2,6 +2,7 @@ package com.rasbet.data;
 
 import com.rasbet.model.*;
 
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,8 +19,9 @@ public class BetDAO {
 
     public static boolean store(Bet b) {
         boolean r = true;
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setInt(1, b.getBetId());
             stm.setFloat(2, b.getValue());
@@ -32,6 +34,8 @@ public class BetDAO {
             stm.setString(9,b.getCurrency());
             stm.setFloat(10,b.getPossibleGain());
             stm.executeUpdate();
+            conn.close();
+
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
             r = false;
@@ -40,14 +44,23 @@ public class BetDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
+
+
         return r;
     }
 
     public static Bet get(int betid) {
         Bet b = null;
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_ID);
             stm.setInt(1, betid);
             ResultSet rs = stm.executeQuery();
@@ -66,14 +79,21 @@ public class BetDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return b;
     }
 
     public static List<Bet> getBetsByEmail(String email) {
         List<Bet> bets = new ArrayList<>();
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
                 PreparedStatement stm = conn.prepareStatement(FIND_BY_Email);
             stm.setString(1, email);
             ResultSet rs = stm.executeQuery();
@@ -92,6 +112,13 @@ public class BetDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         Comparator<Bet> comparator = Comparator.comparingInt(Bet::getMultipleId);
         bets.sort(comparator);
@@ -100,8 +127,8 @@ public class BetDAO {
 
     public static List<Bet> getBetsByGameId(String gameid) {
         List<Bet> bets = new ArrayList<>();
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_Gameid);
             stm.setString(1, gameid);
             ResultSet rs = stm.executeQuery();
@@ -120,14 +147,21 @@ public class BetDAO {
             }
         } catch (Exception e){
             e.printStackTrace();
+        }finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return bets;
     }
 
     public static List<Bet> getBetsByMultipleId(int multipleID) {
         List<Bet> bets = new ArrayList<>();
-
-        try { Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_MULTIPLE_ID);
             stm.setInt(1, multipleID);
             ResultSet rs = stm.executeQuery();
@@ -146,26 +180,42 @@ public class BetDAO {
             }
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return bets;
     }
 
 
     public static void delete(int betId) {
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(DELETE);
             stmt.setInt(1, betId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
 
     public static void update(Bet b){
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(UPDATE);
             stm.setFloat(1, b.getValue());
             stm.setString(2, b.getGameId());
@@ -181,6 +231,13 @@ public class BetDAO {
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

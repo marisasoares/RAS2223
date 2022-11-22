@@ -14,9 +14,10 @@ public class SportGameDAO {
 
 
     public static boolean store(Sport sp, Game gm) {
+        Connection conn = null;
         boolean r = true;
         try {
-            Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(INSERT);
             stm.setInt(1, sp.getId());
             stm.setString(2, gm.getId());
@@ -31,6 +32,13 @@ public class SportGameDAO {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return r ;
     }
@@ -42,8 +50,9 @@ public class SportGameDAO {
      * @return A lista de jogos
      * */
     public static List<Game> get_AllGames_by_SportID(int idSport) {
+        Connection conn = null;
         List<Game> games = new ArrayList<>();
-        try {Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        try {conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_ALL_GAMES_BY_IDSPORT);
             stm.setInt(1, idSport);
             ResultSet rs = stm.executeQuery();
@@ -53,6 +62,13 @@ public class SportGameDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return games;
     }
@@ -63,8 +79,9 @@ public class SportGameDAO {
      * @return O id do desporto
      * */
     public static int get_SportId_by_GameId(String idGame) {
+        Connection conn = null;
         int sportId  = -1;
-        try {Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+        try {conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stm = conn.prepareStatement(FIND_BY_IDGame);
             stm.setString(1, idGame);
             ResultSet rs = stm.executeQuery();
@@ -74,12 +91,14 @@ public class SportGameDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
         return sportId;
     }
-
-
-
-
-
 }

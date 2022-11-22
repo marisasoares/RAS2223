@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d96469b9-181a-4c3b-ab6b-32cf8dce39aa" name="Changes" comment="Página de registo + revamp da UI">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/Lists.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/BetDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/BetDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/GameDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/GameDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/NotificationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/NotificationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/ResultDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/ResultDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/SportDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/SportDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/SportGameDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/SportGameDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/TransferDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/TransferDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/data/WalletDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/data/WalletDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/model/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/model/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/model/RasBetFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/model/RasBetFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/RasbetMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rasbet/ui/RasbetMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/data/BetDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/data/BetDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/data/ResultDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/data/ResultDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/model/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/model/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/model/Notification.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/model/Notification.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/model/RasBetFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/model/RasBetFacade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/ui/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/ui/Login.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/ui/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/ui/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/rasbet/ui/RasbetMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/rasbet/ui/RasbetMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/homePageBetter.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/homePageBetter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/login.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2H6QIY7hX4vEVckiAoUy7WwvyYW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/rasbet/libs/gson-2.10.jar" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.43678162" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunManager" selected="Spring Boot.RasbetMain">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Rasbet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Migrate (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rasbet.data.Migrate" />
+      <module name="RASBET" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rasbet.data.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Migrate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="DataLayer.Migrate" />
+      <module name="Rasbet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="DataLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RasbetMain" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="RASBET" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.rasbet.ui.RasbetMain" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Migrate (1)" />
+        <item itemvalue="Application.Migrate" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d96469b9-181a-4c3b-ab6b-32cf8dce39aa" name="Changes" comment="" />
+      <created>1667602981279</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1667602981279</updated>
+      <workItem from="1667602985898" duration="857000" />
+      <workItem from="1667619188917" duration="155000" />
+      <workItem from="1667767176821" duration="1138000" />
+      <workItem from="1667768447598" duration="42000" />
+      <workItem from="1667902491965" duration="832000" />
+      <workItem from="1667912182090" duration="1189000" />
+      <workItem from="1667917165492" duration="1379000" />
+      <workItem from="1667920244015" duration="2968000" />
+      <workItem from="1668005334703" duration="575000" />
+      <workItem from="1668946272893" duration="19366000" />
+      <workItem from="1669024291824" duration="11165000" />
+      <workItem from="1669049124188" duration="1768000" />
+      <workItem from="1669062784833" duration="599000" />
+      <workItem from="1669111388285" duration="2625000" />
+    </task>
+    <task id="LOCAL-00001" summary="Página de registo + revamp da UI">
+      <created>1668991386915</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1668991386915</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Página de registo + revamp da UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Página de registo + revamp da UI" />
+  </component>
+</project>
