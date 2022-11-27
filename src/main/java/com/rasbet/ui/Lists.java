@@ -15,19 +15,22 @@ public class Lists {
 
     @GetMapping("/notifications")
     public String showNotifications(Model model) {
-        String view = "homePageBetter";
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("notifications", RasBetFacade.listAllNotifications(RasBetFacade.emailAuthenticatedUser));
-        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        RasBetFacade.markNotificationsAsRead(RasBetFacade.emailAuthenticatedUser);
+        view = "notifications";
         return view;
     }
 
     @GetMapping("/transactions")
     public String showTransactions(Model model) {
-        String view = "homePageBetter";
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("transactions", RasBetFacade.transHistory(RasBetFacade.emailAuthenticatedUser));
-        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        view = "transactions";
         return view;
     }
 }

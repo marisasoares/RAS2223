@@ -18,7 +18,7 @@ public class MainController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
-        model.addAttribute("loggedUser",RasBetFacade.emailAuthenticatedUser);
+        model.addAttribute("user",RasBetFacade.emailAuthenticatedUser);
         return "login";
     }
 }

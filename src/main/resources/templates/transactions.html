@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>Início</title>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -17,43 +15,6 @@
     </style>
 </head>
 <body>
-<!--
-<nav style="background-color: #2069ff;" class="navbar navbar-expand-md navbar-dark fixed-top ">
-    <div class="container-fluid text-white ">
-        <h5 class="d-flex align-items-center mb-2 pe-3 mb-lg-0 text-white"> RASBET </h5>
-            <div class="dropdown text-end">
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="avatar.png" alt="mdo" class="User image" width="50" height="50">
-                </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                    <li><a class="dropdown-item" href="changeUserInfo">Definições</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/login">Terminar sessão</a></li>
-                </ul>
-            </div>
-            <p class="nav col-1 col-lg-auto me-lg-auto ms-2 mb-2 justify-content-start mb-md-0">Bem vindo, &nbsp;<span th:text="${user.getName()}"></span>!</p>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/notifications" class="nav-link px-2 link-light">Notificações</a></li>
-                <li><a href="/transactions" class="nav-link px-2 link-light">Transações</a></li>
-            </ul>
-
-            <div class="d-flex justify-content-start rounded-3 p-2 mb-2" style="background-color: rgba(239,239,239,0.63);">
-                <div>
-                    <p class="small text-muted mb-1">Euros</p>
-                    <p class="sm-0 text-black">
-                        <span th:text="${user.getWallet().getEuros()}"></span> €
-                    </p>
-                </div>
-                <div class="px-3">
-                    <p class="small text-muted mb-1">Dollars</p>
-                    <p class="sm text-black">
-                        <span th:text="${user.getWallet().getDollars()}"></span> $
-                    </p>
-                </div>
-            </div>
-        </div>
-</nav> !-->
-
 
 <!-- Navbar -->
 <nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
@@ -107,11 +68,11 @@
             <div class="me-4">
                 <a href="/notifications" class="d-block link-info text-decoration-none  text-white    " id="dropdownUser1"  aria-expanded="false">
                     <i class="fas fa-bell ">Notificações</i>
-                        <div th:if="${notReadNotifications != null}">
-                            <div th:if="${notReadNotifications.size() != 0}">
-                                <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
-                            </div>
+                    <div th:if="${notReadNotifications != null}">
+                        <div th:if="${notReadNotifications.size() != 0}">
+                            <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
                         </div>
+                    </div>
 
 
                 </a>
@@ -140,54 +101,6 @@
 </nav>
 <!-- Navbar -->
 
-<div th:each="game:${games}">
-    <main class="container mb-3 card">
-        <div class="d-flex p-1 rounded">
-            <div class="flex-grow-0 ms-5">
-                <div style="background-color: rgba(239,239,239,0.68);
-                       " class="justify-content rounded-3 mb-1 p-2">
-                    <div>
-                        <p class="small text-muted mb-1">Resultado</p>
-                        <h4 class="mb-0" th:text="${game.getCompleted()} ? ${game.getScores()} : 'Agendado ou a decorrer'"></h4>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 ms-3">
-                <h3>
-                    <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
-                </h3>
-                <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                    <span th:text="${game.getFormattedDate()}"></span>
-                </p>
-            </div>
-
-        </div>
-    </main>
-</div>
-
-<div th:each="notification:${notifications}">
-    <main class="container mb-3 card" >
-        <div class="d-flex p-5 rounded ">
-            <div class="flex-shrink-0">
-                <img src="sport.png"
-                     alt="Generic sport image" class="img-fluid"
-                     style="width: 180px; border-radius: 10px;">
-            </div>
-            <div class="flex-grow-1 ms-3">
-                <h2 th:text="${notification.getContent()}"></h2>
-                <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                    <span th:text="${notification.getFormattedDate()}"></span>
-                </p>
-                <div class="justify-content rounded-3 mb-3 p-2" th:if="${notification.getIsRead()}"
-                     style="background-color: rgba(239,239,239,0.68); margin-right:75%">
-                    <div>
-                        <p class="small text-muted mb-1">Nova</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
 <div class="p-2 d-flex" th:if="${transactions}">
     <img alt="wallet logo" style="width: 100px; border-radius: 10px;" src="wallet.png" class="">
     <h1 class="mb-0 mt-3"> Transações: </h1>

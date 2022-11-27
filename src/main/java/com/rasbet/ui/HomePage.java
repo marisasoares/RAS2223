@@ -15,7 +15,10 @@ public class HomePage {
 
     @GetMapping("/homePage")
     public String showHomePage(Model model) {
+        String view = "homePageBetter";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         model.addAttribute("games", RasBetFacade.games);
-        return "homePageBetter";
+        return view;
     }
 }

@@ -424,10 +424,18 @@ public class RasBetFacade {
 		List<Notification> notifications = NotificationDAO.get(email);
 		for (Notification not : notifications ) {
 			if(!not.getIsRead()) returnList.add(not);
-			not.setRead(true);
-			NotificationDAO.update(not);
 		}
 		return returnList;
+	}
+
+	public static void markNotificationsAsRead(String email){
+		List<Notification> notifications = NotificationDAO.get(email);
+		for (Notification not : notifications ) {
+			if(!not.getIsRead()){
+				not.setRead(true);
+				NotificationDAO.update(not);
+			}
+		}
 	}
 
 	/**

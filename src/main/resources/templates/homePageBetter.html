@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <title>Início</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <meta name="theme-color" content="#712cf9">
-    <style>
-        body {
-            min-height: 75rem;
-            padding-top: 7rem;
-        }
-    </style>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+        <meta name="theme-color" content="#712cf9">
+        <style>
+            body {
+                min-height: 75rem;
+                padding-top: 7rem;
+            }
+        </style>
 </head>
 <body>
 <!--
@@ -75,7 +75,7 @@
         <!-- Collapsible wrapper -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Navbar brand -->
-            <a class="navbar-brand mt-2 mt-lg-0" href="/">
+            <a class="navbar-brand mt-2 mt-lg-0" href="/home">
                 <img
                         src="logo.png"
                         height="50"
@@ -86,10 +86,10 @@
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Transações</a>
+                    <a class="nav-link" href="/transactions">Transações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Apostas</a>
+                    <a class="nav-link" href="/bets">Apostas</a>
                 </li>
             </ul>
             <!-- Left links -->
@@ -104,25 +104,17 @@
             </a>
 
             <!-- Notifications -->
-            <div class="dropdown me-4">
-                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white    " id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="me-4">
+                <a href="/notifications" class="d-block link-info text-decoration-none  text-white    " id="dropdownUser1"  aria-expanded="false">
                     <i class="fas fa-bell ">Notificações</i>
-                    <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                        <div th:if="${notReadNotifications != null}">
+                            <div th:if="${notReadNotifications.size() != 0}">
+                                <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
+                            </div>
+                        </div>
+
+
                 </a>
-                <ul
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="navbarDropdownMenuLink"
-                >
-                    <li>
-                        <a class="dropdown-item" href="#">Some news</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Another news</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </li>
-                </ul>
             </div>
             <!-- Avatar -->
             <div class="dropdown">
@@ -173,28 +165,7 @@
     </main>
 </div>
 
-<div th:each="notification:${notifications}">
-    <main class="container mb-3 card" >
-        <div class="d-flex p-5 rounded ">
-            <div class="flex-shrink-0">
-                <img src="sport.png"
-                     alt="Generic sport image" class="img-fluid"
-                     style="width: 180px; border-radius: 10px;">
-            </div>
-            <div class="flex-grow-1 ms-3">
-                <h2 th:text="${notification.getContent()}"></h2>
-                <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                    <span th:text="${notification.getFormattedDate()}"></span>
-                </p>
-                <div class="justify-content rounded-3 mb-3 p-2" th:if="${notification.getIsRead()}"
-                     style="background-color: rgba(239,239,239,0.68); margin-right:75%">
-                    <div>
-                        <p class="small text-muted mb-1">Nova</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
+
+
 </body>
 </html>
