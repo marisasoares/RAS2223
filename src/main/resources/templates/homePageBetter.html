@@ -126,7 +126,7 @@
                         aria-labelledby="navbarDropdownMenuAvatar"
                 >
                     <li>
-                        <a class="dropdown-item" href="changeUserInfo">Definições</a>
+                        <a class="dropdown-item" href="profile">Definições</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="login">Terminar sessão</a>
@@ -140,32 +140,23 @@
 </nav>
 <!-- Navbar -->
 
-<div th:each="game:${games}">
-    <main class="container mb-3 card">
-        <div class="d-flex p-1 rounded">
-            <div class="flex-grow-0 ms-5">
-                <div style="background-color: rgba(239,239,239,0.68);
-                       " class="justify-content rounded-3 mb-1 p-2">
-                    <div>
-                        <p class="small text-muted mb-1">Resultado</p>
-                        <h4 class="mb-0" th:text="${game.getCompleted()} ? ${game.getScores()} : 'Agendado ou a decorrer'"></h4>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 ms-3">
-                <h3>
-                    <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
-                </h3>
-                <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                    <span th:text="${game.getFormattedDate()}"></span>
-                </p>
-            </div>
+<section>
 
+    <div th:each="game:${games}" class=" card p-2 mx-3 mb-2" style="display: flex; flex-direction: row;gap: 300px; border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
+    <div>
+        <h3 style="color: rgb(58, 58, 58);"Away>
+            <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
+        </h3>
+        <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
+    </div>
+        <div style="display: flex; gap: 7rem; flex-wrap:nowrap ">
+            <button class="mx-5 px-3 py-1" type="button" style="background-color: #ee7742; border-style: none; border-radius: 15px; color: black; font-weight: bold;"> <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
+            <button class="mx-5 px-3 py-1" type="button" style="background-color: white; border-radius: 15px; border-color: #16350e ; color: black; font-weight: bold;"> Empate  <p>3.10</p></button>
+            <button class="mx-5 px-3 py-1"type="button" style="background-color: white; border-radius: 15px; border-color: #16350e ; color: black; font-weight: bold;"> <span th:text="${game.getAwayTeam()}"></span>  <p>5.00</p></button>
         </div>
-    </main>
-</div>
+    </div>
 
-
+</section>
 
 </body>
 </html>

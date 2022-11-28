@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="theme-color" content="#712cf9">
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 7rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="/home">
+                <img
+                        src="logo.png"
+                        height="50"
+                        alt="RASBET Logo"
+                        loading="lazy"
+                />
+            </a>
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/transactions">Transações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/bets">Apostas</a>
+                </li>
+            </ul>
+            <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+            <!-- Icon -->
+            <a class="text-reset me-3" href="#">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+
+            <!-- Notifications -->
+            <div class="me-4">
+                <a href="/notifications" class="d-block link-info text-decoration-none  text-white    " id="dropdownUser1"  aria-expanded="false">
+                    <i class="fas fa-bell ">Notificações</i>
+                    <div th:if="${notReadNotifications != null}">
+                        <div th:if="${notReadNotifications.size() != 0}">
+                            <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
+                        </div>
+                    </div>
+
+
+                </a>
+            </div>
+            <!-- Avatar -->
+            <div class="dropdown">
+                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="avatar.png" alt="User image" class="User image" width="50" height="50">
+                </a>
+                <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                >
+                    <li>
+                        <a class="dropdown-item" href="changeUserInfo">Definições</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="login">Terminar sessão</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
+<div class="p-2 d-flex" th:if="${transactions}">
+    <img alt="wallet logo" style="width: 100px; border-radius: 10px;" src="wallet.png" class="">
+    <h1 class="mb-0 mt-3"> Transações: </h1>
+</div>
+<div th:each="transaction:${transactions}">
+    <main class="container mb-3 card" >
+        <div class="d-flex p-2 rounded ">
+            <div class="flex-shrink-0">
+                <img th:if="${transaction.getValue()} >= 0" src="add-money.png"
+                     alt="Add money" class="img-fluid"
+                     style="width: 80px; border-radius: 10px;">
+                <img th:if="${transaction.getValue()} < 0" src="remove-money.png"
+                     alt="Remove money" class="img-fluid"
+                     style="width: 80px; border-radius: 10px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h2 th:text="${transaction.getDescription()}"></h2>
+                <p class="mb-2 pb-1 small" style="color: #2b2a2a;">
+                    <span th:text="${transaction.getFormattedDate()}"></span>
+                </p>
+                <div class="justify-content rounded-3 mb-3 p-2"
+                     style="background-color: rgba(239,239,239,0.68); margin-right:75%">
+                    <div>
+                        <p class="small text-muted mb-1" th:text="${transaction.getValue()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
