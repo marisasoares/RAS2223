@@ -2,6 +2,8 @@ package com.rasbet.model;
 import com.rasbet.data.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RasBetFacade {
-
 	public static  String emailAuthenticatedUser;
 	public static  List<Game> games;
 
@@ -369,16 +370,29 @@ public class RasBetFacade {
 	}
 
 	/**
-	 * Devolve a lista de desportos
+	 * Devolve a lista de apostas de um determinado jogo
 	 * */
 	public static List<Bet> getBetListGameId(String gameId){
 		return BetDAO.getBetsByGameId(gameId);
 	}
+
 	/**
-	 * Devolve a lista de desportos
+	 * Devolve a lista de apostas
 	 * */
 	public static List<Bet> getBetListEmail(String email){
 		return BetDAO.getBetsByEmail(email);
+	}
+
+	/**
+	 * Devolve a lista de apostas simples
+	 * */
+	public static List<Bet> getSimpleBetsListByEmail(String email){
+		List<Bet> bets = BetDAO.getBetsByEmail(email);
+		List<Bet> returnList = new ArrayList<>();
+		for (Bet bet: bets) {
+			if(bet.getMultipleId() == 0) returnList.add(bet);
+		}
+		return returnList;
 	}
 
 	/**
@@ -386,6 +400,16 @@ public class RasBetFacade {
 	 * */
 	public static List<Game> getGameList(int sportId){
 		return SportGameDAO.get_AllGames_by_SportID(sportId);
+	}
+	/**
+	 * Devolve o jogo de uma bet
+	 * */
+
+	public static Game getGamebyBetId(String betID){
+		return GameDAO.get(betID);
+	}
+	public static String stringtest(){
+		return "TESTE";
 	}
 
 	/**

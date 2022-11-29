@@ -18,7 +18,6 @@
         .caixa {
             margin-left: 20%;
             margin-right: 20%;
-            text-align: center;
         }
         .circle-right-btn {
             height: 30px;
@@ -28,15 +27,17 @@
             margin-top: 15px;
             font-size:18px;
         }
-        .form{
-            display: inline-block;
-        }
         .butons{
             display: flex;
             justify-content: center;
             gap: 50px;
         }
-
+        div.vertical-line{
+            width: 2px;
+            background-color: black;
+            height: 100%;
+            float: left;
+        }
     </style>
 </head>
 <body style="background-color: #d5d4d4">
@@ -115,7 +116,7 @@
                         aria-labelledby="navbarDropdownMenuAvatar"
                 >
                     <li>
-                        <a class="dropdown-item" href="changeUserInfo">Definições</a>
+                        <a class="dropdown-item" href="profile">Definições</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="login">Terminar sessão</a>
@@ -131,26 +132,42 @@
 
 <div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e" class="caixa card">
     <div class="col d-flex justify-content-center">
-
         <div class="card-body">
-            <h3 th:text="${user.getName()}"></h3>
-            <h4> Historico de Apostas </h4>
+            <h3 style="text-align: center" th:text="${user.getName()}"></h3>
+            <h4 style="text-align: center"> Historico de Apostas </h4>
             <hr style="margin-left: 3rem;margin-right: 3rem">
+            <div class ="butons">
+                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?simples'" class="btn btn-primary">Simples</button>
 
-
-
+                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?multiplas'" class="btn btn-primary ">Múltiplas</button>
+            </div>
             <p style="text-align: left" class="historico ms-5 ps-2 mb-2">
                     <a href="/profile">
-                        <input  class="circle-right-btn" type="submit" value=">">
+                        <input  class="circle-right-btn" type="submit" value="<">
                     </a>
             </p>
-            <div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e" class="card">
+            <div th:each="bet:${betsSimple}">
+                <div style="background-color:white; border-radius: 20px;border-style: solid;border-width: thin;border-color: #16350e;margin-left: 70px;margin-right: 70px;margin-bottom: 20px" class="card ">
+                    <div class="d-flex rounded mt-3">
+                        <div style="display: flex;text-align: left" class="flex-grow-1 ms-3">
+                            <div >
+                                <span>Gil Vicente - Portimonense</span>
+                                <p> Equipa vencedora : Gil vicente</p>
+                            </div>
+                            <div class="mx-auto">
+                                <div class="vertical-line " style="height: 45px"></div>
+                            </div>
+                            <div class="me-5">
+                                <span>Montante Apostado 5€</span>
+                                <p> Total de ganhos 50€</p>
+                            </div>
 
-                <P>ASFSDGSJKD</P>
+
+                            <p class="mb-2 pb-1 small" style="color: #2b2a2a;"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-
         </div>
     </div>
 </div>

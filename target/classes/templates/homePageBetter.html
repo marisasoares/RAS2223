@@ -14,7 +14,26 @@
                 min-height: 75rem;
                 padding-top: 7rem;
             }
+
+            button {
+                background: none;
+            }
+
+            button:active{
+                background:olive;
+            }
+
+            button:focus{
+                background: #8080e0;
+            }
+
         </style>
+        <script>
+        function selectOdd(button) {
+            button.style.borderColor = (button.style.borderColor!=='rgb(238,119,66)' ? '#ee7742' : '#16350e');
+            button.style.backgroundColor = (button.style.backgroundColor === 'rgb(238, 119, 66)' ? '#ffffff' : '#ee7742');
+        }
+        </script>
 </head>
 <body>
 <!--
@@ -89,7 +108,7 @@
                     <a class="nav-link" href="/transactions">Transações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/bets">Apostas</a>
+                    <a class="nav-link" href="/betHistory">Apostas</a>
                 </li>
             </ul>
             <!-- Left links -->
@@ -140,22 +159,20 @@
 </nav>
 <!-- Navbar -->
 
-<section>
-
-    <div th:each="game:${games}" class=" card p-2 mx-3 mb-2" style="display: flex; flex-direction: row;gap: 300px; border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
-    <div>
-        <h3 style="color: rgb(58, 58, 58);"Away>
-            <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
-        </h3>
-        <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
-    </div>
+<section th:each="game:${games}">
+    <div class="card p-2 mx-3 mb-2" style="display: flex; flex-direction: row;gap: 300px; border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
+        <div>
+            <h3 style="color: rgb(58, 58, 58);">
+                <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
+            </h3>
+            <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
+        </div>
         <div style="display: flex; gap: 7rem; flex-wrap:nowrap ">
-            <button class="mx-5 px-3 py-1" type="button" style="background-color: #ee7742; border-style: none; border-radius: 15px; color: black; font-weight: bold;"> <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
-            <button class="mx-5 px-3 py-1" type="button" style="background-color: white; border-radius: 15px; border-color: #16350e ; color: black; font-weight: bold;"> Empate  <p>3.10</p></button>
-            <button class="mx-5 px-3 py-1"type="button" style="background-color: white; border-radius: 15px; border-color: #16350e ; color: black; font-weight: bold;"> <span th:text="${game.getAwayTeam()}"></span>  <p>5.00</p></button>
+            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
+            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > Empate <p>1.19</p> </button>
+            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > <span th:text="${game.getAwayTeam()}"></span> <p>1.19</p> </button>
         </div>
     </div>
-
 </section>
 
 </body>

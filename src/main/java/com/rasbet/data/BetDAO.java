@@ -155,6 +155,8 @@ public class BetDAO {
                     e.printStackTrace();
                 }
         }
+        Comparator<Bet> comparator = Comparator.comparingInt(Bet::getMultipleId);
+        bets.sort(comparator);
         return bets;
     }
 

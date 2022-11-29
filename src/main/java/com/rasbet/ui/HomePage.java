@@ -47,7 +47,8 @@ public class HomePage {
         String view = "betHistory";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
-        model.addAttribute("bets", RasBetFacade.getBetListEmail(RasBetFacade.emailAuthenticatedUser));
+        model.addAttribute("betsSimple", RasBetFacade.getSimpleBetsListByEmail(RasBetFacade.emailAuthenticatedUser));
+        //model.addAttribute("RasBetFacade", RasBetFacade);
         return view;
     }
 

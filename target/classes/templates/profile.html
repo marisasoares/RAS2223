@@ -129,7 +129,7 @@
 </nav>
 <!-- Navbar -->
 
-<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e" class="caixa card ">
+<div style="background-color:white; border-radius: 60px;border-style: dashed;border-width: medium;border-color: #16350e" class="caixa card ">
     <div class="col d-flex justify-content-center">
 
         <div class="card-body">
@@ -148,10 +148,15 @@
             </div>
 
 
-            <p style="text-align: left" class="historico ms-5 ps-2 mb-2">Consultar Histórico de Apostas
+            <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Consultar Histórico de Apostas
                     <a href="/betHistory">
                         <input  class="circle-right-btn" type="submit" value=">">
                     </a>
+            </p>
+            <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Consultar Histórico de Transações
+                <a href="/transactions">
+                    <input  class="circle-right-btn" type="submit" value=">">
+                </a>
             </p>
 
 
@@ -169,13 +174,19 @@
                     </div>
                 </div>
                 <div class="form-group row mb-2">
+                    <label for="staticNIF" class="col-sm-2 col-form-label">NIF</label>
+                    <div class="col-sm-10">
+                        <input style="border-color: #16350e;border-radius: 50px;text-align: center" type="text" readonly class="form-control mr-3" id="staticNIF" name="nif"th:attr="value=${user.getNif()}">
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                     <div class="col-sm-10">
-                        <input style="border-color: #16350e;border-radius: 50px;text-align: center" type="password" class="form-control me-3" id="inputPassword" name="password" placeholder="Password">
+                        <input style="border-color: #16350e;border-radius: 50px;text-align: center" type="password" class="form-control me-3" id="inputPassword" name="password" placeholder="Password" minlength="8">
                     </div>
                 </div>
                 <div style="display: flex;justify-content: flex-end">
-                    <button class="btn btn-primary" style="background-color: #ee7742;border-style: none;border-radius: 50px;color: white" onclick="Salvar()">Salvar</button>
+                    <button class="btn btn-primary" style="background-color: #ee7742;border-style: none;border-radius: 50px;color: white" onclick="">Salvar</button>
                 </div>
             </form>
 
