@@ -6,6 +6,8 @@ import com.rasbet.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -48,7 +50,30 @@ public class HomePage {
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         model.addAttribute("betsSimple", RasBetFacade.getSimpleBetsListByEmail(RasBetFacade.emailAuthenticatedUser));
-        //model.addAttribute("RasBetFacade", RasBetFacade);
+        return view;
+    }
+    @GetMapping("/logout")
+    public String logout(Model model) {
+        RasBetFacade.emailAuthenticatedUser = null;
+        return "redirect:login";
+    }
+
+
+    @RequestMapping(value = "/depositar", method = RequestMethod.POST)
+    public String depositar(Model model,@RequestParam String currency,@RequestParam float value) {
+        String view = "redirect:profile";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        if(currency.equals("euros")){
+            RasBetFacade.addMovementEuros(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+        }
+        else RasBetFacade.addMovementDollars(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+        return view;
+    }
+
+    @RequestMapping(value = "/depositar", method = RequestMethod.GET)
+    public String depositar(Model model) {
+        String view = "depositar";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         return view;
     }
 

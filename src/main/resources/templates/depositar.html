@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>betHistory</title>
+    <title>Depositar</title>
     <style>
         body {
             min-height: 75rem;
@@ -14,30 +14,12 @@
             color: #16350e;
 
         }
-
         .caixa {
-            margin-left: 20%;
-            margin-right: 20%;
+            margin-left: 35%;
+            margin-right: 35%;
+            text-align: center;
         }
-        .circle-right-btn {
-            height: 30px;
-            width: 30px;
-            border-radius: 50%;
-            border: 1px solid #16350e;
-            margin-top: 15px;
-            font-size:18px;
-        }
-        .butons{
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-        }
-        div.vertical-line{
-            width: 2px;
-            background-color: black;
-            height: 100%;
-            float: left;
-        }
+
     </style>
 </head>
 <body style="background-color: #d5d4d4">
@@ -130,51 +112,32 @@
 </nav>
 <!-- Navbar -->
 
-<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e" class="caixa card">
-    <div class="col d-flex justify-content-center">
-        <div class="card-body">
-            <h3 style="text-align: center" th:text="${user.getName()}"></h3>
-            <h4 style="text-align: center"> Historico de Apostas </h4>
-            <hr style="margin-left: 3rem;margin-right: 3rem">
-            <div class ="butons">
-                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?simples'" class="btn btn-primary">Simples</button>
-
-                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?multiplas'" class="btn btn-primary ">Múltiplas</button>
-            </div>
-            <p style="text-align: left" class="historico ms-5 ps-2 mb-2">
-                    <a href="/profile">
-                        <input  class="circle-right-btn" type="submit" value="<">
-                    </a>
-            </p>
-            <div th:each="bet:${betsSimple}">
-                <div style="background-color:white; border-radius: 20px;border-style: solid;border-width: thin;border-color: #16350e;margin-left: 70px;margin-right: 70px;margin-bottom: 20px" class="card ">
-                    <div class="d-flex rounded mt-3">
-                        <div style="display: flex;text-align: left" class="flex-grow-1 ms-3">
-                            <div >
-                                <span>Gil Vicente - Portimonense</span>
-                                <p> Equipa vencedora : Gil vicente</p>
-                            </div>
-                            <div class="mx-auto">
-                                <div class="vertical-line " style="height: 45px"></div>
-                            </div>
-                            <div class="me-5">
-                                <span>Montante Apostado 5€</span>
-                                <p> Total de ganhos 50€</p>
-                            </div>
-
-
-                            <p class="mb-2 pb-1 small" style="color: #2b2a2a;"></p>
-                        </div>
+<div style="display: flex;flex-direction: column;justify-content: center;text-align: center">
+    <div style="background-color:white; border-radius: 60px;border-style: dashed;border-width: medium;border-color: #16350e" class="caixa card ">
+        <form action="/depositar" method="POST">
+            <div style="flex-direction: column" class="col d-flex justify-content-center">
+                <h3 >Montante a depositar </h3>
+                <div>
+                    <input type="radio" id="euros" style="background-color: #ee7742;border-style: none" name="currency" value="euros">
+                    <label for="euros"> €</label>
+                    <input type="radio" id="dollars" style="background-color: #ee7742;border-style: none" name="currency" value="dollars">
+                    <label for="dollars"> $</label>
+                    <div>
+                        <input class="mx-auto" style="text-align: center;margin-top: 10px;margin-bottom: 20px" type="text" placeholder="0" inputmode="decimal" name="value" required>
                     </div>
+                </div >
+                <h5 style="text-align: left;margin-left: 30px" >Método de pagamento </h5>
+                <div>
+                    <p style="text-align: left;margin-left: 30px">MBWay</p>
+                </div>
+                <div>
+                    <button type="submit" style="background-color: #ee7742;border-style: none" class="btn btn-primary">Depositar</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
+
 </body>
 </html>
-<script>
-    function Salvar() {
-        alert("Mudanças Salvas");
-    }
-</script>
+

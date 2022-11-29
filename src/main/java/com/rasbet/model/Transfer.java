@@ -27,12 +27,18 @@ public class Transfer {
 	 * */
 	private String email;
 
+	/**
+	 * Saldo do utilizador
+	 */
+	private float balanceAfterTransfer;
+
 	public Transfer(int id, float value, LocalDateTime date, String description,String email) {
 		this.id = id;
 		this.value = value;
 		this.date = date;
 		this.description = description;
 		this.email = email;
+		this.balanceAfterTransfer = 0f;
 	}
 
 	public Transfer(float value, LocalDateTime date, String description,String email) {
@@ -42,6 +48,17 @@ public class Transfer {
 		this.date = date;
 		this.description = description;
 		this.email = email;
+		this.balanceAfterTransfer = 0f;
+	}
+
+	public Transfer(float value, LocalDateTime date, String description,String email,float balanceAfterTransfer) {
+		this.id = Utils.geraIdentificadorUnicoInteger(Utils.transfers);
+		Utils.transfers.put(id,id);
+		this.value = value;
+		this.date = date;
+		this.description = description;
+		this.email = email;
+		this.balanceAfterTransfer = balanceAfterTransfer;
 	}
 
 	public int getId() {
@@ -84,6 +101,14 @@ public class Transfer {
 		this.email = email;
 	}
 
+	public float getBalanceAfterTransfer(){
+		return this.balanceAfterTransfer;
+	}
+
+	public void setBalanceAfterTransfer(float balanceAfterTransfer){
+		this.balanceAfterTransfer = balanceAfterTransfer;
+	}
+
 	@Override
 	public String toString() {
 		return "Transfer{" +
@@ -92,6 +117,7 @@ public class Transfer {
 				", date=" + date +
 				", description='" + description + '\'' +
 				", email='" + email + '\'' +
+				", balanceAfterTransfer='" + balanceAfterTransfer + '\'' +
 				'}';
 	}
 }

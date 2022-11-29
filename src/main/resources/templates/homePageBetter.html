@@ -30,7 +30,7 @@
         </style>
         <script>
         function selectOdd(button) {
-            button.style.borderColor = (button.style.borderColor!=='rgb(238,119,66)' ? '#ee7742' : '#16350e');
+            button.style.borderColor = (button.style.borderColor!=='rgb(238, 119, 66)' ? '#ee7742' : '#16350e');
             button.style.backgroundColor = (button.style.backgroundColor === 'rgb(238, 119, 66)' ? '#ffffff' : '#ee7742');
         }
         </script>
@@ -145,10 +145,10 @@
                         aria-labelledby="navbarDropdownMenuAvatar"
                 >
                     <li>
-                        <a class="dropdown-item" href="profile">Definições</a>
+                        <a class="dropdown-item" href="profile">Perfil</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="login">Terminar sessão</a>
+                        <a class="dropdown-item" href="logout">Terminar sessão</a>
                     </li>
                 </ul>
             </div>
@@ -160,17 +160,19 @@
 <!-- Navbar -->
 
 <section th:each="game:${games}">
-    <div class="card p-2 mx-3 mb-2" style="display: flex; flex-direction: row;gap: 300px; border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
-        <div>
+    <div class="p-2 mx-3 mb-2" style=" display: flex;border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
+        <div style="float: left; width: 25%">
             <h3 style="color: rgb(58, 58, 58);">
                 <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
             </h3>
             <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
         </div>
-        <div style="display: flex; gap: 7rem; flex-wrap:nowrap ">
-            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
-            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > Empate <p>1.19</p> </button>
-            <button class="mx-auto px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ;" > <span th:text="${game.getAwayTeam()}"></span> <p>1.19</p> </button>
+        <div style="float: right; width: 75%">
+            <div style="text-align: center;">
+                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
+                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > Empate <p>1.19</p> </button>
+                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > <span th:text="${game.getAwayTeam()}"></span> <p>1.19</p> </button>
+            </div>
         </div>
     </div>
 </section>

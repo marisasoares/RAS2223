@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Transactions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <meta name="theme-color" content="#712cf9">
+    <title>Histórico de transações</title>
     <style>
         body {
             min-height: 75rem;
             padding-top: 7rem;
+            color: #16350e;
+
         }
+
+        .caixa {
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+
+        .circle-right-btn {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            border: 1px solid #16350e;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .butons {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        div.vertical-line {
+            width: 2px;
+            background-color: black;
+            height: 100%;
+            float: left;
+        }
+
+        table,
+        th,
+        td {
+            border: none;
+            text-align: center;
+        }
+        .first {border-top:2px solid #16350e;
+            border-bottom: 2px solid #16350e;
+        }
+        .second {border-top:2px solid #16350e; border-bottom:2px solid #16350e;}
     </style>
 </head>
-<body>
+
+<body style="background-color: #d5d4d4">
 
 <!-- Navbar -->
 <nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
     <!-- Container wrapper -->
     <div class="container-fluid">
         <!-- Toggle button -->
-        <button
-                class="navbar-toggler"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
 
@@ -37,12 +73,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Navbar brand -->
             <a class="navbar-brand mt-2 mt-lg-0" href="/home">
-                <img
-                        src="logo.png"
-                        height="50"
-                        alt="RASBET Logo"
-                        loading="lazy"
-                />
+                <img src="logo.png" height="50" alt="RASBET Logo" loading="lazy" />
             </a>
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -66,11 +97,13 @@
 
             <!-- Notifications -->
             <div class="me-4">
-                <a href="/notifications" class="d-block link-info text-decoration-none  text-white    " id="dropdownUser1"  aria-expanded="false">
+                <a href="/notifications" class="d-block link-info text-decoration-none  text-white    "
+                   id="dropdownUser1" aria-expanded="false">
                     <i class="fas fa-bell ">Notificações</i>
                     <div th:if="${notReadNotifications != null}">
                         <div th:if="${notReadNotifications.size() != 0}">
-                            <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
+                                <span class="badge rounded-pill badge-notification bg-danger "
+                                      th:text="${notReadNotifications.size()}"></span>
                         </div>
                     </div>
 
@@ -79,13 +112,11 @@
             </div>
             <!-- Avatar -->
             <div class="dropdown">
-                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white"
+                   id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="avatar.png" alt="User image" class="User image" width="50" height="50">
                 </a>
-                <ul
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="navbarDropdownMenuAvatar"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                     <li>
                         <a class="dropdown-item" href="profile">Definições</a>
                     </li>
@@ -101,35 +132,56 @@
 </nav>
 <!-- Navbar -->
 
-<div class="p-2 d-flex" th:if="${transactions}">
-    <img alt="wallet logo" style="width: 100px; border-radius: 10px;" src="wallet.png" class="">
-    <h1 class="mb-0 mt-3"> Transações: </h1>
-</div>
-<div th:each="transaction:${transactions}">
-    <main class="container mb-3 card" >
-        <div class="d-flex p-2 rounded ">
-            <div class="flex-shrink-0">
-                <img th:if="${transaction.getValue()} >= 0" src="add-money.png"
-                     alt="Add money" class="img-fluid"
-                     style="width: 80px; border-radius: 10px;">
-                <img th:if="${transaction.getValue()} < 0" src="remove-money.png"
-                     alt="Remove money" class="img-fluid"
-                     style="width: 80px; border-radius: 10px;">
-            </div>
-            <div class="flex-grow-1 ms-3">
-                <h2 th:text="${transaction.getDescription()}"></h2>
-                <p class="mb-2 pb-1 small" style="color: #2b2a2a;">
-                    <span th:text="${transaction.getFormattedDate()}"></span>
+<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e"
+     class="caixa card">
+    <div class="col d-flex justify-content-center">
+        <div class="card-body">
+            <h3 style="text-align: center" th:text="${user.getName()}"></h3>
+            <h4 style="text-align: center"> Historico de Transações </h4>
+            <hr style="margin-left: 3rem;margin-right: 3rem">
+            <h5 style="text-align: center"> Saldo</h5>
+            <div style="text-align: center">
+                <p class="sm-0 text-black">
+                    <span th:text="${user.getWallet().getEuros()}"></span> €
                 </p>
-                <div class="justify-content rounded-3 mb-3 p-2"
-                     style="background-color: rgba(239,239,239,0.68); margin-right:75%">
-                    <div>
-                        <p class="small text-muted mb-1" th:text="${transaction.getValue()}"></p>
-                    </div>
-                </div>
+                <p class="sm text-black ">
+                    <span th:text="${user.getWallet().getDollars()}"></span> $
+                </p>
+                <p style="text-align: left" class="historico ms-5 ps-2 mb-2">
+                    <a href="/profile">
+                        <input class="circle-right-btn" type="submit" value="<">
+                    </a>
+                </p>
             </div>
+
+
+            <!-- Table -->
+            <div class="mx-5 px-5">
+                <table style="width: 100%;">
+                    <tr class="first">
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Operação</th>
+                        <th>Saldo após movimento</th>
+                    </tr>
+                    <tr class="second" th:each="transaction:${transactions}">
+                        <td><span th:text="${transaction.getFormattedDate()}"></span></td>
+                        <td><span th:text="${transaction.getDescription()}"></span></td>
+                        <td><span th:text="${transaction.getValue()}"></span></td>
+                        <td><span th:text="${transaction.getBalanceAfterTransfer()}"></span></td>
+                    </tr>
+                </table>
+                    <h4 class="mx-5 px-5" th:if="${transactions} == null"> Sem Transações </h4>
+            </div>
+
         </div>
-    </main>
+    </div>
 </div>
 </body>
+
 </html>
+<script>
+    function Salvar() {
+        alert("Mudanças Salvas");
+    }
+</script>

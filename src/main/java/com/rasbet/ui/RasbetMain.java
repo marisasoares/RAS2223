@@ -3,10 +3,7 @@ package com.rasbet.ui;
 import com.rasbet.data.GameDAO;
 import com.rasbet.data.ResultDAO;
 import com.rasbet.data.SportDAO;
-import com.rasbet.model.Game;
-import com.rasbet.model.Notification;
-import com.rasbet.model.RasBetFacade;
-import com.rasbet.model.Sport;
+import com.rasbet.model.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -53,5 +50,8 @@ public class RasbetMain {
                 ResultDAO.update(game.getResult());
             }
         }
+        RasBetFacade.registerUser("Miguel","miguelrodriguesantacruz@gmail.com","12345678","237495759",0);
+        RasBetFacade.addMovementEuros(34.5f,"miguelrodriguesantacruz@gmail.com","Ganho aposta");
+        RasBetFacade.addBet("538136a794711c8c9bc24b48353c396c","miguelrodriguesantacruz@gmail.com",13.5f,0,0,false,0,"euros",333f);
     }
 }

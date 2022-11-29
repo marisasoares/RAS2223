@@ -208,15 +208,15 @@ public class RasBetFacade {
 	public static boolean addMovementEuros(float value, String email,String description) {
 		boolean addedMov = false;
 		if(validateTransferEuros(value,email)){
-			Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email);
 			User user = UserDAO.get(email);
 			if (user instanceof Better){
+				float balance = ((Better) user).getWallet().getEuros()+value;
+				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,balance);
 				((Better) user).getWallet().addEuros(value);
 				addedMov = TransferDAO.store(transfer);
 				UserDAO.update(user);
 			}
 		}
-
 		return addedMov;
 	}
 
@@ -229,9 +229,10 @@ public class RasBetFacade {
 	public static boolean addMovementDollars(float value, String email,String description) {
 		boolean addedMov = false;
 		if(validateTransferDollars(value,email)){
-			Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email);
 			User user = UserDAO.get(email);
 			if(user instanceof Better){
+				float balance = ((Better) user).getWallet().getDollars()+value;
+				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,balance);
 				((Better) user).getWallet().addDollars(value);
 				addedMov = TransferDAO.store(transfer);
 				UserDAO.update(user);
