@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +51,7 @@ public class HomePage {
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         model.addAttribute("betsSimple", RasBetFacade.getSimpleBetsListByEmail(RasBetFacade.emailAuthenticatedUser));
+        model.addAttribute("betsMultiple", RasBetFacade.getMultipleBetsListByEmail(RasBetFacade.emailAuthenticatedUser));
         return view;
     }
     @GetMapping("/logout")
@@ -92,6 +94,22 @@ public class HomePage {
         String view = "levantar";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
+        return view;
+    }
+
+    @RequestMapping(value = "/bet", method = RequestMethod.POST)
+    public String makeBet(Model model, @RequestParam(value="gameId") String[] gameIds, @RequestParam(value="bettedTeam") Integer[] bettedTeams, @RequestParam float oddTotal, @RequestParam float possibleGain,@RequestParam int multipleId,@RequestParam float bettedValue) {
+        String view = "redirect:homePage";
+        if(gameIds.length == 1) multipleId = 0;
+        System.out.println("Games ids: " + Arrays.toString(gameIds));
+        System.out.println("Betted teams: " + Arrays.toString(bettedTeams));
+        System.out.println("Odd total: " + oddTotal);
+        System.out.println("Possible gain: " + possibleGain);
+        System.out.println("Multiple id: " + multipleId);
+        System.out.println("Odd total: " + bettedValue);
+        for (int i = 0; i < gameIds.length; i++) {
+            RasBetFacade.addBet(gameIds[i],RasBetFacade.emailAuthenticatedUser,bettedValue,bettedTeams[i],multipleId,"euros",possibleGain);
+        }
         return view;
     }
 

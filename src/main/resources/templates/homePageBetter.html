@@ -32,6 +32,13 @@
                 min-width: 30rem;
             }
 
+            .input-value{
+                border-color: #16350e;
+                border-radius: 10px;
+                text-align: center;
+
+            }
+
             .aposta{
                 background-color: white;
             }
@@ -150,33 +157,24 @@
                     <button class="mx-3 odd-button" type="button">
                         <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
                         <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
-                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
                         <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
-                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
-                        <input type="hidden" id="draw" value="EMPATE">
-                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="odd" th:attr="value=${game.getResult().getOddHomeTeam()}">
                         <input type="hidden" id="choosenTeam" value="0">
                         <span th:text="${game.getHomeTeam()}"></span><br><span th:text="${game.getResult().getOddHomeTeam()}"></span>
                     </button>
                     <button class="mx-3 odd-button" type="button">
                         <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
                         <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
-                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
                         <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
-                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
-                        <input type="hidden" id="draw" value="EMPATE">
-                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="odd" th:attr="value=${game.getResult().getOddDraw()}">
                         <input type="hidden" id="choosenTeam" value="2">
                         Empate<br/><span th:text="${game.getResult().getOddDraw()}"></span>
                     </button>
                     <button class="mx-3 odd-button" type="button">
                         <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
                         <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
-                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
                         <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
-                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
-                        <input type="hidden" id="draw" value="EMPATE">
-                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="odd" th:attr="value=${game.getResult().getOddAwayTeam()}">
                         <input type="hidden" id="choosenTeam" value="1">
                         <span th:text="${game.getAwayTeam()}"></span><br/><span th:text="${game.getResult().getOddAwayTeam()}"></span>
                     </button>
@@ -191,17 +189,20 @@
                     <b> BOLETIM </b>
                 </h3>
             </div>
-            <form>
+            <form method="post" action="/bet">
                 <div class="listHolder" style="overflow: scroll; max-height: 70vh">
                     <ul></ul>
                 </div>
-                <p class="text-muted container"> ODD Total:
-                    <span class="oddTotal"> 1 </span>
+                <p class="container"> <b>Odd Total:</b>
+                    <span class="oddTotal text-muted"> 1 </span>
+                    <input type="hidden" name="oddTotal" id="oddTotal">
                 </p>
-                <p class="text-muted container" > Ganhos possíveis:
-                    <span class="possibleGains"> 0 </span>
+                <p class=" container" > <b>Ganhos possíveis:</b>
+                    <span class="possibleGain text-muted"> 0 </span>
+                    <input type="hidden" name="possibleGain" id="possibleGain">
                 </p>
-                <input style="text-align: center;margin-top: 10px;margin-bottom: 20px" type="number" min="0.01" placeholder="0" inputmode="decimal" name="bettedValue" id="bettedValue" required>
+                <input type="hidden" name="multipleId" id="multipleId">
+                <input class="input-value" type="number" min="0.00" placeholder="0.00" step="0.01" inputmode="decimal" name="bettedValue" id="bettedValue" required>
                 <button class="mx-3" type="submit"> Apostar</button>
             </form>
         </div>

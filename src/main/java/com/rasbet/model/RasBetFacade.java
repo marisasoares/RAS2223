@@ -413,6 +413,18 @@ public class RasBetFacade {
 	}
 
 	/**
+	 * Devolve a lista de apostas multiplas
+	 * */
+	public static List<Bet> getMultipleBetsListByEmail(String email) {
+		List<Bet> bets = BetDAO.getBetsByEmail(email);
+		List<Bet> returnList = new ArrayList<>();
+		for (Bet bet: bets) {
+			if(bet.getMultipleId() != 0) returnList.add(bet);
+		}
+		return returnList;
+	}
+
+	/**
 	 * Devolve a lista de jogos de um desporto
 	 * */
 	public static List<Game> getGameList(int sportId){
@@ -534,4 +546,6 @@ public class RasBetFacade {
 	public static void addSport(String desporto) {
 		SportDAO.store(new Sport(desporto));
 	}
+
+
 }

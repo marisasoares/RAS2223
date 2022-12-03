@@ -19,20 +19,23 @@
             margin-left: 20%;
             margin-right: 20%;
         }
+
         .circle-right-btn {
             height: 30px;
             width: 30px;
             border-radius: 50%;
             border: 1px solid #16350e;
             margin-top: 15px;
-            font-size:18px;
+            font-size: 18px;
         }
-        .butons{
+
+        .butons {
             display: flex;
             justify-content: center;
             gap: 50px;
         }
-        div.vertical-line{
+
+        div.vertical-line {
             width: 2px;
             background-color: black;
             height: 100%;
@@ -130,42 +133,152 @@
 </nav>
 <!-- Navbar -->
 
-<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e" class="caixa card">
+<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e"
+     class="caixa card">
     <div class="col d-flex justify-content-center">
         <div class="card-body">
             <h3 style="text-align: center" th:text="${user.getName()}"></h3>
             <h4 style="text-align: center"> Historico de Apostas </h4>
             <hr style="margin-left: 3rem;margin-right: 3rem">
-            <div class ="butons">
-                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?simples'" class="btn btn-primary">Simples</button>
+            <div class="butons">
+                <button style="background-color: #ee7742;border-style: none"
+                        onclick="window.location.href='/betHistory?simples'" class="btn btn-primary">Simples
+                </button>
 
-                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/betHistory?multiplas'" class="btn btn-primary ">Múltiplas</button>
+                <button style="background-color: #ee7742;border-style: none"
+                        onclick="window.location.href='/betHistory?multiplas'" class="btn btn-primary ">Múltiplas
+                </button>
             </div>
             <p style="text-align: left" class="historico ms-5 ps-2 mb-2">
-                    <a href="/profile">
-                        <input  class="circle-right-btn" type="submit" value="<">
-                    </a>
+                <a href="/profile">
+                    <input class="circle-right-btn" type="submit" value="<">
+                </a>
             </p>
-            <div th:each="bet:${betsSimple}">
-                <div style="background-color:white; border-radius: 20px;border-style: solid;border-width: thin;border-color: #16350e;margin-left: 70px;margin-right: 70px;margin-bottom: 20px" class="card ">
-                    <div class="d-flex rounded mt-3">
-                        <div style="display: flex;text-align: left" class="flex-grow-1 ms-3">
-                            <div >
-                                <span>Gil Vicente - Portimonense</span>
-                                <p> Equipa vencedora : Gil vicente</p>
-                            </div>
-                            <div class="mx-auto">
-                                <div class="vertical-line " style="height: 45px"></div>
-                            </div>
-                            <div class="me-5">
-                                <span>Montante Apostado 5€</span>
-                                <p> Total de ganhos 50€</p>
-                            </div>
+            <div>
+                <th:block th:if="${param.multiplas}">
+                <div style="background-color:white; border-radius: 20px;border-style: solid;border-width: thin;border-color: #16350e;margin-left: 70px;margin-right: 70px;margin-bottom: 20px"
+                     class="card ">
 
-
-                            <p class="mb-2 pb-1 small" style="color: #2b2a2a;"></p>
+                        <div class="d-flex rounded mt-3" th:each="bet:${betsMultiple}">
+                            <div style="display: flex;text-align: left" class="flex-grow-1 ms-3">
+                                <div>
+                                    <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()} "></span>
+                                    <span> - </span>
+                                    <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()} "></span>
+                                    <div th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != 'NaN'}">
+                                        <p>Equipa vencedora : <span
+                                                th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam()}"></span>
+                                        </p>
+                                    </div>
+                                    <div th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == 'NaN'}">
+                                        <p>Equipa vencedora: Por definir</p>
+                                    </div>
+                                </div>
+                                <div class="mx-auto">
+                                    <div class="vertical-line " style="height: 45px"></div>
+                                </div>
+                                <div class="me-5">
+                                    <p>Montante Apostado: <span th:text="${bet.getValue()}"></span></p>
+                                    <th:block th:switch="${bet.getBettedTeam()}">
+                                        <div th:case="0">
+                                            Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}"></span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                        </div>
+                                        <div th:case="1">
+                                            Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}"></span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                        </div>
+                                        <div th:case="2">
+                                            Equipa apostada: <span>Empate</span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == 'draw'}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                            <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != 'draw'}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                        </div>
+                                        <div th:case="*">
+                                            <p>Total de ganhos: por definir</p>
+                                        </div>
+                                    </th:block>
+                                </div>
+                                <p class="mb-2 pb-1 small" style="color: #2b2a2a;"></p>
+                            </div>
                         </div>
                     </div>
+                    </th:block>
+                    <th:block th:unless="${param.multiplas}">
+                        <div style="background-color:white; border-radius: 20px;border-style: solid;border-width: thin;border-color: #16350e;margin-left: 70px;margin-right: 70px;margin-bottom: 20px"
+                             class="card ">
+
+                            <div class="d-flex rounded mt-3" th:each="bet:${betsSimple}">
+                                <div style="display: flex;text-align: left" class="flex-grow-1 ms-3">
+                                    <div>
+                                        <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()} "></span>
+                                        <span> - </span>
+                                        <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()} "></span>
+                                        <div th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != 'NaN'}">
+                                            <p>Equipa vencedora : <span
+                                                    th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam()}"></span>
+                                            </p>
+                                        </div>
+                                        <div th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == 'NaN'}">
+                                            <p>Equipa vencedora: Por definir</p>
+                                        </div>
+                                    </div>
+                                    <div class="mx-auto">
+                                        <div class="vertical-line " style="height: 45px"></div>
+                                    </div>
+                                    <div class="me-5">
+                                        <p>Montante Apostado: <span th:text="${bet.getValue()}"></span></p>
+                                        <th:block th:switch="${bet.getBettedTeam()}">
+                                            <div th:case="0">
+                                                Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}"></span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                            </div>
+                                            <div th:case="1">
+                                                Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}"></span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getAwayTeam()}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                            </div>
+                                            <div th:case="2">
+                                                Equipa apostada: <span>Empate</span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() == 'draw'}">
+                                            <p>Total de ganhos: <span th:text="${bet.getPossibleGain()}"></span></p>
+                                        </span>
+                                                <span th:if="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getResult().getwinningTeam() != 'draw'}">
+                                            <p>Total de ganhos: por definir</p>
+                                        </span>
+                                            </div>
+                                            <div th:case="*">
+                                                <p>Total de ganhos: por definir</p>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                    <p class="mb-2 pb-1 small" style="color: #2b2a2a;"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>

@@ -75,7 +75,7 @@
                     <a class="nav-link" href="/transactions">Transações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/bets">Apostas</a>
+                    <a class="nav-link" href="/betHistory">Apostas</a>
                 </li>
             </ul>
             <!-- Left links -->
@@ -115,10 +115,10 @@
                         aria-labelledby="navbarDropdownMenuAvatar"
                 >
                     <li>
-                        <a class="dropdown-item" href="changeUserInfo">Definições</a>
+                        <a class="dropdown-item" href="profile">Perfil</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="login">Terminar sessão</a>
+                        <a class="dropdown-item" href="logout">Terminar sessão</a>
                     </li>
                 </ul>
             </div>
@@ -134,6 +134,7 @@
 
         <div class="card-body">
             <h3 th:text="${user.getName()}"></h3>
+            <h5 style="text-align: center"> Saldo</h5>
             <p class="sm-0 text-black">
                 <span th:text="${user.getWallet().getEuros()}"></span> €
             </p>
@@ -142,9 +143,9 @@
             </p>
             <hr style="margin-left: 3rem;margin-right: 3rem">
             <div class ="butons">
-                <button style="background-color: white;border-color: #ee7742;color: #ee7742" onclick="window.location.href='\home'" class="btn btn-outline-primary ">Levantar</button>
+                <button style="background-color: white;border-color: #ee7742;color: #ee7742" onclick="window.location.href='/levantar'" class="btn btn-outline-primary ">Levantar</button>
 
-                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='\home'" class="btn btn-primary">Depositar</button>
+                <button style="background-color: #ee7742;border-style: none" onclick="window.location.href='/depositar'" class="btn btn-primary">Depositar</button>
             </div>
 
 
