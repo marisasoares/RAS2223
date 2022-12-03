@@ -109,6 +109,20 @@ public class RasBetFacade {
 	}
 
 	/**
+	 * Adicionar Aposta
+	 * @param gameID id do jogo
+	 * @param value o valor da aposta
+	 * @param bettedTeam 0 - equipa da casa, 1 - equipa de fora e 2 - empate
+	 * @param email email do utilizador
+	 * @param multipleId id do grupo de apostas(apostas multiplas)
+	 * @return true se adicionada, false caso contrário
+	 */
+	public static boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,String currency,float possibleGain) {
+		Bet bet = new Bet(gameID,value,bettedTeam,email,multipleId,false,1,currency,possibleGain);
+		return BetDAO.store(bet);
+	}
+
+	/**
 	 * Autentica um utilizador
 	 * @param email email do utilizador
 	 * @param pwd password do utilizador
@@ -219,6 +233,8 @@ public class RasBetFacade {
 		}
 		return addedMov;
 	}
+
+
 
 	/**
 	 * Adicionar movimento a um utilizador

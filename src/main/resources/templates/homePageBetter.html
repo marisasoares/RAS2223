@@ -15,64 +15,41 @@
                 padding-top: 7rem;
             }
 
-            button {
-                background: none;
+            .container{
+                border-style:dotted ;
+                border-radius: 20px;
+                border-width: 2px;
+                border-color: #16350e;
+                background-color: rgb(250, 250, 250);
             }
 
-            button:active{
-                background:olive;
+            .boletim{
+                border-style:dotted ;
+                border-radius: 30px;
+                border-width: 1px;
+                border-color: #16350e;
+                background-color: rgb(250, 250, 250);
+                min-width: 30rem;
             }
 
-            button:focus{
-                background: #8080e0;
+            .aposta{
+                background-color: white;
+            }
+
+            button{
+                background-color: white;
+                border-color: #16350e ;
+                border-radius: 15px;
+                font-weight: bold;
+                font-size: small;
+                border-style: solid;
+                width: 100px;
+                word-wrap: break-word;
             }
 
         </style>
-        <script>
-        function selectOdd(button) {
-            button.style.borderColor = (button.style.borderColor!=='rgb(238, 119, 66)' ? '#ee7742' : '#16350e');
-            button.style.backgroundColor = (button.style.backgroundColor === 'rgb(238, 119, 66)' ? '#ffffff' : '#ee7742');
-        }
-        </script>
 </head>
 <body>
-<!--
-<nav style="background-color: #2069ff;" class="navbar navbar-expand-md navbar-dark fixed-top ">
-    <div class="container-fluid text-white ">
-        <h5 class="d-flex align-items-center mb-2 pe-3 mb-lg-0 text-white"> RASBET </h5>
-            <div class="dropdown text-end">
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="avatar.png" alt="mdo" class="User image" width="50" height="50">
-                </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                    <li><a class="dropdown-item" href="changeUserInfo">Definições</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/login">Terminar sessão</a></li>
-                </ul>
-            </div>
-            <p class="nav col-1 col-lg-auto me-lg-auto ms-2 mb-2 justify-content-start mb-md-0">Bem vindo, &nbsp;<span th:text="${user.getName()}"></span>!</p>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/notifications" class="nav-link px-2 link-light">Notificações</a></li>
-                <li><a href="/transactions" class="nav-link px-2 link-light">Transações</a></li>
-            </ul>
-
-            <div class="d-flex justify-content-start rounded-3 p-2 mb-2" style="background-color: rgba(239,239,239,0.63);">
-                <div>
-                    <p class="small text-muted mb-1">Euros</p>
-                    <p class="sm-0 text-black">
-                        <span th:text="${user.getWallet().getEuros()}"></span> €
-                    </p>
-                </div>
-                <div class="px-3">
-                    <p class="small text-muted mb-1">Dollars</p>
-                    <p class="sm text-black">
-                        <span th:text="${user.getWallet().getDollars()}"></span> $
-                    </p>
-                </div>
-            </div>
-        </div>
-</nav> !-->
-
 
 <!-- Navbar -->
 <nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
@@ -104,10 +81,10 @@
             </a>
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
+                <li class="nav-item" style="border: none; border-radius: 40px;">
                     <a class="nav-link" href="/transactions">Transações</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item"  >
                     <a class="nav-link" href="/betHistory">Apostas</a>
                 </li>
             </ul>
@@ -159,23 +136,78 @@
 </nav>
 <!-- Navbar -->
 
-<section th:each="game:${games}">
-    <div class="p-2 mx-3 mb-2" style=" display: flex;border-style:dotted; border-radius: 10px; border-width: 2px; border-color: #16350e;">
-        <div style="float: left; width: 25%">
-            <h3 style="color: rgb(58, 58, 58);">
-                <span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>
-            </h3>
-            <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
-        </div>
-        <div style="float: right; width: 75%">
-            <div style="text-align: center;">
-                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > <span th:text="${game.getHomeTeam()}"></span> <p>1.19</p> </button>
-                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > Empate <p>1.19</p> </button>
-                <button class="mx-5 px-3 py-1" type="button" onclick="selectOdd(this)" style="background-color: white; border-color: #16350e ; border-radius: 15px; font-weight: bold;  border-style: solid ; width: 200px" > <span th:text="${game.getAwayTeam()}"></span> <p>1.19</p> </button>
+<div class="" style="display: flex; flex-direction: row; align-items:flex-start ; justify-content: space-evenly;">
+    <div class="mx-1">
+        <section th:each="game:${games}">
+            <div class="container p-2 mb-2" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;flex-wrap: nowrap;">
+                <div class="p-2" style="word-wrap:break-word; max-width: 50%;">
+                    <h4 style="color: rgb(58, 58, 58);">
+                        <b><span th:text="${game.getHomeTeam()}"></span> - <span th:text="${game.getAwayTeam()}"></span>  </b>
+                    </h4>
+                    <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
+                </div>
+                <div  style="position: relative;display: flex; flex-direction: row; justify-content:center ; align-items: stretch; flex-wrap: nowrap;">
+                    <button class="mx-3 odd-button" type="button">
+                        <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
+                        <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
+                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
+                        <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
+                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
+                        <input type="hidden" id="draw" value="EMPATE">
+                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="choosenTeam" value="0">
+                        <span th:text="${game.getHomeTeam()}"></span><br><span th:text="${game.getResult().getOddHomeTeam()}"></span>
+                    </button>
+                    <button class="mx-3 odd-button" type="button">
+                        <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
+                        <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
+                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
+                        <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
+                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
+                        <input type="hidden" id="draw" value="EMPATE">
+                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="choosenTeam" value="2">
+                        Empate<br/><span th:text="${game.getResult().getOddDraw()}"></span>
+                    </button>
+                    <button class="mx-3 odd-button" type="button">
+                        <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
+                        <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
+                        <input type="hidden" id="oddHomeTeam" th:attr="value=${game.getResult().getOddHomeTeam()}">
+                        <input type="hidden" id="awayTeam" th:attr="value=${game.getAwayTeam()}">
+                        <input type="hidden" id="oddAwayTeam" th:attr="value=${game.getResult().getOddAwayTeam()}">
+                        <input type="hidden" id="draw" value="EMPATE">
+                        <input type="hidden" id="oddDraw" th:attr="value=${game.getResult().getOddDraw()}">
+                        <input type="hidden" id="choosenTeam" value="1">
+                        <span th:text="${game.getAwayTeam()}"></span><br/><span th:text="${game.getResult().getOddAwayTeam()}"></span>
+                    </button>
+                </div>
             </div>
+        </section>
+    </div>
+    <div class="mx-1">
+        <div class="p-2 boletim" style="display: flex; flex-direction: column; justify-content: baseline;">
+            <div class="mx-auto">
+                <h3 style="color: rgb(58, 58, 58);">
+                    <b> BOLETIM </b>
+                </h3>
+            </div>
+            <form>
+                <div class="listHolder" style="overflow: scroll; max-height: 70vh">
+                    <ul></ul>
+                </div>
+                <p class="text-muted container"> ODD Total:
+                    <span class="oddTotal"> 1 </span>
+                </p>
+                <p class="text-muted container" > Ganhos possíveis:
+                    <span class="possibleGains"> 0 </span>
+                </p>
+                <input style="text-align: center;margin-top: 10px;margin-bottom: 20px" type="number" min="0.01" placeholder="0" inputmode="decimal" name="bettedValue" id="bettedValue" required>
+                <button class="mx-3" type="submit"> Apostar</button>
+            </form>
         </div>
     </div>
-</section>
 
+</div>
+<script src="main.js" ></script>
 </body>
 </html>

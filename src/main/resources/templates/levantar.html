@@ -2,9 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Levantar</title>
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 7rem;
+            color: #16350e;
+
+        }
+        .caixa {
+            margin-left: 35%;
+            margin-right: 35%;
+            text-align: center;
+        }
+
+    </style>
 </head>
-<body>
+<body style="background-color: #d5d4d4">
+
+<!-- Navbar -->
+<nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="/home">
+                <img
+                        src="logo.png"
+                        height="50"
+                        alt="RASBET Logo"
+                        loading="lazy"
+                />
+            </a>
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/transactions">Transações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/betHistory">Apostas</a>
+                </li>
+            </ul>
+            <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+            <!-- Icon -->
+            <a class="text-reset me-3" href="#">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+
+            <!-- Notifications -->
+            <div class="me-4">
+                <a href="/notifications" class="d-block link-info text-decoration-none  text-white    "
+                   id="dropdownUser1" aria-expanded="false">
+                    <i class="fas fa-bell ">Notificações</i>
+                    <div th:if="${notReadNotifications != null}">
+                        <div th:if="${notReadNotifications.size() != 0}">
+                            <span class="badge rounded-pill badge-notification bg-danger "
+                                  th:text="${notReadNotifications.size()}"></span>
+                        </div>
+                    </div>
+
+
+                </a>
+            </div>
+            <!-- Avatar -->
+            <div class="dropdown">
+                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white" id="dropdownUser1"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="avatar.png" alt="User image" class="User image" width="50" height="50">
+                </a>
+                <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                >
+                    <li>
+                        <a class="dropdown-item" href="profile">Perfil</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="logout">Terminar sessão</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
+<div style="display: flex;flex-direction: column;justify-content: center;text-align: center">
+    <div style="background-color:white; border-radius: 60px;border-style: dashed;border-width: medium;border-color: #16350e" class="caixa card ">
+        <p class="sm-0 text-black">
+            <span th:text="${user.getWallet().getEuros()}"></span> €
+        </p>
+        <p class="sm text-black ">
+            <span th:text="${user.getWallet().getDollars()}"></span> $
+        </p>
+        <hr style="margin-left: 3rem;margin-right: 3rem">
+        <form action="/levantar" method="POST">
+            <div style="flex-direction: column" class="col d-flex justify-content-center">
+                <h3 >Montante a levantar </h3>
+                <div>
+                    <input type="radio" id="euros" style="background-color: #ee7742;border-style: none" name="currency" value="euros">
+                    <label for="euros"> €</label>
+                    <input type="radio" id="dollars" style="background-color: #ee7742;border-style: none" name="currency" value="dollars">
+                    <label for="dollars"> $</label>
+                    <div>
+                        <input class="mx-auto" style="text-align: center;margin-top: 10px;margin-bottom: 20px" type="number" min="0.01" placeholder="0" inputmode="decimal" name="value" required>
+                    </div>
+                </div >
+                <div>
+                    <button type="submit" style="background-color: #ee7742;border-style: none" class="btn btn-primary">Levantar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>
+

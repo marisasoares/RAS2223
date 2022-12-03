@@ -77,4 +77,22 @@ public class HomePage {
         return view;
     }
 
+    @RequestMapping(value = "/levantar", method = RequestMethod.POST)
+    public String levantar(Model model,@RequestParam String currency,@RequestParam float value) {
+        String view = "redirect:profile";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        if(currency.equals("euros")){
+            RasBetFacade.addMovementEuros(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+        }
+        else RasBetFacade.addMovementDollars(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+        return view;
+    }
+    @RequestMapping(value = "/levantar", method = RequestMethod.GET)
+    public String levantar(Model model) {
+        String view = "levantar";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
+        return view;
+    }
+
 }
