@@ -38,6 +38,7 @@
                 </div>
 
                 <form action="home" method="post">
+                  <span style="color: red;font-size: x-large" th:if="${param.error}"> Login inválido </span>
                   <div class="form-outline mb-4">
                     <input style="border-color: #16350e" type="email" id="form2Example11" class="form-control" name="email" placeholder="E-mail" />
                   </div>
