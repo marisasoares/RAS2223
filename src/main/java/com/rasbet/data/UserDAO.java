@@ -156,7 +156,9 @@ public class UserDAO {
                         rs.getFloat("Value"),
                         LocalDateTime.parse(rs.getString("Date")),
                         rs.getString("Description"),
-                        rs.getString("Email")));
+                        rs.getString("Email"),
+                        rs.getFloat("Balance"),
+                        rs.getString("Currency")));
 
             }
         } catch (SQLException e) {
@@ -181,10 +183,17 @@ public class UserDAO {
             stmt.setInt(1, type);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {  // A chave existe na tabela
-                users.add(new User(rs.getString("Name"),
-                        rs.getString("Email"),
-                        rs.getInt("PasswordHash")));
-
+                switch (type){
+                    case 0:
+                        users.add(new Better(rs.getString("Name"), rs.getString("Email"),rs.getInt("PasswordHash"), rs.getString("NIF")));
+                        break;
+                    case 1:
+                        users.add(new Specialist(rs.getString("Name"), rs.getString("Email"), rs.getInt("PasswordHash")));
+                        break;
+                    default:
+                        users.add(new Administrator(rs.getString("Name"), rs.getString("Email"), rs.getInt("PasswordHash")));
+                        break;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

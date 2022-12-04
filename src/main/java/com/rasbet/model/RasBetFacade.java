@@ -12,7 +12,10 @@ import java.lang.reflect.Type;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RasBetFacade {
 	public static  String emailAuthenticatedUser;
@@ -29,7 +32,10 @@ public class RasBetFacade {
 	 * @param email email do utilizador
 	 */
 	public static List<Transfer> transHistory(String email) {
-		return UserDAO.getTransHistory(email);
+		List<Transfer> sortedList =  UserDAO.getTransHistory(email).stream()
+				.sorted(Comparator.comparing(Transfer :: getDate).reversed())
+				.collect(Collectors.toList());
+		return sortedList;
 	}
 
 	/**
@@ -118,8 +124,23 @@ public class RasBetFacade {
 	 * @return true se adicionada, false caso contrário
 	 */
 	public static boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,String currency,float possibleGain) {
-		Bet bet = new Bet(gameID,value,bettedTeam,email,multipleId,false,1,currency,possibleGain);
-		return BetDAO.store(bet);
+		boolean validBet = false;
+		Bet bet = null;
+		switch (currency){
+			case "dollars":
+				validBet = validateTransferDollars(-value,emailAuthenticatedUser);
+				if(validBet) addMovementDollars(-value,emailAuthenticatedUser,"Realizada Aposta: " + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
+				break;
+			default:
+				validBet = validateTransferEuros(-value,emailAuthenticatedUser);
+				if(validBet) addMovementEuros(-value,emailAuthenticatedUser,"Realizada Aposta: " + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
+				break;
+		}
+		if(validBet){
+			bet = new Bet(gameID,value,bettedTeam,email,multipleId,false,1,currency,possibleGain);
+			BetDAO.store(bet);
+		}
+		return validBet;
 	}
 
 	/**
@@ -224,9 +245,9 @@ public class RasBetFacade {
 		if(validateTransferEuros(value,email)){
 			User user = UserDAO.get(email);
 			if (user instanceof Better){
-				float balance = ((Better) user).getWallet().getEuros()+value;
-				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,balance);
 				((Better) user).getWallet().addEuros(value);
+				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,((Better) user).getWallet().getEuros(),"euros");
+				System.out.println("Balance after transfer €: " + transfer.getBalanceAfterTransfer());
 				addedMov = TransferDAO.store(transfer);
 				UserDAO.update(user);
 			}
@@ -247,9 +268,9 @@ public class RasBetFacade {
 		if(validateTransferDollars(value,email)){
 			User user = UserDAO.get(email);
 			if(user instanceof Better){
-				float balance = ((Better) user).getWallet().getDollars()+value;
-				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,balance);
 				((Better) user).getWallet().addDollars(value);
+				Transfer transfer = new Transfer(value,LocalDateTime.now(),description,email,((Better) user).getWallet().getDollars(),"dollars");
+				System.out.println("Balance after transfer $: " + transfer.getBalanceAfterTransfer());
 				addedMov = TransferDAO.store(transfer);
 				UserDAO.update(user);
 			}
@@ -519,8 +540,6 @@ public class RasBetFacade {
 	}
 
 
-
-
 	public static Result getResultByResultId(int resultid){
 		return ResultDAO.get(resultid);
 	}
@@ -546,6 +565,5 @@ public class RasBetFacade {
 	public static void addSport(String desporto) {
 		SportDAO.store(new Sport(desporto));
 	}
-
 
 }

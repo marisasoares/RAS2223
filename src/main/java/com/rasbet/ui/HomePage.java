@@ -60,21 +60,24 @@ public class HomePage {
         return "redirect:login";
     }
 
-
     @RequestMapping(value = "/depositar", method = RequestMethod.POST)
     public String depositar(Model model,@RequestParam String currency,@RequestParam float value) {
         String view = "redirect:profile";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         if(currency.equals("euros")){
-            RasBetFacade.addMovementEuros(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+            if(value >= 0) RasBetFacade.addMovementEuros(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
         }
-        else RasBetFacade.addMovementDollars(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+        else {
+            if(value >= 0) RasBetFacade.addMovementDollars(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+        }
         return view;
     }
 
     @RequestMapping(value = "/depositar", method = RequestMethod.GET)
     public String depositar(Model model) {
         String view = "depositar";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         return view;
     }
@@ -84,9 +87,11 @@ public class HomePage {
         String view = "redirect:profile";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         if(currency.equals("euros")){
-            RasBetFacade.addMovementEuros(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+            if(value >= 0) RasBetFacade.addMovementEuros(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
         }
-        else RasBetFacade.addMovementDollars(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+        else {
+            if(value >= 0) RasBetFacade.addMovementDollars(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+        }
         return view;
     }
     @RequestMapping(value = "/levantar", method = RequestMethod.GET)
@@ -101,16 +106,11 @@ public class HomePage {
     public String makeBet(Model model, @RequestParam(value="gameId") String[] gameIds, @RequestParam(value="bettedTeam") Integer[] bettedTeams, @RequestParam float oddTotal, @RequestParam float possibleGain,@RequestParam int multipleId,@RequestParam float bettedValue) {
         String view = "redirect:homePage";
         if(gameIds.length == 1) multipleId = 0;
-        System.out.println("Games ids: " + Arrays.toString(gameIds));
-        System.out.println("Betted teams: " + Arrays.toString(bettedTeams));
-        System.out.println("Odd total: " + oddTotal);
-        System.out.println("Possible gain: " + possibleGain);
-        System.out.println("Multiple id: " + multipleId);
-        System.out.println("Odd total: " + bettedValue);
         for (int i = 0; i < gameIds.length; i++) {
             RasBetFacade.addBet(gameIds[i],RasBetFacade.emailAuthenticatedUser,bettedValue,bettedTeams[i],multipleId,"euros",possibleGain);
         }
         return view;
     }
+
 
 }

@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>ProfileAdmin</title>
+    <title>RegistarAdmin</title>
     <style>
         body {
             min-height: 75rem;
@@ -115,69 +115,58 @@
 
 <div style="background-color:white; border-radius: 60px;border-style: dashed;border-width: medium;border-color: #16350e" class="caixa card ">
     <div class="col d-flex justify-content-center">
-
-        <div class="card-body ">
-            <h3 th:text="${user.getName()}"></h3>
+        <div class="card-body">
+            <h4 class="mx-5 px-5" th:if="${add == 'admin' }"> Registar Administrador </h4>
+            <h4 class="mx-5 px-5" th:if="${add == 'spec' }"> Registar Especialista </h4>
             <hr style="margin-left: 3rem;margin-right: 3rem">
-            <div class="d-flex justify-content-sm-around">
-                <div class="coluna1">
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Adicionar Administrador
-                        <a href="/addAdmin">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Adicionar Especialista
-                        <a href="/addEspecialista">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Alterar estado da Aposta
-                        <a href="/transactions">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
+            <div th:if="${add == 'admin' }">
+                <form action="/registerAdmin" method="post">
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="text" id="nomeAdmin" name="nomeAdmin" class="form-control" placeholder="Nome" />
+                    </div>
 
-                </div>
-                <div class="coluna2">
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Alterar Odds
-                        <a href="/transactions">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Adicionar Jogo
-                        <a href="/transactions">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Listar Desportos
-                        <a href="/desportos">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="email" id="emailAdmin" name="emailAdmin" class="form-control" placeholder="E-mail" />
+                    </div>
 
-                </div>
-                <div class="coluna3">
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Listar Apostadores
-                        <a href="/utilizadores">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Listar Especialistas
-                        <a href="/especialistas">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                    <p style="text-align: left; " class=" historico ms-5 ps-2 mb-2">Listar Administradores
-                        <a href="/administradores">
-                            <input  class="circle-right-btn" type="submit" value=">">
-                        </a>
-                    </p>
-                </div>
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="password" id="passAdmin" name="passwordAdmin" class="form-control mb-2" placeholder="Palavra-passe" required minlength="8" onchange="onChange()"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="password" id="repetir-passAdmin" name="confirm" class="form-control mb-2" placeholder="Repita Palavra-passe" required minlength="8" onchange="onChange()"/>
+                    </div>
+
+                    <div class="text-center pt-1 mb-2 pb-1">
+                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" style="background-color: #ee7742;border-style: none;color: #16350e">Registar</button>
+                    </div>
+
+                </form>
             </div>
+            <div th:if="${add == 'spec' }">
+                <form action="/registerSpec" method="post">
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="text" id="nome" name="nome" class="form-control" placeholder="Nome" />
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="email" id="email" name="email" class="form-control" placeholder="E-mail" />
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="password" id="pass" name="password" class="form-control mb-2" placeholder="Palavra-passe" required minlength="8" onchange="onChange()"/>
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="password" id="repetir-pass" name="confirm" class="form-control mb-2" placeholder="Repita Palavra-passe" required minlength="8" onchange="onChange()"/>
+                    </div>
 
+                    <div class="text-center pt-1 mb-2 pb-1">
+                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" style="background-color: #ee7742;border-style: none;color: #16350e">Registar</button>
+                    </div>
+
+                </form>
+            </div>
 
         </div>
     </div>

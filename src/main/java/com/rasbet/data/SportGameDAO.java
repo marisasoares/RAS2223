@@ -10,6 +10,7 @@ public class SportGameDAO {
     private static final String DELETE = "DELETE FROM SportGame WHERE idSport=?";
     private static final String FIND_ALL_GAMES_BY_IDSPORT = "SELECT * FROM SportGame WHERE idSport= ?";
     private static final String FIND_BY_IDGame = "SELECT * FROM SportGame WHERE idGame=?";
+    private static final String NUMBER_GAMES_BY_ID_SPORT = "SELECT count(*) FROM Game WHERE idSport=?";
     private static final String INSERT = "INSERT INTO SportGame(idSport,idGame) VALUES(?,?)";
 
 
@@ -100,5 +101,28 @@ public class SportGameDAO {
                 }
         }
         return sportId;
+    }
+
+    public static int get_number_of_games_by_id_sport(int idSport) {
+        Connection conn = null;
+        int number = 0;
+        int sportId  = -1;
+        try {conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            PreparedStatement stm = conn.prepareStatement(NUMBER_GAMES_BY_ID_SPORT);
+            stm.setInt(1, idSport);
+            ResultSet rs = stm.executeQuery();
+            number = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+        return number;
     }
 }

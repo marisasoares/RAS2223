@@ -85,6 +85,7 @@ public class Migrate {
                         "Description VARCHAR(100) NOT NULL," +
                         "Email VARCHAR(75) NOT NULL," +
                         "Balance FLOAT NOT NULL," +
+                        "Currency VARCHAR(75) NOT NULL," +
                         "FOREIGN KEY (Email) REFERENCES User(Email))";
             stm.executeUpdate(sqlT);
 

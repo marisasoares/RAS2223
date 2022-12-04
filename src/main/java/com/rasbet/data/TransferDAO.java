@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class TransferDAO {
     private static final String DELETE = "DELETE FROM Transfer WHERE idTransfer=?";
     private static final String FIND_BY_ID = "SELECT * FROM Transfer WHERE idTransfer=?";
-    private static final String INSERT = "INSERT INTO Transfer(idTransfer,Value,Date,Description,Email,Balance) VALUES(?,?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO Transfer(idTransfer,Value,Date,Description,Email,Balance,Currency) VALUES(?,?,?,?,?,?,?)";
 
     public static boolean store(Transfer ts) {
         Connection conn = null;
@@ -22,6 +22,7 @@ public class TransferDAO {
             stm.setString(4, ts.getDescription());
             stm.setString(5,ts.getEmail());
             stm.setFloat(6,ts.getBalanceAfterTransfer());
+            stm.setString(7,ts.getCurrency());
             stm.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException s) {
             // erro ao inserir user reptido
@@ -42,6 +43,8 @@ public class TransferDAO {
         }
         return r;
     }
+
+
     public static Transfer get(String idTransfer) {
         Connection conn = null;
         Transfer trans = null;
@@ -56,6 +59,7 @@ public class TransferDAO {
                         rs.getString("Description"),
                         rs.getString("Email"));
                         rs.getFloat("Balance");
+                        rs.getString("Currency");
             }
         } catch (SQLException e){
             e.printStackTrace();

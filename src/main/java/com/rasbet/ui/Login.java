@@ -36,8 +36,8 @@ public class Login {
             model.addAttribute("notifications", RasBetFacade.listAllNotifications(RasBetFacade.emailAuthenticatedUser));
             model.addAttribute("notReadNotifications", RasBetFacade.listNotReadNotifications(RasBetFacade.emailAuthenticatedUser));
             model.addAttribute("user",user);
-            if(user instanceof Specialist) view = "homePageSpecialist";
-            else if (user instanceof Administrator) view = "homePageAdmin";
+            if(user instanceof Specialist) view = "redirect;homePageSpecialist";
+            else if (user instanceof Administrator) view = "redirect:homePageAdmin";
             else view = "homePageBetter";
         }
         return view;

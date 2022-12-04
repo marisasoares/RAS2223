@@ -32,6 +32,11 @@ public class Transfer {
 	 */
 	private float balanceAfterTransfer;
 
+	/**
+	 * Moeda usada
+	 */
+	private String currency;
+
 	public Transfer(int id, float value, LocalDateTime date, String description,String email) {
 		this.id = id;
 		this.value = value;
@@ -51,7 +56,7 @@ public class Transfer {
 		this.balanceAfterTransfer = 0f;
 	}
 
-	public Transfer(float value, LocalDateTime date, String description,String email,float balanceAfterTransfer) {
+	public Transfer(float value, LocalDateTime date, String description,String email,float balanceAfterTransfer, String currency) {
 		this.id = Utils.geraIdentificadorUnicoInteger(Utils.transfers);
 		Utils.transfers.put(id,id);
 		this.value = value;
@@ -59,6 +64,17 @@ public class Transfer {
 		this.description = description;
 		this.email = email;
 		this.balanceAfterTransfer = balanceAfterTransfer;
+		this.currency = currency;
+	}
+
+	public Transfer(int id,float value, LocalDateTime date, String description,String email,float balanceAfterTransfer, String currency) {
+		this.id = id;
+		this.value = value;
+		this.date = date;
+		this.description = description;
+		this.email = email;
+		this.balanceAfterTransfer = balanceAfterTransfer;
+		this.currency = currency;
 	}
 
 	public int getId() {
@@ -100,13 +116,22 @@ public class Transfer {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public float getBalanceAfterTransfer(){
 		return this.balanceAfterTransfer;
 	}
 
+
+
 	public void setBalanceAfterTransfer(float balanceAfterTransfer){
 		this.balanceAfterTransfer = balanceAfterTransfer;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	@Override
@@ -117,7 +142,8 @@ public class Transfer {
 				", date=" + date +
 				", description='" + description + '\'' +
 				", email='" + email + '\'' +
-				", balanceAfterTransfer='" + balanceAfterTransfer + '\'' +
+				", balanceAfterTransfer=" + balanceAfterTransfer +
+				", currency='" + currency + '\'' +
 				'}';
 	}
 }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Histórico de transações</title>
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 7rem;
+            color: #16350e;
+
+        }
+
+        .caixa {
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+
+        .circle-right-btn {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            border: 1px solid #16350e;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .butons {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        div.vertical-line {
+            width: 2px;
+            background-color: black;
+            height: 100%;
+            float: left;
+        }
+
+        table,
+        th,
+        td {
+            border: none;
+            text-align: center;
+        }
+
+        .first {
+            border-top: 2px solid #16350e;
+            border-bottom: 2px solid #16350e;
+        }
+
+        .second {
+            border-top: 2px solid #16350e;
+            border-bottom: 2px solid #16350e;
+        }
+    </style>
+</head>
+
+<body style="background-color: #d5d4d4">
+
+<!-- Navbar -->
+<nav style="background-color: rgba(3,84,5,0.92)" class=" navbar navbar-expand-lg navbar-dark  fixed-top">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="/home">
+                <img
+                        src="logo.png"
+                        height="50"
+                        alt="RASBET Logo"
+                        loading="lazy"
+                />
+            </a>
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" style="border: none; border-radius: 40px;">
+                    <a class="nav-link" href="/transactions">Transações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/betHistory">Apostas</a>
+                </li>
+            </ul>
+            <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+            <!-- Icon -->
+            <a class="text-reset me-3" href="#">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+
+            <!-- Notifications -->
+            <div class="me-4">
+                <a href="/notifications" class="d-block link-info text-decoration-none text-white" id="dropdownUser1"
+                   aria-expanded="false">
+                    <i class="fas fa-bell ">Notificações</i>
+                    <div th:if="${notReadNotifications != null}">
+                        <div th:if="${notReadNotifications.size() != 0}">
+                            <span class="badge rounded-pill badge-notification bg-danger "
+                                  th:text="${notReadNotifications.size()}"></span>
+                        </div>
+                    </div>
+
+
+                </a>
+            </div>
+            <!-- Avatar -->
+            <div class="dropdown">
+                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white" id="dropdownUser1"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="avatar.png" alt="User image" class="User image" width="50" height="50">
+                </a>
+                <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                >
+                    <li>
+                        <a class="dropdown-item" href="profileAdmin">Perfil</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="logout">Terminar sessão</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
+<div style="background-color:white; border-radius: 60px;border-style: dotted;border-width: medium;border-color: #16350e"
+     class="caixa card">
+    <div class="col d-flex justify-content-center">
+        <div class="card-body">
+            <h3 style="text-align: center" th:text="${user.getName()}"></h3>
+            <hr style="margin-left: 3rem;margin-right: 3rem">
+            <div style="text-align: center">
+                <h4 class="mx-5 px-5" th:if="${utilizadores != null }"> Utilizadores </h4>
+                <h4 class="mx-5 px-5" th:if="${administradores != null}">Administradores </h4>
+                <h4 class="mx-5 px-5" th:if="${especialistas != null}">Especialistas </h4>
+                <h4 class="mx-5 px-5" th:if="${desportos != null} ">Desportos </h4>
+            </div>
+
+
+
+            <!-- Table -->
+            <div class="mx-5 px-5">
+                <table style="width: 100%;">
+                    <div th:if="${utilizadores}">
+                        <tr class="first">
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>NIF</th>
+                        </tr>
+                        <div th:each="user:${utilizadores}">
+                            <tr class="second">
+                            <td><span th:text="${user.getName()}"></span></td>
+                            <td><span th:text="${user.getMail()}"></span></td>
+                            <td><span th:text="${user.getNif()}"></span></td>
+                            </tr>
+                        </div>
+
+                    </div>
+                    <div th:if="${administradores}">
+
+                        <tr class="first">
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                        <div th:each="admin:${administradores}">
+                            <tr class="second">
+                            <td><span th:text="${admin.getName()}"></span></td>
+                            <td><span th:text="${admin.getMail()}"></span></td>
+                            </tr>
+                        </div>
+                    </div>
+                    <div th:if="${especialistas}">
+                        <tr class="first">
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                        <div th:each="spec:${especialistas}">
+                            <tr class="second">
+                            <td><span th:text="${spec.getName()}"></span></td>
+                            <td><span th:text="${spec.getMail()}"></span></td>
+                            </tr>
+                        </div>
+                    </div>
+                    <div th:if="${desportos}">
+                        <tr class="first">
+                            <th>Nome</th>
+                        </tr>
+                        <div th:each="desporto:${desportos}">
+                            <tr class="second">
+                                <td><span th:text="${desporto.getNome()}"></span></td>
+                            </tr>
+                        </div>
+                    </div>
+                </table>
+                <div style="text-align: center">
+                    <h4 class="mx-5 px-5" th:if="${utilizadores != null && utilizadores.size() == 0}"> Sem
+                        utilizadores </h4>
+                    <h4 class="mx-5 px-5" th:if="${administradores != null && administradores.size() == 0}"> Sem
+                        administradores </h4>
+                    <h4 class="mx-5 px-5" th:if="${especialistas != null && especialistas.size() == 0}"> Sem
+                        especialistas </h4>
+                    <h4 class="mx-5 px-5" th:if="${desportos != null && desportos.size() == 0}"> Sem
+                        especialistas </h4>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+<script>
+    function Salvar() {
+        alert("Mudanças Salvas");
+    }
+</script>

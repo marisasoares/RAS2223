@@ -1,14 +1,9 @@
 package com.rasbet.ui;
 
-import com.rasbet.data.UserDAO;
 import com.rasbet.model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class Lists {
@@ -33,5 +28,43 @@ public class Lists {
         view = "transactions";
         return view;
     }
+    @GetMapping("/utilizadores")
+    public String showUtilizadores(Model model) {
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
+        model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("utilizadores", RasBetFacade.getBetters());
+        view = "listarAdmin";
+        return view;
+    }
 
+    @GetMapping("/administradores")
+    public String showAdmins(Model model) {
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
+        model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("administradores", RasBetFacade.getAdmins());
+        view = "listarAdmin";
+        return view;
+    }
+
+    @GetMapping("/especialistas")
+    public String showEspecialistas(Model model) {
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
+        model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("especialistas", RasBetFacade.getSpecialist());
+        view = "listarAdmin";
+        return view;
+    }
+
+    @GetMapping("/desportos")
+    public String showDesportos(Model model) {
+        String view = "redirect:login";
+        if(RasBetFacade.emailAuthenticatedUser == null) return view;
+        model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("desportos", RasBetFacade.getSportList());
+        view = "listarAdmin";
+        return view;
+    }
 }

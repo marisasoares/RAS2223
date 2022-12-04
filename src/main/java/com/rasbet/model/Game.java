@@ -66,7 +66,7 @@ public class Game {
 		this.awayTeam = awayTeam;
 		this.commenceTime = commenceTime;
 		this.completed = completed;
-		this.scores = "0x0";
+		this.scores = null;
 		this.bookmakers = new ArrayList<>();
 		this.result = result;
 		this.sportId = sportId;
@@ -78,7 +78,20 @@ public class Game {
 		this.awayTeam = awayTeam;
 		this.commenceTime = commenceTime;
 		this.completed = false;
-		this.scores = "0x0";
+		this.scores = null;
+		this.bookmakers = new ArrayList<>();
+		this.result = new Result();
+		this.sportId = sportId;
+	}
+
+	public Game(String homeTeam, String awayTeam, String commenceTime,int sportId) {
+		this.id = Utils.geraIdentificadorUnico(Utils.games);
+		Utils.games.put(id,id);
+		this.homeTeam = homeTeam;
+		this.awayTeam = awayTeam;
+		this.commenceTime = commenceTime;
+		this.completed = false;
+		this.scores = null;
 		this.bookmakers = new ArrayList<>();
 		this.result = new Result();
 		this.sportId = sportId;
