@@ -103,11 +103,11 @@ public class HomePage {
     }
 
     @RequestMapping(value = "/bet", method = RequestMethod.POST)
-    public String makeBet(Model model, @RequestParam(value="gameId") String[] gameIds, @RequestParam(value="bettedTeam") Integer[] bettedTeams, @RequestParam float oddTotal, @RequestParam float possibleGain,@RequestParam int multipleId,@RequestParam float bettedValue, @RequestParam String currency) {
+    public String makeBet(Model model, @RequestParam(value = "gameId") String[] gameIds, @RequestParam(value = "bettedTeam") Integer[] bettedTeams, @RequestParam float oddTotal, @RequestParam int multipleId, @RequestParam float bettedValue, @RequestParam String currency, @RequestParam String betType) {
         String view = "redirect:homePage";
-        if(gameIds.length == 1) multipleId = 0;
+        if(betType.equals("simples")) multipleId = 0;
         for (int i = 0; i < gameIds.length; i++) {
-            RasBetFacade.addBet(gameIds[i],RasBetFacade.emailAuthenticatedUser,bettedValue,bettedTeams[i],multipleId,currency,possibleGain);
+            RasBetFacade.addBet(gameIds[i],RasBetFacade.emailAuthenticatedUser,bettedValue,bettedTeams[i],multipleId,currency,oddTotal*bettedValue);
         }
         return view;
     }

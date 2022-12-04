@@ -55,6 +55,28 @@
             word-wrap: break-word;
         }
 
+        .radio-btn-wrapper input[type="radio"] {
+            display: none;
+        }
+
+        .radio-btn-wrapper label:hover {
+            background: #a4a4a4;
+        }
+
+        .radio-btn-wrapper input[type="radio"]:checked + label {
+            background-color: #ee7742;
+            border-color: #ee7742;
+            color: white;
+        }
+
+        .radio-btn-wrapper label{
+            padding: 5px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #16350e;
+            border-radius: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -204,6 +226,12 @@
                         <b> BOLETIM </b>
                     </h3>
                 </div>
+                <div class="radio-btn-wrapper">
+                    <input type="radio" id="simples" name="betType" value="simples" checked="checked" />
+                    <label for="simples">Simples</label>
+                    <input type="radio" id="multipla" name="betType" value="multipla" />
+                    <label for="multipla">Multipla</label>
+                </div>
                 <div class="listHolder" style="overflow: scroll; max-height: 70vh">
                     <ul></ul>
                 </div>
@@ -218,7 +246,7 @@
                 <input type="hidden" name="multipleId" id="multipleId">
                 <input class="input-value" type="number" min="0.00" placeholder="0.00" step="0.01" inputmode="decimal"
                        name="bettedValue" id="bettedValue" required>
-                <button class="mx-3" type="submit">Apostar</button>
+                <button id="betBtn" class="mx-3" type="submit">Apostar</button>
             </div>
         </div>
     </div>
