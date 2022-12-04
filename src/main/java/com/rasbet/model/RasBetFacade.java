@@ -436,12 +436,35 @@ public class RasBetFacade {
 	/**
 	 * Devolve a lista de apostas multiplas
 	 * */
-	public static List<Bet> getMultipleBetsListByEmail(String email) {
+	public static List<List<Bet>> getMultipleBetsListByEmail(String email) {
 		List<Bet> bets = BetDAO.getBetsByEmail(email);
-		List<Bet> returnList = new ArrayList<>();
-		for (Bet bet: bets) {
-			if(bet.getMultipleId() != 0) returnList.add(bet);
+		List<List<Bet>> returnList = new ArrayList<>();
+		if(bets.size() == 0) return null;
+		int lastMultipleId = bets.get(0).getMultipleId();
+		int index = 0;
+		returnList.add(new ArrayList<>());
+		System.out.println("bets size: " + bets.size());
+		System.out.println("return list size: " + returnList.size());
+		for (int i = 0; i < bets.size(); i++) {
+			System.out.println("i:" + i);
+			if(bets.get(i).getMultipleId() == lastMultipleId){
+				returnList.get(index).add(bets.get(i));
+			} else{
+				returnList.add(new ArrayList<>());
+				index++;
+				returnList.get(index).add(bets.get(i));
+			}
+			lastMultipleId = bets.get(i).getMultipleId();
 		}
+
+		for (List<Bet> l : returnList ) {
+			System.out.print("Lista: ");
+			for (Bet b : l ) {
+				System.out.println(b.toString());
+			}
+			System.out.println();
+		}
+
 		return returnList;
 	}
 

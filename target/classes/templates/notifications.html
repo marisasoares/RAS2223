@@ -12,6 +12,14 @@
       min-height: 75rem;
       padding-top: 7rem;
     }
+
+    .container {
+      border-style: dotted;
+      border-radius: 20px;
+      border-width: 2px;
+      border-color: #16350e;
+      background-color: rgb(250, 250, 250);
+    }
   </style>
 </head>
 <body>
@@ -113,7 +121,7 @@
 
 <div th:each="notification:${notifications}">
   <main class="container mb-3 card" >
-    <div class="d-flex p-5 rounded ">
+    <div class="d-flex rounded ">
       <div class="flex-shrink-0">
         <img src="sport.png"
              alt="Generic sport image" class="img-fluid"
