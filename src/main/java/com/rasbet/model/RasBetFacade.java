@@ -522,8 +522,8 @@ public class RasBetFacade {
 		for (Notification not : notifications ) {
 			if(!not.getIsRead()) returnList.add(not);
 		}
-		System.out.println("Notifications not read: " + returnList.size());
-		return returnList;
+		return returnList.stream().sorted(Comparator.comparing(Notification :: getDate).reversed())
+				.collect(Collectors.toList());
 	}
 
 	public static void markNotificationsAsRead(String email){
@@ -540,7 +540,8 @@ public class RasBetFacade {
 	 * Devolve uma lista com as Notificaçoes todas
 	 * */
 	public static List<Notification> listAllNotifications(String email){
-		return NotificationDAO.get(email);
+		return NotificationDAO.get(email).stream().sorted(Comparator.comparing(Notification :: getDate).reversed())
+				.collect(Collectors.toList());
 	}
 
 	/**
