@@ -6,6 +6,18 @@ const random = Math.floor(Math.random() * 100000);
 var oddTotal = 1;
 var possibleGain = 0;
 var bettedValue = 0;
+var currency = "euros";
+var euros = parseFloat(document.querySelector("#euros").textContent.slice(0, -1));
+var dollars = parseFloat(document.querySelector("#dollars").textContent.slice(0, -1));
+
+switch (currency){
+    case "euros":
+        document.querySelector(".possibleGain").innerHTML = 0 + " €";
+        break;
+    default:
+        document.querySelector(".possibleGain").innerHTML = 0 + " $";
+        break;
+}
 
 document.querySelector('#multipleId').value = random;
 
@@ -37,7 +49,14 @@ oddButtons.forEach(button =>{
             oddTotal = oddTotal * odd;
             possibleGain = bettedValue * oddTotal;
             document.querySelector(".oddTotal").innerHTML = oddTotal;
-            document.querySelector(".possibleGain").innerHTML = possibleGain;
+            switch (currency){
+                case "euros":
+                    document.querySelector(".possibleGain").innerHTML = possibleGain + " €";
+                    break;
+                default:
+                    document.querySelector(".possibleGain").innerHTML = possibleGain + " $";
+                    break;
+            }
             document.querySelector('#possibleGain').value = possibleGain;
             document.querySelector('#oddTotal').value = oddTotal;
 
@@ -65,7 +84,41 @@ const inputBetValue = document.querySelector('#bettedValue');
 inputBetValue.addEventListener('input',() => {
     bettedValue = document.querySelector('#bettedValue').value;
     possibleGain = bettedValue * oddTotal;
-    document.querySelector('.possibleGain').innerHTML = possibleGain;
     document.querySelector('#possibleGain').value = possibleGain;
     document.querySelector('#oddTotal').value = oddTotal;
+    const confirm = document.querySelector('#bettedValue');
+    switch (currency){
+        case "euros":
+            document.querySelector('.possibleGain').innerHTML = possibleGain + " €";
+            if( bettedValue <= euros ) {
+                confirm.setCustomValidity('');
+            } else {
+                confirm.setCustomValidity('Saldo Insuficiente');
+            }
+            break;
+        default:
+            document.querySelector('.possibleGain').innerHTML = possibleGain + " $";
+            if( bettedValue <= dollars ) {
+                confirm.setCustomValidity('');
+            }
+            else {
+                confirm.setCustomValidity('Saldo Insuficiente');
+            }
+            break;
+    }
+});
+
+const selectCurrency = document.querySelector("#currency");
+
+selectCurrency.addEventListener('change',() => {
+   currency = selectCurrency.value;
+    switch (currency){
+        case "euros":
+            document.querySelector(".possibleGain").innerHTML = possibleGain + " €";
+            break;
+        default:
+            document.querySelector(".possibleGain").innerHTML = possibleGain + " $";
+            break;
+    }
+
 });

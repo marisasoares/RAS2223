@@ -118,6 +118,7 @@
         <div class="card-body">
             <h4 class="mx-5 px-5" th:if="${add == 'admin' }"> Registar Administrador </h4>
             <h4 class="mx-5 px-5" th:if="${add == 'spec' }"> Registar Especialista </h4>
+            <h4 class="mx-5 px-5" th:if="${add == 'jogo' }"> Registar Jogo </h4>
             <hr style="margin-left: 3rem;margin-right: 3rem">
             <div th:if="${add == 'admin' }">
                 <form action="/registerAdmin" method="post">
@@ -167,7 +168,34 @@
 
                 </form>
             </div>
+            <div th:if="${add == 'jogo' }">
+                <form action="/registerJogo" method="post">
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="text" id="HomeTeam" name="HomeTeam" class="form-control" placeholder="HomeTeam" />
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="email" id="AwayTeam" name="AwayTeam" class="form-control" placeholder="AwayTeam" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input style="border-color: #16350e" type="datetime-local" id="data" name="data" class="form-control mb-2" placeholder="Data"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Desportos</option>
+                            <option value="1">Futebol</option>
+                            <option value="2">Tenis</option>
+                            <option value="3">WTV</option>
+                        </select>
+                    </div>
+
+                    <div class="text-center pt-1 mb-2 pb-1">
+                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" style="background-color: #ee7742;border-style: none;color: #16350e">Registar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -78,7 +78,7 @@
                 <li class="nav-item" style="border: none; border-radius: 40px;">
                     <a class="nav-link" href="/transactions">Transações</a>
                 </li>
-                <li class="nav-item"  >
+                <li class="nav-item">
                     <a class="nav-link" href="/betHistory">Apostas</a>
                 </li>
             </ul>
@@ -92,32 +92,33 @@
             <a class="text-reset me-3" href="#">
                 <i class="fas fa-shopping-cart"></i>
             </a>
-            <div class="dropdown d-row text-decoration-none text-white me-3 d-row" >
-                <span>Saldo : </span>
-                <a style="color: inherit;text-decoration: none" class="dropdown-toggle" th:text="${user.getWallet().getEuros()+'€'} " href="#" role="button" id="navbarDropdownSaldo" data-bs-toggle="dropdown" aria-expanded="false"></a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownSaldo">
-                    <li>
-                        <span th:text="${user.getWallet().getDollars()+'$'}" class="dropdown-item"></span>
-                    </li>
-                </ul>
+            <div class="me-3 d-row text-white">
+                <label>
+                    Saldo :
+                    <select id="currency" name="currency" style="border-color: #16350e; border-radius: 10px">
+                        <option id="euros" value="euros"><span th:text="${user.getWallet().getEuros()}"></span> €</option>
+                        <option id="dollars" value="dollars"><span th:text="${user.getWallet().getDollars()}"></span> $</option>
+                    </select>
+                </label>
             </div>
 
             <!-- Notifications -->
             <div class="me-4">
-                <a href="/notifications" class="d-block link-info text-decoration-none text-white" id="dropdownUser1"  aria-expanded="false">
+                <a href="/notifications" class="d-block link-info text-decoration-none text-white"
+                   id="dropdownUser1" aria-expanded="false">
                     <i class="fas fa-bell ">Notificações</i>
                     <div th:if="${notReadNotifications != null}">
                         <div th:if="${notReadNotifications.size() != 0}">
-                            <span class="badge rounded-pill badge-notification bg-danger " th:text="${notReadNotifications.size()}" ></span>
+                                <span class="badge rounded-pill badge-notification bg-danger "
+                                      th:text="${notReadNotifications.size()}"></span>
                         </div>
                     </div>
-
-
                 </a>
             </div>
             <!-- Avatar -->
             <div class="dropdown">
-                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="d-block link-info text-decoration-none dropdown-toggle text-white"
+                   id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="avatar.png" alt="User image" class="User image" width="50" height="50">
                 </a>
                 <ul
@@ -185,6 +186,7 @@
                                 </div>
                                 <div class="me-5">
                                     <p>Montante Apostado: <span th:text="${bet.getValue()}"></span></p>
+                                    <p>Ganhos possiveis: <span th:text="${bet.getPossibleGain()}"></span></p>
                                     <th:block th:switch="${bet.getBettedTeam()}">
                                         <div th:case="0">
                                             Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}"></span>
@@ -246,6 +248,7 @@
                                     </div>
                                     <div class="me-5">
                                         <p>Montante Apostado: <span th:text="${bet.getValue()}"></span></p>
+                                        <p>Ganhos possiveis: <span th:text="${bet.getPossibleGain()}"></span></p>
                                         <th:block th:switch="${bet.getBettedTeam()}">
                                             <div th:case="0">
                                                 Equipa apostada: <span th:text="${T(com.rasbet.model.RasBetFacade).getGamebyBetId(bet.getGameId()).getHomeTeam()}"></span>

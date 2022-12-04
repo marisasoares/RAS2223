@@ -10,11 +10,11 @@
 	</parent>
 	<groupId>com.rasbet</groupId>
 	<artifactId>rasbet-web</artifactId>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>2.1.1-SNAPSHOT</version>
 	<name>RASBET</name>
 	<description>Plataforma de apostas</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>1.17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -25,7 +25,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
