@@ -28,6 +28,16 @@ public class HomePage {
         return view;
     }
 
+    @GetMapping("/homePageSpecialist")
+    public String showHomePageSpecialist(Model model) {
+        String view = "alterarOdd";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("games", RasBetFacade.games);
+        model.addAttribute("notReadNotifications",RasBetFacade.listNotReadNotifications(RasBetFacade.getEmailAuthenticatedUser()));
+        return view;
+    }
+
     @GetMapping("/profile")
     public String showProfile(Model model) {
         String view = "profile";
