@@ -32,6 +32,7 @@ radioBtn.forEach(radioBtn =>{
        if(hasDuplicates(gamesIds) && betType === "multipla") {
            alert("Existem jogos em que foram selecionados resultados diferentes para o mesmo jogo, o que invalida apostas multiplas. Por favor selecione apenas um resultado por jogo");
             document.getElementById("simples").checked = true;
+            return;
        }
         oddTotal = calculateOddTotal(odds);
         document.querySelector(".oddTotal").innerHTML = oddTotal + (betType === 'simples' ? ' ( soma das odds)' : ' ( produto das odds)');

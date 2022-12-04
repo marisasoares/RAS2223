@@ -118,21 +118,24 @@
   <!-- Container wrapper -->
 </nav>
 <!-- Navbar -->
-
+<div th:if="${notifications == null || notifications.size() == 0}">
+  <main class="container mb-3 card" >
+    <div class="d-flex rounded ">
+      <div class="flex-grow-1 ms-3" style="text-align: center">
+        <h3> Sem notificaçoes </h3>
+      </div>
+    </div>
+  </main>
+</div>
 <div th:each="notification:${notifications}">
   <main class="container mb-3 card" >
     <div class="d-flex rounded ">
-      <div class="flex-shrink-0">
-        <img src="sport.png"
-             alt="Generic sport image" class="img-fluid"
-             style="width: 180px; border-radius: 10px;">
-      </div>
       <div class="flex-grow-1 ms-3">
         <h2 th:text="${notification.getContent()}"></h2>
         <p class="mb-2 pb-1" style="color: #2b2a2a;">
           <span th:text="${notification.getFormattedDate()}"></span>
         </p>
-        <div class="justify-content rounded-3 mb-3 p-2" th:if="${notification.getIsRead()}"
+        <div class="justify-content rounded-3 mb-3 p-2" th:if="${notification.getIsRead() == false}"
              style="background-color: rgba(239,239,239,0.68); margin-right:75%">
           <div>
             <p class="small text-muted mb-1">Nova</p>

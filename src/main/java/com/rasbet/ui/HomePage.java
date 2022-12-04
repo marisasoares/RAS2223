@@ -24,6 +24,7 @@ public class HomePage {
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         model.addAttribute("games", RasBetFacade.games);
+        model.addAttribute("notReadNotifications",RasBetFacade.listNotReadNotifications(RasBetFacade.getEmailAuthenticatedUser()));
         return view;
     }
 

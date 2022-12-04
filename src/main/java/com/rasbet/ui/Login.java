@@ -33,7 +33,6 @@ public class Login {
         if(RasBetFacade.login(email,password)) {
             User user = RasBetFacade.getAuthenticatedUser();
             model.addAttribute("games", RasBetFacade.games);
-            model.addAttribute("notifications", RasBetFacade.listAllNotifications(RasBetFacade.emailAuthenticatedUser));
             model.addAttribute("notReadNotifications", RasBetFacade.listNotReadNotifications(RasBetFacade.emailAuthenticatedUser));
             model.addAttribute("user",user);
             if(user instanceof Specialist) view = "redirect;homePageSpecialist";

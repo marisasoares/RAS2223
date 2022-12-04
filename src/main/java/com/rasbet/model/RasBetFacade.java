@@ -522,6 +522,7 @@ public class RasBetFacade {
 		for (Notification not : notifications ) {
 			if(!not.getIsRead()) returnList.add(not);
 		}
+		System.out.println("Notifications not read: " + returnList.size());
 		return returnList;
 	}
 
@@ -539,17 +540,7 @@ public class RasBetFacade {
 	 * Devolve uma lista com as Notificaçoes todas
 	 * */
 	public static List<Notification> listAllNotifications(String email){
-		List<Notification> returnList = new ArrayList<>();
-		List<Notification> notifications = NotificationDAO.get(email);
-
-		for (Notification not : notifications ) {
-			returnList.add(not);
-			if(!not.getIsRead()){
-				not.setRead(true);
-				NotificationDAO.update(not);
-			}
-		}
-		return returnList;
+		return NotificationDAO.get(email);
 	}
 
 	/**
