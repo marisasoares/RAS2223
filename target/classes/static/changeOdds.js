@@ -6,7 +6,7 @@ const oddsInput = document.querySelectorAll('.odd');
 oddsInput.forEach(input => {
     input.addEventListener('input',() => {
         const li = document.createElement('li');
-        let gameId = input.parentElement.querySelector("#gameId").value;
+        let gameId = input.parentElement.querySelector("#gameId").value + input.parentElement.querySelector("#choosenTeam").value;
         if(gamesIds.includes(gameId)) {
             const child = document.querySelector('#' +  input.parentElement.querySelector('#homeTeam').value.replace(/[^A-Z0-9]+/ig, "_") + input.parentElement.querySelector('#awayTeam').value.replace(/[^A-Z0-9]+/ig, "_") + input.parentElement.querySelector('#choosenTeam').value);
             ul.removeChild(child);
@@ -21,6 +21,7 @@ oddsInput.forEach(input => {
             ul.appendChild(li);
             return;
         }
+        document.querySelector(".oddChanged").innerHTML = (gamesIds.length + 1).toString();
         gamesIds.push(gameId);
         console.log('gameId: ' + input.parentElement.querySelector("#gameId").value);
         li.innerHTML = '<div class="aposta mb-1 px-4">'

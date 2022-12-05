@@ -26,6 +26,11 @@ public class RasBetFacade {
 		emailAuthenticatedUser = null;
 	}
 
+	public static List<Game> getGames() {
+		return GameDAO.getAllGames().stream()
+				.sorted(Comparator.comparing(Game :: getCommenceTime))
+				.collect(Collectors.toList());
+	}
 
 	/**
 	 * Dado um email de utilizador devolver o histórico de transações
@@ -129,16 +134,60 @@ public class RasBetFacade {
 		switch (currency){
 			case "dollars":
 				validBet = validateTransferDollars(-value,emailAuthenticatedUser);
-				if(validBet) addMovementDollars(-value,emailAuthenticatedUser,"Realizada Aposta: " + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
+				if(validBet) addMovementDollars(-value,emailAuthenticatedUser,"Realizada Aposta (" + (bettedTeam == 0 ? RasBetFacade.getGamebyBetId(gameID).getHomeTeam() : (bettedTeam == 1 ? RasBetFacade.getGamebyBetId(gameID).getAwayTeam() : "Empate") ) + "): " + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
 				break;
 			default:
 				validBet = validateTransferEuros(-value,emailAuthenticatedUser);
-				if(validBet) addMovementEuros(-value,emailAuthenticatedUser,"Realizada Aposta: " + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
+				if(validBet) addMovementEuros(-value,emailAuthenticatedUser,"Realizada Aposta (" + (bettedTeam == 0 ? RasBetFacade.getGamebyBetId(gameID).getHomeTeam() : (bettedTeam == 1 ? RasBetFacade.getGamebyBetId(gameID).getAwayTeam() : "Empate") )  + "):" + RasBetFacade.getGamebyBetId(gameID).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID).getAwayTeam());
 				break;
 		}
 		if(validBet){
 			bet = new Bet(gameID,value,bettedTeam,email,multipleId,false,1,currency,possibleGain);
 			BetDAO.store(bet);
+		}
+		return validBet;
+	}
+
+	/**
+	 * Adicionar Aposta
+	 * @param gameID  array com ids de jogo
+	 * @param value o valor da aposta
+	 * @param bettedTeam array com bettedTeam: 0 - equipa da casa, 1 - equipa de fora e 2 - empate
+	 * @param email email do utilizador
+	 * @param multipleId id do grupo de apostas(apostas multiplas)
+	 * @return true se adicionada, false caso contrário
+	 */
+	public static boolean addBet(String[] gameID,String email, float value, int[] bettedTeam, int multipleId,String currency,float possibleGain) {
+		boolean validBet = false;
+		Bet bet = null;
+		switch (currency){
+			case "dollars":
+				validBet = validateTransferDollars(-value,emailAuthenticatedUser);
+				if(validBet){
+					if(gameID.length == 1){
+						addMovementDollars(-value,emailAuthenticatedUser,"Realizada Aposta Simples Dollars " + RasBetFacade.getGamebyBetId(gameID[0]).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID[0]).getAwayTeam());
+					}else {
+						addMovementDollars(-value,emailAuthenticatedUser,"Realizada Aposta Múltipla Dollars");
+					}
+				}
+				break;
+			default:
+				validBet = validateTransferEuros(-value,emailAuthenticatedUser);
+				if(validBet) {
+					if(gameID.length == 1){
+						addMovementEuros(-value,emailAuthenticatedUser,"Realizada Aposta Simples Euros" + RasBetFacade.getGamebyBetId(gameID[0]).getHomeTeam() + " - " + RasBetFacade.getGamebyBetId(gameID[0]).getAwayTeam());
+					}else {
+						addMovementEuros(-value,emailAuthenticatedUser,"Realizada Aposta Múltipla Euros");
+					}
+				}
+				break;
+		}
+		if(validBet){
+			for (int i = 0; i < gameID.length; i++) {
+				bet = new Bet(gameID[i],value,bettedTeam[i],email,multipleId,false,1,currency,possibleGain);
+				BetDAO.store(bet);
+			}
+
 		}
 		return validBet;
 	}
@@ -447,12 +496,14 @@ public class RasBetFacade {
 		System.out.println("return list size: " + returnList.size());
 		for (int i = 0; i < bets.size(); i++) {
 			System.out.println("i:" + i);
-			if(bets.get(i).getMultipleId() == lastMultipleId){
-				returnList.get(index).add(bets.get(i));
-			} else{
-				returnList.add(new ArrayList<>());
-				index++;
-				returnList.get(index).add(bets.get(i));
+			if(bets.get(i).getMultipleId() != 0){
+				if(bets.get(i).getMultipleId() == lastMultipleId){
+                	returnList.get(index).add(bets.get(i));
+				} else{
+                	returnList.add(new ArrayList<>());
+                    index++;
+					returnList.get(index).add(bets.get(i));
+				}
 			}
 			lastMultipleId = bets.get(i).getMultipleId();
 		}

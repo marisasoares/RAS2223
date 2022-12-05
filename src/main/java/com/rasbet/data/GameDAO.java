@@ -12,6 +12,7 @@ public class GameDAO {
     private static final String FIND_BY_ID = "SELECT * FROM Game WHERE idGame=?";
     private static final String INSERT = "INSERT INTO Game(idGame, HomeTeam, AwayTeam, CommenceTime, Completed, ResultID) VALUES(?,?,?,?,?,?)";
     private static final String UPDATE = "UPDATE Game SET Completed= ? WHERE idGame=?";
+    private static final String FIND_ALL = "SELECT * FROM Game";
 
     public static boolean store(Game game) {
         boolean r = true;
@@ -75,6 +76,38 @@ public class GameDAO {
                 }
         }
         return game;
+    }
+
+    public static List<Game> getAllGames() {
+        List<Game> games = new ArrayList<>();
+        Connection conn = null;
+        try { conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(FIND_ALL);
+
+            while (rs.next()) {  // A chave existe na tabela
+                int sportId = SportGameDAO.get_SportId_by_GameId(rs.getString("idGame"));
+                Result result = ResultDAO.get(rs.getInt("ResultID"));
+                games.add(new Game(rs.getString("idGame"),
+                        rs.getString("HomeTeam"),
+                        rs.getString("AwayTeam"),
+                        rs.getString("CommenceTime"),
+                        rs.getBoolean("Completed"),
+                        result,
+                        sportId));
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+        return games;
     }
 
     public static void delete(int id) {

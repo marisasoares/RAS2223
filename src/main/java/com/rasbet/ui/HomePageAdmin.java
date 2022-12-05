@@ -16,16 +16,31 @@ public class HomePageAdmin {
 
     @GetMapping("/homePageAdmin")
     public String showHomePage(Model model) {
-        String view = "homePageAdmin";
+        String view = "HomePageAdmin";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
-        model.addAttribute("games", RasBetFacade.games);
+        model.addAttribute("games", RasBetFacade.getGames());
+        return view;
+    }
+    @GetMapping("/homePageSpec")
+    public String showHomePageSpec(Model model) {
+        String view = "HomePageSpec";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
+        model.addAttribute("games", RasBetFacade.getGames());
         return view;
     }
 
     @GetMapping("/profileAdmin")
     public String showProfile(Model model) {
         String view = "profileAdmin";
+        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
+        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
+        return view;
+    }
+    @GetMapping("/profileSpec")
+    public String showProfileSpec(Model model) {
+        String view = "profileSpec";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         return view;
@@ -71,4 +86,39 @@ public class HomePageAdmin {
         return "redirect:profileAdmin";
     }
 
+    @RequestMapping(value = "/changeOdd", method = RequestMethod.POST)
+    public String changeOdds(@RequestParam float[] oddHomeTeam, @RequestParam float[] oddEmpate, @RequestParam float[] oddAwayTeam, @RequestParam String[] gameId) {
+        System.out.println("odd homet: " + oddHomeTeam.length);
+        System.out.println("odd emp: " + oddHomeTeam.length);
+        System.out.println("odd awayt: " + oddHomeTeam.length);
+
+        for (int i = 0; i < oddHomeTeam.length - 1; i++) {
+            RasBetFacade.inserirChange(oddHomeTeam[i],gameId[i],0);
+            System.out.println("Game: " + gameId[i] + " oddHome: " + oddHomeTeam[i]);
+            RasBetFacade.inserirChange(oddAwayTeam[i],gameId[i],1);
+            System.out.println("Game: " + gameId[i] + " oddAway: " + oddAwayTeam[i]);
+            RasBetFacade.inserirChange(oddEmpate[i],gameId[i],2);
+            System.out.println("Game: " + gameId[i] + " oddEmpate: " + oddEmpate[i]);
+
+        }
+        return "redirect:homePageSpec";
+    }
+
+    @RequestMapping(value = "/changeOddAdmin", method = RequestMethod.POST)
+    public String changeOddsAdmin(@RequestParam float[] oddHomeTeam, @RequestParam float[] oddEmpate, @RequestParam float[] oddAwayTeam, @RequestParam String[] gameId) {
+        System.out.println("odd homet: " + oddHomeTeam.length);
+        System.out.println("odd emp: " + oddHomeTeam.length);
+        System.out.println("odd awayt: " + oddHomeTeam.length);
+
+        for (int i = 0; i < oddHomeTeam.length - 1; i++) {
+            RasBetFacade.inserirChange(oddHomeTeam[i],gameId[i],0);
+            System.out.println("Game: " + gameId[i] + " oddHome: " + oddHomeTeam[i]);
+            RasBetFacade.inserirChange(oddAwayTeam[i],gameId[i],1);
+            System.out.println("Game: " + gameId[i] + " oddAway: " + oddAwayTeam[i]);
+            RasBetFacade.inserirChange(oddEmpate[i],gameId[i],2);
+            System.out.println("Game: " + gameId[i] + " oddEmpate: " + oddEmpate[i]);
+
+        }
+        return "redirect:homePageAdmin";
+    }
 }

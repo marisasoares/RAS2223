@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class HomePage {
@@ -23,17 +20,7 @@ public class HomePage {
         String view = "homePageBetter";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
-        model.addAttribute("games", RasBetFacade.games);
-        model.addAttribute("notReadNotifications",RasBetFacade.listNotReadNotifications(RasBetFacade.getEmailAuthenticatedUser()));
-        return view;
-    }
-
-    @GetMapping("/homePageSpecialist")
-    public String showHomePageSpecialist(Model model) {
-        String view = "alterarOdd";
-        if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
-        model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
-        model.addAttribute("games", RasBetFacade.games);
+        model.addAttribute("games", RasBetFacade.getGames());
         model.addAttribute("notReadNotifications",RasBetFacade.listNotReadNotifications(RasBetFacade.getEmailAuthenticatedUser()));
         return view;
     }
@@ -114,12 +101,11 @@ public class HomePage {
     }
 
     @RequestMapping(value = "/bet", method = RequestMethod.POST)
-    public String makeBet(Model model, @RequestParam(value = "gameId") String[] gameIds, @RequestParam(value = "bettedTeam") Integer[] bettedTeams, @RequestParam float oddTotal, @RequestParam int multipleId, @RequestParam float bettedValue, @RequestParam String currency, @RequestParam String betType) {
+    public String makeBet(Model model, @RequestParam(value = "gameId") String[] gameIds, @RequestParam(value = "bettedTeam") int[] bettedTeams, @RequestParam float oddTotal, @RequestParam int multipleId, @RequestParam float bettedValue, @RequestParam String currency, @RequestParam String betType) {
         String view = "redirect:homePage";
         if(betType.equals("simples")) multipleId = 0;
-        for (int i = 0; i < gameIds.length; i++) {
-            RasBetFacade.addBet(gameIds[i],RasBetFacade.emailAuthenticatedUser,bettedValue,bettedTeams[i],multipleId,currency,oddTotal*bettedValue);
-        }
+        else multipleId = new Random().nextInt();
+        RasBetFacade.addBet(gameIds,RasBetFacade.getEmailAuthenticatedUser(),bettedValue,bettedTeams,multipleId,currency,oddTotal*bettedValue);
         return view;
     }
 

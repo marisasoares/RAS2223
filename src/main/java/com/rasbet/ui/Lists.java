@@ -34,7 +34,8 @@ public class Lists {
         if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("utilizadores", RasBetFacade.getBetters());
-        view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Administrator)view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Specialist)view = "listarSpec";
         return view;
     }
 
@@ -44,7 +45,8 @@ public class Lists {
         if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("administradores", RasBetFacade.getAdmins());
-        view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Administrator)view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Specialist)view = "listarSpec";
         return view;
     }
 
@@ -54,7 +56,8 @@ public class Lists {
         if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("especialistas", RasBetFacade.getSpecialist());
-        view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Administrator)view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Specialist)view = "listarSpec";
         return view;
     }
 
@@ -64,7 +67,8 @@ public class Lists {
         if(RasBetFacade.emailAuthenticatedUser == null) return view;
         model.addAttribute("user",RasBetFacade.getAuthenticatedUser());
         model.addAttribute("desportos", RasBetFacade.getSportList());
-        view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Administrator)view = "listarAdmin";
+        if(RasBetFacade.getAuthenticatedUser() instanceof Specialist)view = "listarSpec";
         return view;
     }
 }

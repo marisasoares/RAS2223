@@ -32,10 +32,10 @@ public class Login {
         String view = "redirect:login?error";
         if(RasBetFacade.login(email,password)) {
             User user = RasBetFacade.getAuthenticatedUser();
-            model.addAttribute("games", RasBetFacade.games);
+            model.addAttribute("games", RasBetFacade.getGames());
             model.addAttribute("notReadNotifications", RasBetFacade.listNotReadNotifications(RasBetFacade.emailAuthenticatedUser));
             model.addAttribute("user",user);
-            if(user instanceof Specialist) view = "redirect:homePageSpecialist";
+            if(user instanceof Specialist) view = "redirect:homePageSpec";
             else if (user instanceof Administrator) view = "redirect:homePageAdmin";
             else view = "homePageBetter";
         }
