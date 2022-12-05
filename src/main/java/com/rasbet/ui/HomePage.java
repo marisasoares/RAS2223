@@ -64,10 +64,10 @@ public class HomePage {
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         model.addAttribute("user", RasBetFacade.getAuthenticatedUser());
         if(currency.equals("euros")){
-            if(value >= 0) RasBetFacade.addMovementEuros(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+            if(value >= 0) RasBetFacade.addMovementEuros(value,RasBetFacade.emailAuthenticatedUser,"Deposito Euros");
         }
         else {
-            if(value >= 0) RasBetFacade.addMovementDollars(value,RasBetFacade.emailAuthenticatedUser,"Deposito");
+            if(value >= 0) RasBetFacade.addMovementDollars(value,RasBetFacade.emailAuthenticatedUser,"Deposito Dollars");
         }
         return view;
     }
@@ -85,10 +85,10 @@ public class HomePage {
         String view = "redirect:profile";
         if(RasBetFacade.emailAuthenticatedUser == null) view="redirect:login";
         if(currency.equals("euros")){
-            if(value >= 0) RasBetFacade.addMovementEuros(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+            if(value >= 0) RasBetFacade.addMovementEuros(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento Euros");
         }
         else {
-            if(value >= 0) RasBetFacade.addMovementDollars(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento");
+            if(value >= 0) RasBetFacade.addMovementDollars(-value,RasBetFacade.emailAuthenticatedUser,"Levantamento Dollars");
         }
         return view;
     }
