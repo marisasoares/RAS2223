@@ -1,4 +1,5 @@
 package com.rasbet.model;
+import com.mysql.cj.util.DnsSrv;
 import com.rasbet.data.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -333,26 +334,19 @@ public class RasBetFacade {
 	 * @param gameID o id do jogo
 	 * @param type o tipo de odd (0 - ganha HomeTeam, 1 - ganha awayTeam e 2 - empate)
 	 */
-	public static void inserirChange(float odd, String gameID,int type) {
+	public static boolean inserirChange(float odd, String gameID,int type) {
 		Game game = GameDAO.get(gameID);
 		if(game != null){
 			switch (type) {
-				case 0:
-					game.getResult().setOddHomeTeam(odd);
-					break;
-				case 1:
-					game.getResult().setOddAwayTeam(odd);
-					break;
-				case 2:
-					game.getResult().setOddDraw(odd);
-					break;
-				default:
-					break;
-
+				case 0 -> game.getResult().setOddHomeTeam(odd);
+				case 1 -> game.getResult().setOddAwayTeam(odd);
+				case 2 -> game.getResult().setOddDraw(odd);
+				default -> {
+				}
 			}
-			GameDAO.update(game);
-
+			return GameDAO.update(game);
 		}
+		return false;
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package com.rasbet.model;
 
+import java.util.Objects;
+
 public class Result {
 	/**
 	 * Identificador do resultado
@@ -113,6 +115,19 @@ public class Result {
 
 	public void setScores(String scores) {
 		this.scores = scores;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Result)) return false;
+		Result result = (Result) o;
+		return resultID == result.resultID && Float.compare(result.oddAwayTeam, oddAwayTeam) == 0 && Float.compare(result.oddHomeTeam, oddHomeTeam) == 0 && Float.compare(result.oddDraw, oddDraw) == 0 && winningTeam.equals(result.winningTeam) && scores.equals(result.scores);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(resultID, oddAwayTeam, oddHomeTeam, oddDraw, winningTeam, scores);
 	}
 
 	@Override

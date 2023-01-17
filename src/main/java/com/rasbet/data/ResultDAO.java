@@ -94,12 +94,14 @@ public class ResultDAO {
     }
 
 
-    public static void update(Result result) {
+    public static boolean update(Result result) {
+        boolean changed = false;
+        Result antigo = ResultDAO.get(result.getResultID());
+        if(!antigo.equals(result)) changed = true;
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
-
             stmt.setString(1,result.getScores());
             stmt.setFloat(2,result.getOddAwayTeam());
             stmt.setFloat(3,result.getOddHomeTeam());
@@ -118,6 +120,7 @@ public class ResultDAO {
                     e.printStackTrace();
                 }
         }
+        return changed;
     }
     public static void updateScore(Result result) {
         Connection conn = null;

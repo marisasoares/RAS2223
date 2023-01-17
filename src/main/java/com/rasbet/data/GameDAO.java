@@ -152,8 +152,9 @@ public class GameDAO {
         }
     }
 
-    public static void update(Game game) {
+    public static boolean update(Game game) {
         Connection conn = null;
+        boolean r = false;
         try {
             conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
@@ -161,7 +162,7 @@ public class GameDAO {
             stmt.setString(2, game.getId());
             stmt.executeUpdate();
             Result result = game.getResult();
-            ResultDAO.update(result);
+            r = ResultDAO.update(result);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -172,5 +173,6 @@ public class GameDAO {
                     e.printStackTrace();
                 }
         }
+        return r;
     }
 }
