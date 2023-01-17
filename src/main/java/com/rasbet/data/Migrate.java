@@ -110,6 +110,15 @@ public class Migrate {
                         "FOREIGN KEY (Email) REFERENCES User(Email))";
                 stm.executeUpdate(sqlNot);
 
+                String sqlNotA = "CREATE TABLE IF NOT EXISTS NotificationAlert (" +
+                        "idNotAlert INT NOT NULL PRIMARY KEY ," +
+                        "Email VARCHAR(75) NOT NULL," +
+                        "idGame VARCHAR(45) NOT NULL,"+
+                        "isInterested TINYINT NOT NULL," +
+                        "FOREIGN KEY (idGame) References Game(idGame),"+
+                        "FOREIGN KEY (Email) REFERENCES User(Email))";
+                stm.executeUpdate(sqlNotA);
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());

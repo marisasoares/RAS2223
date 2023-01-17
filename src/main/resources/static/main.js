@@ -1,4 +1,5 @@
 const betBtn = document.querySelector('#betBtn');
+const bellBtn = document.querySelectorAll('#bell');
 const divList = document.querySelector('.listHolder');
 const oddButtons = document.querySelectorAll('.odd-button');
 const betTypeBtn = document.querySelectorAll('.betTypeBtn');
@@ -14,6 +15,23 @@ var currency = "euros";
 var euros = parseFloat(document.querySelector("#euros").textContent.slice(0, -1));
 var dollars = parseFloat(document.querySelector("#dollars").textContent.slice(0, -1));
 var betType = document.querySelector('input[name="betType"]:checked').value;
+
+
+bellBtn.forEach(bellBtn =>{
+    bellBtn.addEventListener('click',() => {
+        const gameId =  bellBtn.querySelector('#gameId').value;
+        console.log('Imagem:' + bellBtn.src);
+        if(bellBtn.getAttribute("src") === 'sino.png') {
+            bellBtn.setAttribute("src","sino_cheio.png")
+            // Simulate an HTTP redirect:
+            window.location.replace("/updateNotif?gameId="+gameId);
+        } else{
+            bellBtn.setAttribute("src","sino.png");
+            window.location.replace("/updateNotif?gameId="+gameId);
+        }
+    });
+});
+
 
 switch (currency){
     case "euros":
@@ -88,36 +106,39 @@ oddButtons.forEach(button =>{
                 alert("Nao e possivel escolher dois resultados diferentes no mesmo jogo nas apostas multiplas");
                 return;
             }
-            gamesIds.push(gameId);
-            button.style.backgroundColor = '#ee7742';
-            button.style.borderColor = '#ee7742';
-            bettedValue = parseFloat(document.querySelector('#bettedValue').value);
-            odds.push(parseFloat(button.querySelector("#odd").value));
-            console.log("Odd lida: " + parseFloat(button.querySelector("#odd").value));
-            oddTotal = calculateOddTotal(odds);
-            document.querySelector(".oddTotal").innerHTML = oddTotal + (betType === 'simples' ? ' ( soma das odds)' : ' ( produto das odds)');
-            switch (currency){
-                case "euros":
-                    document.querySelector(".possibleGain").innerHTML = possibleGain + " €";
-                    break;
-                default:
-                    document.querySelector(".possibleGain").innerHTML = possibleGain + " $";
-                    break;
-            }
-            document.querySelector('#possibleGain').value = possibleGain;
-            document.querySelector('#oddTotal').value = oddTotal;
+            if(gamesIds.length < 5){
+                gamesIds.push(gameId);
+                button.style.backgroundColor = '#ee7742';
+                button.style.borderColor = '#ee7742';
+                bettedValue = parseFloat(document.querySelector('#bettedValue').value);
+                odds.push(parseFloat(button.querySelector("#odd").value));
+                console.log("Odd lida: " + parseFloat(button.querySelector("#odd").value));
+                oddTotal = calculateOddTotal(odds);
+                document.querySelector(".oddTotal").innerHTML = oddTotal + (betType === 'simples' ? ' ( soma das odds)' : ' ( produto das odds)');
+                switch (currency){
+                    case "euros":
+                        document.querySelector(".possibleGain").innerHTML = possibleGain + " €";
+                        break;
+                    default:
+                        document.querySelector(".possibleGain").innerHTML = possibleGain + " $";
+                        break;
+                }
+                document.querySelector('#possibleGain').value = possibleGain;
+                document.querySelector('#oddTotal').value = oddTotal;
 
-            li.innerHTML = '<div class="aposta mb-1 px-4">'
-                + '<b>' + button.querySelector('#homeTeam').value + '-' + button.querySelector('#awayTeam').value + '</b>'
-                + '</div> <div class="aposta px-4 mb-4">'
-                + '<br> Resultado Aposta: <b> ' +  button.innerHTML.split('<br>')[0] + '</b>'
-                + '<div class="container"> Odd: <b>' + parseFloat(button.querySelector("#odd").value) + '</b></div>'
-                + '<input type="hidden" name="gameId" value="' + button.querySelector('#gameId').value + '">'
-                + '<input type="hidden" name="bettedTeam" value="' + button.querySelector('#choosenTeam').value + '">'
-                + '</div>';
-            li.id = button.querySelector('#homeTeam').value.replace(/[^A-Z0-9]+/ig, "_") + button.querySelector('#awayTeam').value.replace(/[^A-Z0-9]+/ig, "_") + button.querySelector('#choosenTeam').value;
-            console.log(li.id);
-            ul.appendChild(li);
+                li.innerHTML = '<div class="aposta mb-1 px-4">'
+                    + '<b>' + button.querySelector('#homeTeam').value + '-' + button.querySelector('#awayTeam').value + '</b>'
+                    + '</div> <div class="aposta px-4 mb-4">'
+                    + '<br> Resultado Aposta: <b> ' +  button.innerHTML.split('<br>')[0] + '</b>'
+                    + '<div class="container"> Odd: <b>' + parseFloat(button.querySelector("#odd").value) + '</b></div>'
+                    + '<input type="hidden" name="gameId" value="' + button.querySelector('#gameId').value + '">'
+                    + '<input type="hidden" name="bettedTeam" value="' + button.querySelector('#choosenTeam').value + '">'
+                    + '</div>';
+                li.id = button.querySelector('#homeTeam').value.replace(/[^A-Z0-9]+/ig, "_") + button.querySelector('#awayTeam').value.replace(/[^A-Z0-9]+/ig, "_") + button.querySelector('#choosenTeam').value;
+                console.log(li.id);
+                ul.appendChild(li);
+            }
+
         }
 
     });

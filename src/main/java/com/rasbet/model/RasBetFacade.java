@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RasBetFacade {
-	public static  String emailAuthenticatedUser;
-	public static  List<Game> games;
+	public static String emailAuthenticatedUser;
+	public static List<Game> games;
 
 
 	public RasBetFacade(){
@@ -66,9 +66,9 @@ public class RasBetFacade {
 	 * Devolve o valor em euros da carteira
 	 * @return O valor em euros ou 0
 	 */
-	public static float getEuros() {
+	public float getEuros() {
 		float euros = 0;
-		User user = getAuthenticatedUser();
+		User user = this.getAuthenticatedUser();
 		if(user instanceof Better){
 			euros = ((Better) user).getWallet().getEuros();
 		}
@@ -128,7 +128,7 @@ public class RasBetFacade {
 	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public static boolean addBet(String gameID,String email, float value, int bettedTeam, int multipleId,String currency,float possibleGain) {
+	public static boolean addBet(String gameID, String email, float value, int bettedTeam, int multipleId, String currency, float possibleGain) {
 		boolean validBet = false;
 		Bet bet = null;
 		switch (currency){
@@ -157,7 +157,7 @@ public class RasBetFacade {
 	 * @param multipleId id do grupo de apostas(apostas multiplas)
 	 * @return true se adicionada, false caso contrário
 	 */
-	public static boolean addBet(String[] gameID,String email, float value, int[] bettedTeam, int multipleId,String currency,float possibleGain) {
+	public static boolean addBet(String[] gameID, String email, float value, int[] bettedTeam, int multipleId, String currency, float possibleGain) {
 		boolean validBet = false;
 		Bet bet = null;
 		switch (currency){
@@ -351,8 +351,8 @@ public class RasBetFacade {
 
 			}
 			GameDAO.update(game);
-		}
 
+		}
 	}
 
 	/**
@@ -383,7 +383,7 @@ public class RasBetFacade {
 	 * Define o utilizador autenticado
 	 * @param emailAuthenticatedUser o email do utilizador autenticado
 	 */
-	public static void setEmailAuthenticatedUser(String emailAuthenticatedUser) {
+	public void setEmailAuthenticatedUser(String emailAuthenticatedUser) {
 		RasBetFacade.emailAuthenticatedUser = emailAuthenticatedUser;
 	}
 
@@ -603,6 +603,12 @@ public class RasBetFacade {
 	public static void notificaUser(String email, String content){
 		Notification notification = new Notification(email,content,LocalDateTime.now());
 		NotificationDAO.store(notification);
+	}
+
+	public static boolean isInterested(String gameId){
+		NotificationAlertDAO.NotAlert not =  NotificationAlertDAO.get(RasBetFacade.getEmailAuthenticatedUser(),gameId);
+		if(not == null) return false;
+		return not.isInterested;
 	}
 
 

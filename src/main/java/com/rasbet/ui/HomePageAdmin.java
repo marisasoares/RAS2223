@@ -1,5 +1,6 @@
 package com.rasbet.ui;
 
+import com.rasbet.data.NotificationAlertDAO;
 import com.rasbet.model.Game;
 import com.rasbet.model.RasBetFacade;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -88,36 +90,39 @@ public class HomePageAdmin {
 
     @RequestMapping(value = "/changeOdd", method = RequestMethod.POST)
     public String changeOdds(@RequestParam float[] oddHomeTeam, @RequestParam float[] oddEmpate, @RequestParam float[] oddAwayTeam, @RequestParam String[] gameId) {
-        System.out.println("odd homet: " + oddHomeTeam.length);
-        System.out.println("odd emp: " + oddHomeTeam.length);
-        System.out.println("odd awayt: " + oddHomeTeam.length);
 
         for (int i = 0; i < oddHomeTeam.length - 1; i++) {
             RasBetFacade.inserirChange(oddHomeTeam[i],gameId[i],0);
-            System.out.println("Game: " + gameId[i] + " oddHome: " + oddHomeTeam[i]);
             RasBetFacade.inserirChange(oddAwayTeam[i],gameId[i],1);
-            System.out.println("Game: " + gameId[i] + " oddAway: " + oddAwayTeam[i]);
             RasBetFacade.inserirChange(oddEmpate[i],gameId[i],2);
-            System.out.println("Game: " + gameId[i] + " oddEmpate: " + oddEmpate[i]);
-
+            List<String> users = NotificationAlertDAO.getAllInterestedUsers(gameId[i]);
+            for (String email : users) {
+                RasBetFacade.notificaUser(email,"Odds do jogo alteradas\n" +
+                        "Novas Odds:\n" +
+                         RasBetFacade.getGame(gameId[i]).getHomeTeam() + ": " + oddHomeTeam[i] + "\n" +
+                        "Empate: " + oddEmpate[i] + "\n" +
+                        RasBetFacade.getGame(gameId[i]).getAwayTeam() + ": " + oddAwayTeam[i]);
+            }
         }
+
         return "redirect:homePageSpec";
     }
 
     @RequestMapping(value = "/changeOddAdmin", method = RequestMethod.POST)
     public String changeOddsAdmin(@RequestParam float[] oddHomeTeam, @RequestParam float[] oddEmpate, @RequestParam float[] oddAwayTeam, @RequestParam String[] gameId) {
-        System.out.println("odd homet: " + oddHomeTeam.length);
-        System.out.println("odd emp: " + oddHomeTeam.length);
-        System.out.println("odd awayt: " + oddHomeTeam.length);
 
         for (int i = 0; i < oddHomeTeam.length - 1; i++) {
             RasBetFacade.inserirChange(oddHomeTeam[i],gameId[i],0);
-            System.out.println("Game: " + gameId[i] + " oddHome: " + oddHomeTeam[i]);
             RasBetFacade.inserirChange(oddAwayTeam[i],gameId[i],1);
-            System.out.println("Game: " + gameId[i] + " oddAway: " + oddAwayTeam[i]);
             RasBetFacade.inserirChange(oddEmpate[i],gameId[i],2);
-            System.out.println("Game: " + gameId[i] + " oddEmpate: " + oddEmpate[i]);
-
+            List<String> users = NotificationAlertDAO.getAllInterestedUsers(gameId[i]);
+            for (String email : users) {
+                RasBetFacade.notificaUser(email,"Odds do jogo alteradas\n" +
+                        "Novas Odds:\n" +
+                        RasBetFacade.getGame(gameId[i]).getHomeTeam() + ": " + oddHomeTeam[i] + "\n" +
+                        "Empate: " + oddEmpate[i] + "\n" +
+                        RasBetFacade.getGame(gameId[i]).getAwayTeam() + ": " + oddAwayTeam[i]);
+            }
         }
         return "redirect:homePageAdmin";
     }

@@ -51,7 +51,7 @@
             font-weight: bold;
             font-size: small;
             border-style: solid;
-            width: 100px;
+            width: 110px;
             word-wrap: break-word;
         }
 
@@ -180,13 +180,13 @@
         <div class="mx-1">
             <section th:each="game:${games}">
                 <div class="container p-2 mb-2"
-                     style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;flex-wrap: nowrap;">
+                     style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center;flex-wrap: nowrap;">
                     <div class="p-2" style="word-wrap:break-word; max-width: 50%;">
                         <h4 style="color: rgb(58, 58, 58);">
                             <b><span th:text="${game.getHomeTeam()}"></span> - <span
                                     th:text="${game.getAwayTeam()}"></span> </b>
                         </h4>
-                        <p class="text-muted" th:text="${game.getFormattedDate()}"></p>
+                        <p style="text-align: end" class="text-muted" th:text="${game.getFormattedDate()}"></p>
                     </div>
                     <div style="position: relative;display: flex; flex-direction: row; justify-content:center ; align-items: stretch; flex-wrap: nowrap;">
                         <button class="mx-3 odd-button" type="button">
@@ -206,6 +206,8 @@
                             <input type="hidden" id="choosenTeam" value="2">
                             Empate<br/><span th:text="${game.getResult().getOddDraw()}"></span>
                         </button>
+
+
                         <button class="mx-3 odd-button" type="button">
                             <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
                             <input type="hidden" id="homeTeam" th:attr="value=${game.getHomeTeam()}">
@@ -214,8 +216,22 @@
                             <input type="hidden" id="choosenTeam" value="1">
                             <span th:text="${game.getAwayTeam()}"></span><br/><span
                                 th:text="${game.getResult().getOddAwayTeam()}"></span>
+                            </button>
+
+                    </div>
+                    <div>
+                        <button id="bell" class="mx-3 odd-button" type="button">
+                            <input type="hidden" id="gameId" th:attr="value=${game.getId()}">
+                            <div th:if="${T(com.rasbet.model.RasBetFacade).isInterested(game.getId())}">
+                                <input  style="margin-right: 5px;width: 25px;height: 25px;" type="image" src="sino_cheio.png"/>
+                            </div>
+                            <div th:unless="${T(com.rasbet.model.RasBetFacade).isInterested(game.getId())}">
+                                <input  style="margin-right: 5px;width: 25px;height: 25px;" type="image" src="sino.png"/>
+                            </div>
                         </button>
                     </div>
+
+
                 </div>
             </section>
         </div>

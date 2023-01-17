@@ -1,5 +1,6 @@
 package com.rasbet.ui;
 
+import com.rasbet.data.NotificationAlertDAO;
 import com.rasbet.model.Better;
 import com.rasbet.model.RasBetFacade;
 import com.rasbet.model.User;
@@ -108,6 +109,14 @@ public class HomePage {
         RasBetFacade.addBet(gameIds,RasBetFacade.getEmailAuthenticatedUser(),bettedValue,bettedTeams,multipleId,currency,oddTotal*bettedValue);
         return view;
     }
+    @RequestMapping(value = "/updateNotif", method = RequestMethod.GET)
+    public String updateNotif(Model model, @RequestParam(value = "gameId") String gameId) {
+        String email = RasBetFacade.getEmailAuthenticatedUser();
+        NotificationAlertDAO.update(email,gameId);
+        return "redirect:homePage";
+    }
+
+
 
 
 }
